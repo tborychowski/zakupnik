@@ -1,0 +1,11 @@
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.log
+.cache
+node_modules
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.sublime-*
+__*.php
