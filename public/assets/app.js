@@ -67,38 +67,22 @@
 	var el;
 	
 	
-	function getTree(data) {
-		var item = arguments[1] === undefined ? { id: 0 } : arguments[1];
-		var items = data.filter(function (i) {
-			return i.parent_id === item.id;
-		});
-		if (items.length) {
-			item.items = items;
-			for (var _iterator = items[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-				var sub = _step.value;
-				sub = getTree(data, sub);
-			}
-		}
-		return item;
-	}
-	
-	
 	function createTree(data) {
 		var html = arguments[1] === undefined ? [] : arguments[1];
-		if (!data.length) data = data.items;
+		if (!data.length) data = [data];
 		for (var _iterator = data[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
 			var item = _step.value;
 			html.push("<li>" + item.name);
 			if (item.items) html.push(createTree(item.items));
 			html.push("</li>");
 		}
-		return "<ul>" + html.join("") + "</ul>";
+		return "<ul class=\"category-tree\">" + html.join("") + "</ul>";
 	}
 	
 	
 	function init() {
-		el = $(".category-tree");
-		Data.get().then(getTree).then(createTree).then(function (html) {
+		el = $("#categories");
+		Data.get().then(createTree).then(function (html) {
 			el[0].innerHTML = html;
 		})["catch"](function (e) {
 			console.error("ERROR:", e);

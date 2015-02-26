@@ -1,48 +1,37 @@
-.tree
-.tree ul
-	margin 0
-	padding 0
-	list-style none
+@import '_lib'
 
-.tree ul
-	position relative
-	margin-left 1em/* indentation */
+border-color = #fff;
+border-width = 1px;
+item-height = 2.1em;
+offset = 1em;			// indentation
 
-.tree ul ul
-	margin-left .5em /* (indentation/2) */
+.category-tree
+	&
+	ul
+		margin 0; padding 0; list-style none
 
-.tree ul:before
-	content ''
-	position absolute
-	top 0
-	bottom 0
-	left 0
-	display block
-	width 0
-	border-left 1px solid
+	ul
+		position relative; margin-left offset
 
-.tree li
-	margin 0
-	padding 0 1.5em /* indentation + .5em */
-	line-height 2em /* default list item's `line-height` */
-	color #369
-	font-weight bold
-	position relative
+		ul
+			margin-left (offset / 2)
 
-.tree ul li:before
-	content ''
-	display block
-	position absolute
-	left 0
-	height 0
-	border-top 1px solid
-	margin-top -1px /* border top width */
-	width 10px /* same with indentation */
-	top 1em /* (line-height/2) */
+		&:before
+			content ''; pos 0; bottom 0; left 0; width 0; display block
+			border-left border-width solid border-color
 
-.tree ul li:last-child:before
-	height auto
-	bottom 0
-	background white /* same with body background */
-	top 1em /* (line-height/2) */
+	li
+		position relative; margin 0; color #fff;
+		padding 0 (offset + 0.2em)
+		line-height item-height
+
+	ul li:before
+		content ''; pos(); left 0; display block; height 0
+		border-top border-width solid border-color
+		margin-top -(border-width)
+		top (item-height / 2)
+		width (offset / 1.3)
+
+	ul li:last-child:before
+		height auto; bottom 0; background body-bg; top (item-height / 2)
 
