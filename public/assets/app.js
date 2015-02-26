@@ -60,14 +60,46 @@
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var Data = _interopRequire(__webpack_require__(2));
+	var $ = _interopRequire(__webpack_require__(2));
+	
+	var Data = _interopRequire(__webpack_require__(3));
+	
+	var el;
 	
 	
+	function getTree(data) {
+		var item = arguments[1] === undefined ? { id: 0 } : arguments[1];
+		var items = data.filter(function (i) {
+			return i.parent_id === item.id;
+		});
+		if (items.length) {
+			item.items = items;
+			for (var _iterator = items[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+				var sub = _step.value;
+				sub = getTree(data, sub);
+			}
+		}
+		return item;
+	}
+	
+	
+	function createTree(data) {
+		var html = arguments[1] === undefined ? [] : arguments[1];
+		if (!data.length) data = data.items;
+		for (var _iterator = data[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+			var item = _step.value;
+			html.push("<li>" + item.name);
+			if (item.items) html.push(createTree(item.items));
+			html.push("</li>");
+		}
+		return "<ul>" + html.join("") + "</ul>";
+	}
 	
 	
 	function init() {
-		Data.get().then(function (data) {
-			console.log(data);
+		el = $(".category-tree");
+		Data.get().then(getTree).then(createTree).then(function (html) {
+			el[0].innerHTML = html;
 		})["catch"](function (e) {
 			console.error("ERROR:", e);
 		});
@@ -79,24 +111,6 @@
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	function _get() {
-		return $.ajax("categories");
-	}
-	
-	module.exports = {
-		get: _get
-	};
-
-/***/ },
-/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -118,6 +132,24 @@
 	for (var prop in all) {
 	  sizzle[prop] = all[prop];
 	}module.exports = sizzle;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(2));
+	
+	function _get() {
+		return $.ajax("categories");
+	}
+	
+	module.exports = {
+		get: _get
+	};
 
 /***/ },
 /* 4 */
