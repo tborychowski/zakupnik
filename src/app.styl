@@ -8,14 +8,18 @@ body
 	size 100%; overflow hidden; position fixed; // <- chrome scroll bug
 
 body
-	margin 0; font 400 15px/1 'Open Sans', sans-serif; bg body-bg;
+	margin 0; font 400 15px/1 'Open Sans', sans-serif; bg body-bg; cursor default;
 
 *
 	box-sizing border-box;
 
+h1, h2, h3, h4, h5
+	font-family 'Open Sans', sans-serif; font-weight 400;
+
 label
 button
 input
+select
 	font inherit; height 27; vertical-align top;
 	&::-moz-focus-inner
 		padding 0; border 0;
@@ -26,6 +30,11 @@ input
 	border #d9d9d9; padding 0 5; bg #ccc; transition all .3s ease-out;
 	&:focus
 		bg #fff;
+
+select
+	font inherit; height 27; vertical-align top;
+	padding 0 5; transition all .3s ease-out;
+
 
 button
 	cursor default; padding 0 15; bg #d9d9d9; color #222; outline none; font 14/1;
@@ -60,3 +69,14 @@ button
 		bg transparent; color #2e92cf;
 
 
+#content
+	pos 0 0 0 50; padding 20;
+
+.section
+	show 0; opacity 0; transition opacity .2s ease-out;
+
+	&.visible
+		show 2;
+
+	&.active
+		opacity 1;

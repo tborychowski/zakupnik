@@ -19,7 +19,7 @@ module.exports = {
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
-				loader: '6to5-loader?experimental&comments=false'
+				loader: 'babel-loader?experimental&comments=false'
 			}
 		]
 	}

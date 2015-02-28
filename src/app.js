@@ -1,5 +1,5 @@
 // import appcache from 'appcache';
 // appcache();
 
-import categories from 'categories';
-categories.init();
+import menu from 'menu';
+menu.init();

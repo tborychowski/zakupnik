@@ -1,0 +1,10 @@
+<div class="form-row">
+	<select name="category" class="category">
+		<option id="0">Category</option>
+		{{#categories}}
+			<option id="0">{{name}}</option>
+		{{/categories}}
+	</select>
+	<input name="amount" class="amount">
+	{{#first}}<button type="button" class="btn-split">Split</button>{{/first}}
+</div>

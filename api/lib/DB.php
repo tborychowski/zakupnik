@@ -26,13 +26,15 @@ class DB {
 	public function __toString () { return print_r($this->output, true); }
 
 	public function to_json ($pretty = true) {
-		$flags = JSON_NUMERIC_CHECK;
+		// $flags = JSON_NUMERIC_CHECK;
+		$flags = 0;
 		if ($pretty) $flags = $flags | JSON_PRETTY_PRINT;
 		return json_encode($this->output, $flags);
 	}
 
 	public function get_all ($table) {
 		$this->output = $this->db->select($table, '*');
+		$this->integerise();
 		return $this;
 	}
 
@@ -40,23 +42,50 @@ class DB {
 		$this->output = [];
 		$out = $this->db->select($table, '*', [ "id" => $id ]);
 		if (!empty($out)) $this->output = $out[0];
+		$this->integerise();
 		return $this;
 	}
 
 
 
-	public function get_categories ($id) {
+
+	public function get_categories ($id = null) {
 		if (!empty($id)) $this->get_by_id('categories', $id);
 		else {
 			$this->get_all('categories');
-			$this->output = $this->get_categories_tree($this->output);
+			$this->integerise('parent_id');
 		}
+		return $this;
+	}
+	public function category_tree () {
+		$this->output = $this->get_category_tree($this->output);
 		return $this;
 	}
 
 	public function get_entries ($id) {
 		if (!empty($id)) $this->get_by_id('entries', $id);
-		else $this->get_all('entries');
+		else {
+			// select entries.*, categories.name as category from entries
+			// join categories on entries.category_id = categories.id
+			$this->output = $this->db->select('entries', [
+					'[>]categories' => ['category_id' => 'id']
+				], [
+					'entries.id',
+					'entries.date',
+					'categories.name(category)',
+					'entries.description',
+					'entries.amount'
+				], [
+					'ORDER' => 'entries.date DESC',
+					'LIMIT' => 25
+				]);
+
+			foreach ($this->output as &$e) {
+				$e['amount'] = intval($e['amount']);
+				$e['amount_str'] = number_format($e['amount'], 2, '.', ',');
+			}
+
+		}
 		return $this;
 	}
 
@@ -66,14 +95,14 @@ class DB {
 	 * Convert categories to a tree (recurr.)
 	 * @return [array]       nested array
 	 */
-	private function get_categories_tree ($data, $item = array('id' => 0, 'name' => 'Zakupnik')) {
+	private function get_category_tree ($data, $item = array('id' => 0, 'name' => 'Zakupnik')) {
 		$items = array_filter($data, function ($i) use($item) {
 			return $i['parent_id'] == $item['id'];
 		});
 
 		if (!empty($items)) {
 			foreach ($items as &$sub) {
-				$sub = $this->get_categories_tree($data, $sub);
+				$sub = $this->get_category_tree($data, $sub);
 			}
 			$item['items'] = array_values($items);
 		}
@@ -82,5 +111,14 @@ class DB {
 
 
 
+
+
+	private function integerise ($fields = 'id') {
+		$fields = explode(',', $fields);
+		foreach ($this->output as &$row) {
+			foreach ($fields as $f) $row[$f] = intval($row[$f]);
+		}
+		return $this;
+	}
 
 }

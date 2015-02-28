@@ -1,0 +1,24 @@
+@import '_lib'
+
+
+#menu
+	pos 0; bottom 0; left 0; color #fff; width 50; list-style none; padding 0; margin 0;
+	bg #282828 'noise.png' 0 0 repeat;
+	shadow -2 0 4 #000 .4 inset;
+
+
+.fa
+	margin 10 auto 0;
+	padding 25 0; font 0; u 0; show 2; text-align center;
+	color #666; transition color .3s ease-out;
+
+	&:before
+		font 32;
+
+	&.active
+	&:hover
+		color #fff;
+
+
+.fa-shopping-cart
+	padding-right 3px;

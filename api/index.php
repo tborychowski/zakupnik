@@ -9,6 +9,10 @@ Router::get('/categories/{id}', function ($params) use ($db){
 	echo $db->get_categories($params['id'])->to_json();
 });
 
+Router::get('/categorytree', function ($params) use ($db){
+	echo $db->get_categories()->category_tree()->to_json();
+});
+
 
 Router::get('/entries/{id}', function ($params) use ($db){
 	echo $db->get_entries($params['id'])->to_json();

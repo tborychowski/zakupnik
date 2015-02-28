@@ -17,7 +17,7 @@ function createTree (data, html = []) {
 
 function init () {
 	el = $('#categories');
-	Data.get()
+	Data.getTree()
 		.then(createTree)
 		.then(function (html) {
 			el[0].innerHTML = html;

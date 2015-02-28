@@ -24,28 +24,41 @@ function sizzle (mixed, context) {
 
 sizzle.fn = {};
 sizzle.fn.find = function (selector) { return sizzle(selector, this[0]); };
+sizzle.fn.filter = function (selector) {
+	var elems = Array.prototype.filter.call(this, function (el) {
+		return el.matches(selector);
+	});
+	return sizzle(elems);
+};
 
-sizzle.fn.appendTo = function (el) {
-	if (el.length) el = el[0];
-	if (this && this.length) el.appendChild(this[0]);
+sizzle.fn.first = function () { return sizzle(this[0]); };
+sizzle.fn.last = function () { return sizzle(this[this.length - 1]); };
+sizzle.fn.eq = function (idx) { return sizzle(this[idx || 0]); };
+
+
+sizzle.fn.appendTo = function (parent) {
+	if (!this || !this.length) return this;
+	if (typeof parent === 'string') parent = sizzle(parent);
+	parent[0].appendChild(this[0]);
 	return this;
 };
 
-sizzle.fn.append = function (el) {
-	if (el.length) el = el[0];
-	if (this && this.length) this[0].appendChild(el);
+sizzle.fn.append = function (child) {
+	if (!this || !this.length) return this;
+	if (typeof child === 'string') child = sizzle(child);
+	this[0].appendChild(child[0]);
 	return this;
 };
 
 sizzle.fn.on = function (eventName, cb) {
-	var el = (this && this.length ? this[0] : null);
-	if (el) el.addEventListener(eventName, cb);
+	if (!this || !this.length) return this;
+	this.forEach(function (el) { el.addEventListener(eventName, cb); });
 	return this;
 };
 
 sizzle.fn.off = function (eventName, cb) {
-	var el = (this && this.length ? this[0] : null);
-	if (el) el.removeEventListener(eventName, cb);
+	if (!this || !this.length) return this;
+	this.forEach(function (el) { el.removeEventListener(eventName, cb); });
 	return this;
 };
 
@@ -54,11 +67,17 @@ sizzle.fn.closest = function (cls) {
 	var el = (this && this.length ? this[0] : null), has = false;
 	cls = ('' + cls).replace(/\./g, '');
 	while (!has && el) {
-		has = el && el.classList && el.classList.contains(cls);
+		// has = el && el.classList && el.classList.contains(cls);
+		has = el.matches(cls);
 		if (has) return el;
 		el = el.parentNode;
 	}
 	return null;
+};
+
+sizzle.fn.is = function (selector) {
+	if (!this || !this.length) return false;
+	return this[0].matches(selector);
 };
 
 /**
@@ -77,6 +96,45 @@ sizzle.fn.isIn = function (...classes) {
 	return false;
 };
 
+
+
+/**
+ * Modify element class list
+ * @param  {array} el        array of elements
+ * @param  {string} action   add, remove or toggle
+ * @param  {string} cls      space separated list of classes to add/remove/toggle
+ * @param  {boolean} cond    [optional] true or false for toggle
+ * @return {array}           same array of elements
+ */
+function modElCls(el, action, cls, cond) {
+	if (!el || !el.length) return el;
+	cls = cls.split(' ');
+	if (typeof cond === 'boolean') {
+		el.forEach(function (el) {
+			cls.forEach(function (c) { el.classList[action](c, cond); });
+		});
+	}
+	else {
+		el.forEach(function (el) {
+			cls.forEach(function (c) { el.classList[action](c); });
+		});
+	}
+	return el;
+}
+
+sizzle.fn.addClass = function (cls) { return modElCls(this, 'add', cls); };
+sizzle.fn.removeClass = function (cls) { return modElCls(this, 'remove', cls); };
+sizzle.fn.toggleClass = function (cls, cond) { return modElCls(this, 'toggle', cls, cond); };
+sizzle.fn.hasClass = function (cls) {
+	if (!this || !this.length) return false;
+	return this[0].classList.contains(cls);
+};
+
+sizzle.fn.html = function (html) {
+	if (!this || !this.length) return this;
+	this.forEach(function (el) { el.innerHTML = html; });
+	return this;
+};
 
 
 export default sizzle;
