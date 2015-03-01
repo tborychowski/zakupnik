@@ -19,13 +19,13 @@ var gulp = require('gulp'),
 	};
 
 
-gulp.task('clean', function (cb) { del(['public/assets/**/*.{css,js,map}'], cb); });
+gulp.task('clean', function (cb) { del(['assets/**/*.{css,js,map}'], cb); });
 
 gulp.task('js', function () {
 	return gulp.src(['src/app.js'])
 		.pipe(webpack(wpCfg, null, wpErr))
 		// .pipe(uglify())
-		.pipe(gulp.dest('public/assets/'))
+		.pipe(gulp.dest('assets/'))
 		.pipe(live());
 });
 
@@ -42,7 +42,7 @@ gulp.task('styl', function () {
 		.pipe(stylus({ paths: ['src']}))
 		.pipe(cssmin({ keepSpecialComments: 0 }))
 		.pipe(concat('app.css'))
-		.pipe(gulp.dest('public/assets'))
+		.pipe(gulp.dest('assets'))
 		.pipe(live());
 });
 

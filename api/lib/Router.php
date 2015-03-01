@@ -135,9 +135,20 @@ class Router {
 	private static function sanitizeData ($data) {
 		$newData = array();
 		if (empty($data)) return $newData;
-		foreach ($data as $key => $value) {
-			$key = static::sanitize($key);
-			$newData[$key] = static::sanitize($value, $key);
+		if (isset($data[0])) {
+			foreach ($data as &$row) {
+				foreach ($row as $key => $value) {
+					$key = static::sanitize($key);
+					$row[$key] = static::sanitize($value, $key);
+				}
+			}
+			$newData['data'] = $data;
+		}
+		else {
+			foreach ($data as $key => $value) {
+				$key = static::sanitize($key);
+				$newData[$key] = static::sanitize($value, $key);
+			}
 		}
 		return $newData;
 	}

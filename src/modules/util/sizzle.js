@@ -64,13 +64,13 @@ sizzle.fn.off = function (eventName, cb) {
 
 
 sizzle.fn.closest = function (cls) {
-	var el = (this && this.length ? this[0] : null), has = false;
-	cls = ('' + cls).replace(/\./g, '');
+	if (!this || !this.length) return false;
+	var has = false, el = this[0];
 	while (!has && el) {
-		// has = el && el.classList && el.classList.contains(cls);
 		has = el.matches(cls);
-		if (has) return el;
+		if (has) return sizzle(el);
 		el = el.parentNode;
+		if (el.tagName === 'HTML') return null;
 	}
 	return null;
 };
@@ -134,6 +134,19 @@ sizzle.fn.html = function (html) {
 	if (!this || !this.length) return this;
 	this.forEach(function (el) { el.innerHTML = html; });
 	return this;
+};
+
+sizzle.fn.remove = function () {
+	if (!this || !this.length) return this;
+	this.forEach(function (el) { el.remove(); });
+	return this;
+};
+
+sizzle.fn.data = function (key) {
+	if (!this || !this.length) return this;
+	if (!this[0].dataset) return null;
+	if (key) return this[0].dataset[key];
+	return this[0].dataset;
 };
 
 

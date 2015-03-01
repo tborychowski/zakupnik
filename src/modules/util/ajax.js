@@ -1,4 +1,4 @@
-const base_url = '../api/';
+const base_url = 'api/';
 
 export default function (options, data) {
 	var req = new XMLHttpRequest(), resp;
@@ -12,7 +12,8 @@ export default function (options, data) {
 		options.type = 'json';
 	}
 
-	options.type = options.type || 'x-www-form-urlencoded';
+	// options.type = options.type || 'x-www-form-urlencoded';
+	options.type = options.type || 'json';
 	if (data && options.type === 'json') data = JSON.stringify(data);
 
 

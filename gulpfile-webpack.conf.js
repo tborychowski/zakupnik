@@ -5,7 +5,7 @@ module.exports = {
 	debug: false,
 	output: {
 		filename: 'app.js',
-		sourceMapFilename: 'app.map.js',
+		sourceMapFilename: 'app.js.map',
 		publicPath: './public/assets/'
 	},
 	resolve: {

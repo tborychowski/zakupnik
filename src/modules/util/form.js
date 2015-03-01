@@ -111,7 +111,7 @@ Form.prototype.get = function (convert = false) {
 		last = current[lastPart];
 		if (last) {
 			if (!Array.isArray(last)) current[lastPart] = (last === undefined ? [] : [last]);
-			last.push(value);
+			current[lastPart].push(value);
 		}
 		else if (!last) current[lastPart] = value;
 	});

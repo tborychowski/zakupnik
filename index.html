@@ -12,6 +12,11 @@
 </head>
 <body>
 
+	<div id="top">
+		<a href="#" class="logout">Logout</a>
+		<h1>zakupnik</h1>
+	</div>
+
 	<ul id="menu">
 		<li><a class="fa fa-shopping-cart" href="#expenses">Expenses</a></li>
 		<li><a class="fa fa-money" href="#income">Income</a></li>
@@ -20,13 +25,16 @@
 	</ul>
 
 	<div id="content">
+
 		<div class="section" id="expenses">
-			<h2>Add</h2>
+			<h2>Expenses</h2>
 			<div class="expenses-form">
 				<form class="form">
+
 					<div class="form-calendar">
-						<input type="date" name="date">
+						<input type="hidden" name="date" class="datefield">
 					</div>
+
 					<div class="subforms"></div>
 					<div class="form-row">
 						<button type="submit" class="btn-add">Add</button>
@@ -35,9 +43,21 @@
 			</div>
 			<div class="expenses-table"></div>
 		</div>
-		<div class="section" id="income">income</div>
-		<div class="section" id="stats">stats</div>
-		<div class="section" id="categories"></div>
+
+
+		<div class="section" id="income">
+			<h2>Income</h2>
+		</div>
+
+
+		<div class="section" id="stats">
+			<h2>Stats</h2>
+		</div>
+
+
+		<div class="section" id="categories">
+			<h2>Categories</h2>
+		</div>
 	</div>
 
 

@@ -1,40 +1,12 @@
 @import '_lib'
 
-
-#expenses
-	color #fff;
-
-	h2
-		margin 0 0 20; font-weight 100; font-size 30px;
-
-
-.expenses-form
-	.form
-		position relative;
-
-	.form-calendar
-		pos 0 auto 0 0; width 220;
-
-	.form-row
-		clear both; overflow hidden; padding 0 0 20;
-		margin-left 220px;
-
-	.btn-add
-		margin-left 330px
-
-	.category
-		width 200;
-
-	.amount
-		width 100; text-align right; margin-left 10px;
-
-	.btn-split
-		margin-left 10px;
+// #expenses
+// 	color #fff;
 
 
 
 .expenses-table
-	pos auto 10 10 10;
+	pos auto 0 10 10; padding-right 10px; max-height 50%; overflow-y auto;
 
 	table
 		width 100%; border-collapse collapse;
@@ -45,6 +17,20 @@
 		thead td
 			bg rgba(#fff, .3);
 
+		.active td
+			bg rgba(#FFFFD4, 0.2);
 
 	.amount
 		text-align right;
+
+	.actions
+		text-align right; width 70; padding 0 5 0 0; padding-left 0;
+		.btn
+			float right; font 14; size 27; text-align center; u 0;
+			margin-left 5px; padding-top 6px;
+			color rgba(#fff, 0.3); transition color .3s ease-out;
+
+			&:hover
+				color #fff;
+			&:active
+				color #aaa;

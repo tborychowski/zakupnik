@@ -1,10 +1,16 @@
 <div class="form-row">
-	<select name="category" class="category">
-		<option id="0">Category</option>
+	<input type="hidden" name="id">
+	<select name="category_id" class="category">
 		{{#categories}}
-			<option id="0">{{name}}</option>
+		<optgroup label="{{name}}">
+			{{#items}}
+				<option value="{{id}}">{{name}}</option>
+			{{/items}}
+		</optgroup>
 		{{/categories}}
 	</select>
-	<input name="amount" class="amount">
+	<input name="amount" class="amount" placeholder="0.00">
+	<input name="description" class="description" placeholder="description">
 	{{#first}}<button type="button" class="btn-split">Split</button>{{/first}}
+	{{^first}}<button type="button" class="btn-del">&times;</button>{{/first}}
 </div>
