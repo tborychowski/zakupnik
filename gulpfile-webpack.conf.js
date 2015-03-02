@@ -6,7 +6,7 @@ module.exports = {
 	output: {
 		filename: 'app.js',
 		sourceMapFilename: 'app.js.map',
-		publicPath: './public/assets/'
+		publicPath: './assets/'
 	},
 	resolve: {
 		modulesDirectories: ['modules', 'node_modules'],
