@@ -32,7 +32,7 @@
 				<form class="form">
 
 					<div class="form-calendar">
-						<input type="hidden" name="date" class="datefield">
+						<input type="text" name="date" class="datefield">
 					</div>
 
 					<div class="subforms"></div>
@@ -57,7 +57,22 @@
 
 		<div class="section" id="categories">
 			<h2>Categories</h2>
+
+			<div class="tree"></div>
+
+			<div class="form">
+				<form>
+					<input type="hidden" name="id">
+					<select name="parent_id" class="category"></select>
+					<input type="text" name="name" placeholder="name">
+					<button type="submit" class="btn btn-add">Add</button>
+					<button type="submit" class="btn btn-sav">Save</button>
+					<button type="button" class="btn btn-del">Remove</button>
+				</form>
+				<a href="#" class="cat">+ Add New</a>
+			</div>
 		</div>
+
 	</div>
 
 

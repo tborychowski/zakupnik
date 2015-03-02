@@ -24,7 +24,7 @@ function varToRealType (v) {
 
 function isObjectEmpty (x) {
 	if (!x || typeof x !== 'object') return true;
-	return Object.keys(x).length;
+	return Object.keys(x).length === 0;
 }
 
 function rand (max, min = 0) {

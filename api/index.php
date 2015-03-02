@@ -4,15 +4,28 @@ require('lib/_lib.php');
 header('content-type: text/plain; charset=utf8');	// XXX: for debug only
 
 
+Router::get('/categorytree', function ($params) {
+	$db = new Categories();
+	echo $db->get()->tree()->to_json();
+});
+
 Router::get('/categories/{id}', function ($params) {
 	$db = new Categories();
 	echo $db->get($params['id'])->to_json();
 });
 
-Router::get('/categorytree', function ($params) {
+Router::post('/categories/{id}', function ($params) {
 	$db = new Categories();
-	echo $db->get()->tree()->to_json();
+	if (!empty($params['id'])) echo $db->save($params)->to_json();
+	else echo $db->add($params)->to_json();
 });
+
+Router::del('/categories/{id}', function ($params) {
+	$db = new Categories();
+	if (!empty($params['id'])) echo $db->del($params['id'])->to_json();
+});
+
+
 
 
 Router::get('/entries/{id}', function ($params) {
@@ -22,18 +35,17 @@ Router::get('/entries/{id}', function ($params) {
 
 Router::post('/entries/{id}', function ($params) {
 	$db = new Entries();
-	if (!empty($params['id'])) {
-		echo $db->save($params)->to_json();
-	}
+	if (!empty($params['id'])) echo $db->save($params)->to_json();
 	else echo $db->add($params['data'])->to_json();
 });
 
 Router::del('/entries/{id}', function ($params) {
 	$db = new Entries();
-	if (!empty($params['id'])) {
-		echo $db->del($params['id'])->to_json();
-	}
+	if (!empty($params['id'])) echo $db->del($params['id'])->to_json();
 });
+
+
+
 
 
 

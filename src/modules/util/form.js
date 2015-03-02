@@ -28,13 +28,14 @@ function _getInputs (form) {
  */
 function Form (el) {
 	if (!el) return null;
+	if (!(this instanceof Form)) return new Form(el);
 	this.form = el;
 }
 
 Form.prototype.set = function (params, clear) {
 	_getInputs(this.form).forEach(input => {
 		var name = input.name,
-			value = params[name] || '',
+			value = (typeof params[name] === 'undefined' ? '' : params[name]),
 			names, i, n, v;
 
 		// if name is object, e.g. user[name], userData[address][street], update value to read this correctly
@@ -60,6 +61,10 @@ Form.prototype.set = function (params, clear) {
 
 		if (input.type === 'radio') input.checked = (input.value.toString() === value.toString());
 		else if (input.type === 'checkbox') input.checked = value;
+		else if (input.tagName === 'SELECT') {
+			if (value === '' || value === undefined) input.selectedIndex = 0;
+			else input.value = value;
+		}
 		else input.value = value;
 	});
 	return this;

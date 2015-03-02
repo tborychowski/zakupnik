@@ -1,20 +1,29 @@
 import $ from 'util';
 import Data from 'data/entries';
 import Categories from 'data/categories';
-import Moment from 'moment';
 import Pikaday from 'pikaday';
 
 var tableTpl = require('./table.html');
 var formTpl = require('./form.html');
 var el, formContainer, form, tableContainer, subforms, picker, catList = [], isReady = false;
 
+function dateToString (date) {
+	var Y = date.getFullYear(), M = date.getMonth(), D = date.getDate();
+	return [ Y, ('0' + (M + 1)).substr(-2), ('0' + D).substr(-2) ].join('-');     // 2010-12-21
+}
+
+// parse string date: 2011-01-31
+function stringToDate (str) {
+	var s = str.split('-');
+	return new Date(s[0], s[1]-1, s[2]);
+}
 
 function load (initial = false) {
 	Data.get().then(function (entries) {
 		tableContainer.html(tableTpl({ entries }));
 	});
 	Categories.getTree().then(function (data) {
-		catList = data.items;
+		catList = data;
 		if (initial) subforms.html('');
 		split(initial);
 	});
@@ -47,7 +56,7 @@ function add () {
 	}
 
 	Data.save(newData).then(function (resp) {
-		if (resp.result === 'success') form.reset();
+		if (resp.result === 'success') form.set({ date: formData.date });
 		load(true);
 	});
 }
@@ -81,19 +90,29 @@ function init () {
 		tableContainer = el.find('.expenses-table');
 		formContainer = el.find('.expenses-form .form');
 		subforms = formContainer.find('.subforms');
-		form = new $.form(formContainer[0]);
+		form = $.form(formContainer[0]);
 
-		var start = Moment('2010-01-01'), end = Moment().endOf('month');
+		var start = new Date('2010-01-01'),
+			end = new Date(),
+			field = formContainer.find('.datefield')[0];
+
+		end.setMonth(end.getMonth() + 1);
+		field.value = dateToString(new Date());
+
 		picker = new Pikaday({
 			firstDay: 1,
-			bound: false,
-			defaultDate: Moment().toDate(),
-			setDefaultDate: true,
-			container: formContainer.find('.form-calendar')[0],
-			field: formContainer.find('.datefield')[0],
-			minDate: start.toDate(),
-			maxDate: end.toDate(),
-			yearRange: [start.year(), end.year()]
+			format: 'YYYY-MM-DD',
+			defaultDate: dateToString(new Date()),
+			// setDefaultDate: true,
+			// container: formContainer.find('.form-calendar')[0],
+			// bound: false,
+			field: field,
+			minDate: start,
+			maxDate: end,
+			yearRange: [start.getFullYear(), end.getFullYear()],
+			onSelect: function (v) {
+				field.value = dateToString(v);
+			}
 		});
 
 		formContainer.on('submit', function (e) {
@@ -120,7 +139,7 @@ function init () {
 		});
 	}
 
-	load(!isReady);
+	load(true);
 	isReady = true;
 }
 

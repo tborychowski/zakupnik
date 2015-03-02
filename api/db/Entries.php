@@ -31,8 +31,8 @@ class Entries extends DB {
 		return $this;
 	}
 
-	public function add ($entries) {
-		$this->insert('entries', $entries);
+	public function add ($data) {
+		$this->insert('entries', $data);
 		return $this;
 	}
 
