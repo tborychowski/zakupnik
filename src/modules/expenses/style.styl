@@ -1,35 +1,44 @@
 @import '_lib'
 
-// #expenses
-// 	color #fff;
-
-
+#expenses
+	.btn-reset
+		color rgba(#fff, 0.6); u 0; font 24; vertical-align bottom;
+		margin-left 10px; transition color .3s ease-out;
+		&:hover
+			color #fff;
+		&:active
+			color #888;
 
 .expenses-table
-	pos 300 0 10 10; padding-right 10px; max-height 50%; overflow-y auto;
+	pos 60 0 10 500; padding-right 10px;
 
 	table
-		width 100%; border-collapse collapse;
+		width 100%; border-collapse collapse; font 13; border #ccc;
 
 		td
-			border #ccc; padding 7;
+			padding 7; //border #ccc; border-width 1px 0 1px;
 
 		thead td
 			bg rgba(#fff, .3);
 
 		.active td
 			bg rgba(#FFFFD4, 0.2);
+		tr:hover td
+			bg rgba(#fff, .1);
+
 
 	.amount
 		text-align right;
 
 	.actions
-		text-align right; width 70; padding 0 5 0 0; padding-left 0;
+		text-align right; width 60; padding 0;
 		.btn
-			float right; font 14; size 27; text-align center; u 0;
-			margin-left 5px; padding-top 6px;
+			float right; font 14; size 24; text-align center; u 0;
+			margin-left 5px; padding-top 4px;
 			color rgba(#fff, 0.3); transition color .3s ease-out;
 
+			&:last-child
+				margin-left 0;
 			&:hover
 				color #fff;
 			&:active

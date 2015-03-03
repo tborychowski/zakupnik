@@ -16,6 +16,7 @@
 		<a href="#" class="logout">Logout</a>
 		<h1>zakupnik</h1>
 	</div>
+	<div id="calendar"></div>
 
 	<ul id="menu">
 		<li><a class="fa fa-shopping-cart" href="#expenses">Expenses</a></li>
@@ -27,20 +28,13 @@
 	<div id="content">
 
 		<div class="section" id="expenses">
-			<h2>Expenses</h2>
-			<div class="expenses-form">
-				<form class="form">
-
-					<div class="form-calendar">
-						<input type="text" name="date" class="datefield">
-					</div>
-
-					<div class="subforms"></div>
-					<div class="form-row">
-						<button type="submit" class="btn-add">Add</button>
-					</div>
-				</form>
-			</div>
+			<h2>Expenses <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
+			<form class="expenses-form">
+				<div class="subforms"></div>
+				<div class="form-row">
+					<button type="submit" class="btn-add">Add</button>
+				</div>
+			</form>
 			<div class="expenses-table"></div>
 		</div>
 

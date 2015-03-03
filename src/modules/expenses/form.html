@@ -11,6 +11,6 @@
 	</select>
 	<input name="amount" class="amount" placeholder="0.00">
 	<input name="description" class="description" placeholder="description">
-	{{#first}}<button type="button" class="btn-split">Split</button>{{/first}}
-	{{^first}}<button type="button" class="btn-del">&times;</button>{{/first}}
+	{{#first}}<a href="#" title="Split" class="btn-split fa fa-share-alt"></a>{{/first}}
+	{{^first}}<a href="#" title="Remove" class="btn-del fa fa-trash-o"></a>{{/first}}
 </div>

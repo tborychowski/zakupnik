@@ -1,0 +1,43 @@
+@import '_lib'
+
+
+#calendar
+	pos 0; height top-height; text-align center; padding 5 0 0;
+	left calc(50% - 170px);
+	right calc(50% - 170px);
+
+	.date
+		bg none; border none; width 160; padding 0; text-align center;
+		color #fff; cursor default;
+		font 20;
+
+		&:hover
+			u 1;
+
+
+
+
+.pika-single
+	border 0;
+
+	&
+	.pika-button
+	.pika-table th
+		font 100 15px/1 'Open Sans', sans-serif;
+
+.pika-table th
+	padding 5 0 10;
+	abbr
+		cursor default;
+
+.pika-label
+	font 15/1; font-weight 400; padding 5 3 10
+
+.pika-button
+	bg #fff;
+
+.is-selected .pika-button
+	border-radius 0; shadow none;
+
+.pika-button:hover
+	bg #ff8000; border-radius 0 !important;
