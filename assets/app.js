@@ -200,15 +200,15 @@
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var sizzle = _interopRequire(__webpack_require__(14));
+	var sizzle = _interopRequire(__webpack_require__(13));
 	
-	var ajax = _interopRequire(__webpack_require__(15));
+	var ajax = _interopRequire(__webpack_require__(14));
 	
-	var form = _interopRequire(__webpack_require__(16));
+	var form = _interopRequire(__webpack_require__(15));
 	
-	var pubsub = _interopRequire(__webpack_require__(17));
+	var pubsub = _interopRequire(__webpack_require__(16));
 	
-	var util = _interopRequire(__webpack_require__(18));
+	var util = _interopRequire(__webpack_require__(17));
 	
 	var all = { ajax: ajax, form: form };
 	Object.assign(all, ajax, pubsub, util);
@@ -226,18 +226,20 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(19));
+	var Data = _interopRequire(__webpack_require__(18));
 	
-	var Categories = _interopRequire(__webpack_require__(20));
+	var Categories = _interopRequire(__webpack_require__(19));
 	
 	var Calendar = _interopRequire(__webpack_require__(2));
 	
-	var tableTpl = __webpack_require__(11);
-	var formTpl = __webpack_require__(12);
+	var Grid = _interopRequire(__webpack_require__(20));
+	
+	var formTpl = __webpack_require__(11);
 	var el,
 	    formContainer,
 	    form,
 	    tableContainer,
+	    grid,
 	    subforms,
 	    catList = [],
 	    isReady = false;
@@ -245,9 +247,7 @@
 	function load() {
 		var initial = arguments[0] === undefined ? false : arguments[0];
 	
-		Data.get().then(function (entries) {
-			tableContainer.html(tableTpl({ entries: entries }));
-		});
+		grid.load();
 		Categories.getTree().then(function (data) {
 			catList = data;
 			if (initial) subforms.html("");
@@ -295,19 +295,18 @@
 		});
 	}
 	
-	function del(row, id) {
-		row.addClass("active");
+	function del(item, row) {
+		this.selectRow(row, true);
 		if (window.confirm("Are you sure you wish to delete this row?")) {
-			Data.del({ id: id }).then(function (resp) {
+			Data.del({ id: item.id }).then(function (resp) {
 				if (resp.result === "success") row.remove();
 			});
 		}
 	}
 	
-	function edit(row, id) {
-		tableContainer.find(".active").removeClass("active");
-		row.addClass("active");
-		Data.get(id).then(function (data) {
+	function edit(item, row) {
+		this.selectRow(row, true);
+		Data.get(item.id).then(function (data) {
 			Calendar.set(data.date);
 			resetForm();
 			form.set(data);
@@ -339,14 +338,23 @@
 				if (target.is(".btn-del")) unsplit(target);
 			});
 	
-			tableContainer.on("click", function (e) {
-				var btn = $(e.target),
-				    row = btn.closest(".row"),
-				    id = row && row.data("id");
-	
-				if (btn.is(".fa")) btn = btn.closest(".btn");
-				if (btn.is(".btn-del")) del(row, id);else if (btn.is(".btn-mod")) edit(row, id);else if (row) edit(row, id);else return;
-				e.preventDefault();
+			grid = new Grid({
+				target: tableContainer[0],
+				sort: { by: "date", order: "desc" },
+				dataSource: function () {
+					return Data.get();
+				},
+				columns: [{ width: 52, cls: "action", icons: {
+						edit: { cls: "pencil", action: edit },
+						del: { cls: "trash-o", action: del }
+					} }, { name: "Date", field: "date", cls: "date", sortable: true, width: 90 }, { name: "Category", field: "category", cls: "category", sortable: true, width: "25%" }, { name: "Description", field: "description", cls: "category", sortable: true }, { name: "Amount", field: "amount", cls: "amount", sortable: true, width: 100,
+					renderer: function (v, item) {
+						return "€" + item.amount_str;
+					},
+					footer: function () {
+						return "€0";
+					}
+				}]
 			});
 		}
 	
@@ -408,7 +416,7 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(20));
+	var Data = _interopRequire(__webpack_require__(19));
 	
 	var el,
 	    treeContainer,
@@ -416,7 +424,7 @@
 	    form,
 	    btn = {},
 	    catSel;
-	var tpl = __webpack_require__(13);
+	var tpl = __webpack_require__(12);
 	
 	function updateCatSelect(data) {
 		var options = ["<option value=\"0\"></option>"];
@@ -4631,39 +4639,32 @@
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var H = __webpack_require__(103);
+	var H = __webpack_require__(106);
 	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<input type=\"text\" class=\"date\">\r");t.b("\n" + i);t.b("<button class=\"btn btn-prev\" data-go=\"prev\">&laquo;</button>\r");t.b("\n" + i);t.b("<button class=\"btn btn-today\" data-go=\"today\">Today</button>\r");t.b("\n" + i);t.b("<button class=\"btn btn-next\" data-go=\"next\">&raquo;</button>");return t.fl(); },partials: {}, subs: {  }}, "<input type=\"text\" class=\"date\">\r\n<button class=\"btn btn-prev\" data-go=\"prev\">&laquo;</button>\r\n<button class=\"btn btn-today\" data-go=\"today\">Today</button>\r\n<button class=\"btn btn-next\" data-go=\"next\">&raquo;</button>", H); return T.render.apply(T, arguments); };
 
 /***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var H = __webpack_require__(103);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<table>\r");t.b("\n" + i);t.b("<thead><tr>\r");t.b("\n" + i);t.b("	<td>Date</td>\r");t.b("\n" + i);t.b("	<td>Category</td>\r");t.b("\n" + i);t.b("	<td>Description</td>\r");t.b("\n" + i);t.b("	<td class=\"amount\">Amount</td>\r");t.b("\n" + i);t.b("	<td class=\"actions\"></td>\r");t.b("\n" + i);t.b("</tr></thead>\r");t.b("\n" + i);t.b("<tbody>\r");t.b("\n" + i);if(t.s(t.f("entries",c,p,1),c,p,0,178,508,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<tr class=\"row\" data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("	<td>");t.b(t.v(t.f("date",c,p,0)));t.b("</td>\r");t.b("\n" + i);t.b("	<td>");t.b(t.v(t.f("category",c,p,0)));t.b("</td>\r");t.b("\n" + i);t.b("	<td>");t.b(t.v(t.f("description",c,p,0)));t.b("</td>\r");t.b("\n" + i);t.b("	<td class=\"amount\">&euro;");t.b(t.v(t.f("amount_str",c,p,0)));t.b("</td>\r");t.b("\n" + i);t.b("	<td class=\"actions\">\r");t.b("\n" + i);t.b("		<a href=\"#\" class=\"btn btn-mod\"><i class=\"fa fa-pencil\"></i></a>\r");t.b("\n" + i);t.b("		<a href=\"#\" class=\"btn btn-del\"><i class=\"fa fa-trash-o\"></i></a>\r");t.b("\n" + i);t.b("	</td>\r");t.b("\n" + i);t.b("</tr>\r");t.b("\n" + i);});c.pop();}t.b("</tbody>\r");t.b("\n" + i);t.b("</table>");return t.fl(); },partials: {}, subs: {  }}, "<table>\r\n<thead><tr>\r\n\t<td>Date</td>\r\n\t<td>Category</td>\r\n\t<td>Description</td>\r\n\t<td class=\"amount\">Amount</td>\r\n\t<td class=\"actions\"></td>\r\n</tr></thead>\r\n<tbody>\r\n{{#entries}}\r\n<tr class=\"row\" data-id=\"{{id}}\">\r\n\t<td>{{date}}</td>\r\n\t<td>{{category}}</td>\r\n\t<td>{{description}}</td>\r\n\t<td class=\"amount\">&euro;{{amount_str}}</td>\r\n\t<td class=\"actions\">\r\n\t\t<a href=\"#\" class=\"btn btn-mod\"><i class=\"fa fa-pencil\"></i></a>\r\n\t\t<a href=\"#\" class=\"btn btn-del\"><i class=\"fa fa-trash-o\"></i></a>\r\n\t</td>\r\n</tr>\r\n{{/entries}}\r\n</tbody>\r\n</table>", H); return T.render.apply(T, arguments); };
+	var H = __webpack_require__(106);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"form-row\">\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"id\">\r");t.b("\n" + i);t.b("	<select name=\"category_id\" class=\"category\">\r");t.b("\n" + i);if(t.s(t.f("categories",c,p,1),c,p,0,122,248,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("		<optgroup label=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\">\r");t.b("\n" + i);if(t.s(t.f("items",c,p,1),c,p,0,168,219,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("				<option value=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</option>\r");t.b("\n" + i);});c.pop();}t.b("		</optgroup>\r");t.b("\n" + i);});c.pop();}t.b("	</select>\r");t.b("\n" + i);t.b("	<input name=\"amount\" class=\"amount\" placeholder=\"0.00\">\r");t.b("\n" + i);t.b("	<input name=\"description\" class=\"description\" placeholder=\"description\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("first",c,p,1),c,p,0,421,485,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-share-alt\"></a>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	");if(!t.s(t.f("first",c,p,1),c,p,1,0,0,"")){t.b("<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>");};t.b("\r");t.b("\n" + i);t.b("</div>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"form-row\">\r\n\t<input type=\"hidden\" name=\"id\">\r\n\t<select name=\"category_id\" class=\"category\">\r\n\t\t{{#categories}}\r\n\t\t<optgroup label=\"{{name}}\">\r\n\t\t\t{{#items}}\r\n\t\t\t\t<option value=\"{{id}}\">{{name}}</option>\r\n\t\t\t{{/items}}\r\n\t\t</optgroup>\r\n\t\t{{/categories}}\r\n\t</select>\r\n\t<input name=\"amount\" class=\"amount\" placeholder=\"0.00\">\r\n\t<input name=\"description\" class=\"description\" placeholder=\"description\">\r\n\t{{#first}}<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-share-alt\"></a>{{/first}}\r\n\t{{^first}}<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>{{/first}}\r\n</div>\r\n", H); return T.render.apply(T, arguments); };
 
 /***/ },
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var H = __webpack_require__(103);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"form-row\">\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"id\">\r");t.b("\n" + i);t.b("	<select name=\"category_id\" class=\"category\">\r");t.b("\n" + i);if(t.s(t.f("categories",c,p,1),c,p,0,122,248,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("		<optgroup label=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\">\r");t.b("\n" + i);if(t.s(t.f("items",c,p,1),c,p,0,168,219,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("				<option value=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</option>\r");t.b("\n" + i);});c.pop();}t.b("		</optgroup>\r");t.b("\n" + i);});c.pop();}t.b("	</select>\r");t.b("\n" + i);t.b("	<input name=\"amount\" class=\"amount\" placeholder=\"0.00\">\r");t.b("\n" + i);t.b("	<input name=\"description\" class=\"description\" placeholder=\"description\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("first",c,p,1),c,p,0,421,471,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<a href=\"#\" class=\"btn-split fa fa-share-alt\"></a>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	");if(!t.s(t.f("first",c,p,1),c,p,1,0,0,"")){t.b("<a href=\"#\" class=\"btn-del fa fa-trash-o\"></a>");};t.b("\r");t.b("\n" + i);t.b("</div>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"form-row\">\r\n\t<input type=\"hidden\" name=\"id\">\r\n\t<select name=\"category_id\" class=\"category\">\r\n\t\t{{#categories}}\r\n\t\t<optgroup label=\"{{name}}\">\r\n\t\t\t{{#items}}\r\n\t\t\t\t<option value=\"{{id}}\">{{name}}</option>\r\n\t\t\t{{/items}}\r\n\t\t</optgroup>\r\n\t\t{{/categories}}\r\n\t</select>\r\n\t<input name=\"amount\" class=\"amount\" placeholder=\"0.00\">\r\n\t<input name=\"description\" class=\"description\" placeholder=\"description\">\r\n\t{{#first}}<a href=\"#\" class=\"btn-split fa fa-share-alt\"></a>{{/first}}\r\n\t{{^first}}<a href=\"#\" class=\"btn-del fa fa-trash-o\"></a>{{/first}}\r\n</div>\r\n", H); return T.render.apply(T, arguments); };
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var H = __webpack_require__(103);
+	var H = __webpack_require__(106);
 	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H); return T.render.apply(T, arguments); };
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var util = _interopRequire(__webpack_require__(18));
+	var util = _interopRequire(__webpack_require__(17));
 	
 	function sizzle(mixed, context) {
 		if (!mixed) {
@@ -4841,7 +4842,7 @@
 	module.exports = sizzle;
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4885,7 +4886,7 @@
 	};
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5020,7 +5021,7 @@
 	module.exports = Form;
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5061,7 +5062,7 @@
 	module.exports = { on: on, off: off, trigger: trigger };
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5194,7 +5195,7 @@
 	};
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5225,7 +5226,7 @@
 	};
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5259,6 +5260,400 @@
 		save: save,
 		del: del
 	};
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
+	
+	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+	
+	var util = _interopRequire(__webpack_require__(103));
+	
+	var Grid = (function () {
+		function Grid(cfg) {
+			_classCallCheck(this, Grid);
+	
+			var _defaults = {
+				target: document.body,
+				sort: { by: "id", order: "asc" },
+				dataSource: null,
+				columns: []
+			};
+			this.tpl = {
+				frame: __webpack_require__(104),
+				row: __webpack_require__(105)
+			};
+			this.isRendered = false;
+			this.cfg = Object.assign({}, _defaults, cfg);
+			this.cfg.target.classList.add("grid");
+			this.cfg.target.innerHTML = this.tpl.frame();
+			this.el = {
+				target: this.cfg.target,
+				scroller: this.cfg.target.querySelector(".grid-scroller"),
+				head: this.cfg.target.querySelector(".grid-header"),
+				body: this.cfg.target.querySelector(".grid-body"),
+				foot: this.cfg.target.querySelector(".grid-footer"),
+				headTable: this.cfg.target.querySelector(".grid-header-table"),
+				bodyTable: this.cfg.target.querySelector(".grid-body-table")
+			};
+			this.processColumns();
+			this.el.target.addEventListener("click", this.onClick.bind(this));
+			this.el.scroller.addEventListener("scroll", this.onScroll.bind(this));
+		}
+	
+		_prototypeProperties(Grid, null, {
+			load: {
+				value: function load() {
+					this.data = {};
+					this.items = [];
+					if (!this.cfg.dataSource) throw "No data source";
+					var src = this.cfg.dataSource();
+					if (src instanceof Promise) src.then(this.setData.bind(this));else this.setData(src);
+					return this;
+				},
+				writable: true,
+				configurable: true
+			},
+			setData: {
+				value: function setData(data) {
+					if (!data) throw "No data!";
+					this.data = data;
+	
+					this.items = data;
+					this.sortItems();
+					return this;
+				},
+				writable: true,
+				configurable: true
+			},
+			sortItems: {
+				value: function sortItems(sortBy, order) {
+					if (sortBy) this.cfg.sort.by = sortBy;
+					if (order) this.cfg.sort.order = order;
+	
+					if (this.items && this.items.length) {
+						this.items.sort(util.sortFn({ by: "id", order: "desc" }, this.items));
+						if (sortBy) this.items.sort(util.sortFn(this.cfg.sort, this.items));
+					}
+					this.populate();
+	
+					var col,
+					    all = this.el.head.querySelectorAll(".sort");
+					var _iteratorNormalCompletion = true;
+					var _didIteratorError = false;
+					var _iteratorError = undefined;
+	
+					try {
+						for (var _iterator = all[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+							col = _step.value;
+							col.classList.remove("sort-asc", "sort-desc");
+						}
+					} catch (err) {
+						_didIteratorError = true;
+						_iteratorError = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion && _iterator["return"]) {
+								_iterator["return"]();
+							}
+						} finally {
+							if (_didIteratorError) {
+								throw _iteratorError;
+							}
+						}
+					}
+	
+					this.el.head.querySelector(".sort." + this.cfg.sort.by).classList.add("sort-" + this.cfg.sort.order);
+				},
+				writable: true,
+				configurable: true
+			},
+			processColumns: {
+				value: function processColumns() {
+					var actions = {},
+					    colWidths = [];
+					var _iteratorNormalCompletion = true;
+					var _didIteratorError = false;
+					var _iteratorError = undefined;
+	
+					try {
+						for (var _iterator = this.cfg.columns[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+							var col = _step.value;
+	
+							if (col.icons) {
+								for (var icon in col.icons) {
+									actions[icon] = col.icons[icon].action;
+								}
+							}
+							if (typeof col.width === "string" && col.width.indexOf("%") === -1) {
+								col.width = parseInt(col.width, 10);
+							}
+							colWidths.push(col.width || "auto");
+						}
+					} catch (err) {
+						_didIteratorError = true;
+						_iteratorError = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion && _iterator["return"]) {
+								_iterator["return"]();
+							}
+						} finally {
+							if (_didIteratorError) {
+								throw _iteratorError;
+							}
+						}
+					}
+	
+					this.columnWidths = colWidths;
+					this.iconHandlers = actions;
+				},
+				writable: true,
+				configurable: true
+			},
+			updateColumnWidths: {
+				value: function updateColumnWidths() {
+					var autos = 0,
+					    sumW = 0,
+					    remainingW,
+					    autoPercent = 100,
+					    autoW,
+					    headCols = this.el.head.querySelectorAll(".grid-cell"),
+					    bodyCols = this.el.body.querySelectorAll(".grid-row:first-child .grid-cell"),
+					    footCols = this.el.foot.querySelectorAll(".grid-cell");
+	
+					var _iteratorNormalCompletion = true;
+					var _didIteratorError = false;
+					var _iteratorError = undefined;
+	
+					try {
+						for (var _iterator = this.columnWidths[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+							var col = _step.value;
+	
+							if (typeof col === "number") sumW += col;else if (col === "auto") autos++;else if (col.indexOf("%") > -1) {
+								autoPercent -= parseInt(col, 10);
+								autos++;
+							}
+						}
+					} catch (err) {
+						_didIteratorError = true;
+						_iteratorError = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion && _iterator["return"]) {
+								_iterator["return"]();
+							}
+						} finally {
+							if (_didIteratorError) {
+								throw _iteratorError;
+							}
+						}
+					}
+	
+					remainingW = this.el.head.offsetWidth - sumW;
+					autoPercent = autoPercent / autos;
+					autoW = remainingW * autoPercent / 100;
+	
+					var _iteratorNormalCompletion2 = true;
+					var _didIteratorError2 = false;
+					var _iteratorError2 = undefined;
+	
+					try {
+						for (var _iterator2 = this.columnWidths.entries()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+							var _step2$value = _slicedToArray(_step2.value, 2);
+	
+							var i = _step2$value[0];
+							var col = _step2$value[1];
+	
+							if (col === "auto") col = autoPercent + "%";else if (typeof col === "number") col = col + "px";
+	
+							if (headCols[i]) headCols[i].style.width = col;
+							if (bodyCols[i]) bodyCols[i].style.width = col;
+							if (footCols[i]) footCols[i].style.width = col;
+						}
+					} catch (err) {
+						_didIteratorError2 = true;
+						_iteratorError2 = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+								_iterator2["return"]();
+							}
+						} finally {
+							if (_didIteratorError2) {
+								throw _iteratorError2;
+							}
+						}
+					}
+	
+					this.el.bodyTable.style.width = this.el.headTable.offsetWidth + "px";
+				},
+				writable: true,
+				configurable: true
+			},
+			onClick: {
+				value: function onClick(e) {
+					var target = e.target;
+	
+					if (util.closest(target, "td.sort")) {
+						target = util.closest(target, "td.sort");
+						var isAsc = target.classList.contains("sort-asc");
+						this.sortItems(target.dataset.sortby, isAsc ? "desc" : "asc");
+					} else if (util.closest(target, ".row-action")) {
+						target = util.closest(target, ".row-action");
+						e.preventDefault();
+						var row = util.closest(target, ".grid-row"),
+						    action = target.dataset.action,
+						    id = +row.dataset.id,
+						    item = this.getItemById(id);
+						this.iconHandlers[action].call(this, item, row);
+					}
+				},
+				writable: true,
+				configurable: true
+			},
+			onScroll: {
+				value: function onScroll() {
+					var scrld = this.el.scroller.scrollTop > 0;
+					this.el.headTable.classList.toggle("grid-header-scroll-over", scrld);
+				},
+				writable: true,
+				configurable: true
+			},
+			getItemById: {
+				value: function getItemById(id) {
+					return this.items.filter(function (item) {
+						return item.id === id;
+					})[0];
+				},
+				writable: true,
+				configurable: true
+			},
+			getItemRow: {
+				value: function getItemRow(item) {
+					var _this = this;
+	
+					return this.cfg.columns.map(function (col) {
+						var text = item[col.field];
+						var cls = col.cls ? " " + col.cls : "";
+						if (typeof col.renderer === "function") text = col.renderer.call(_this, text, item);else if (col.icons) {
+							text = Object.keys(col.icons).map(function (i) {
+								var icon = col.icons[i];
+								var cls = "row-action";
+								return "<a href=\"#\" class=\"" + cls + "\" data-action=\"" + i + "\"><i class=\"fa fa-" + icon.cls + "\"></i></a>";
+							}).join("");
+						}
+						return { cls: cls, text: text };
+					}, this);
+				},
+				writable: true,
+				configurable: true
+			},
+			getHeader: {
+				value: function getHeader() {
+					var cells = this.cfg.columns.map(function (col) {
+						var text = col.name || "";
+						var cls = "grid-cell grid-header-cell" + (col.cls ? " " + col.cls : "");
+						if (col.sortable) cls += " sort";
+						return "<td class=\"" + cls + "\" data-sortby=\"" + col.field + "\">" + "<em></em><span class=\"grid-header-cell-inner\">" + text + "</span></td>";
+					}, this);
+					return cells.join("");
+				},
+				writable: true,
+				configurable: true
+			},
+			getFooter: {
+				value: function getFooter() {
+					var _this = this;
+	
+					var cells = this.cfg.columns.map(function (col) {
+						var text = "";
+						var cls = "grid-cell grid-footer-cell" + (col.cls ? " " + col.cls : "");
+						if (typeof col.footer === "function") text = col.footer.call(_this, _this.data);else if (typeof col.footer === "string") text = col.footer;
+						return "<td class=\"" + cls + "\"><span class=\"grid-footer-cell-inner\">" + text + "</span></td>";
+					}, this);
+					return cells.join("");
+				},
+				writable: true,
+				configurable: true
+			},
+			getBody: {
+				value: function getBody() {
+					var _this = this;
+	
+					return this.items.map(function (item) {
+						return _this.tpl.row({ id: item.id, cells: _this.getItemRow(item) });
+					}, this).join("");
+				},
+				writable: true,
+				configurable: true
+			},
+			populate: {
+				value: function populate() {
+					if (!this.isRendered) {
+						this.el.head.innerHTML = this.getHeader();
+						this.el.foot.innerHTML = this.getFooter();
+						this.isRendered = true;
+					}
+					this.el.body.innerHTML = this.getBody();
+					this.updateColumnWidths();
+				},
+				writable: true,
+				configurable: true
+			},
+			selectRow: {
+				value: function selectRow(row, unselectOther) {
+					if (unselectOther) this.unselectRows();
+					row.classList.add("selected");
+				},
+				writable: true,
+				configurable: true
+			},
+			unselectRows: {
+				value: function unselectRows() {
+					var row,
+					    rows = this.el.body.querySelectorAll(".grid-row.selected");
+					var _iteratorNormalCompletion = true;
+					var _didIteratorError = false;
+					var _iteratorError = undefined;
+	
+					try {
+						for (var _iterator = rows[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+							row = _step.value;
+							row.classList.remove("selected");
+						}
+					} catch (err) {
+						_didIteratorError = true;
+						_iteratorError = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion && _iterator["return"]) {
+								_iterator["return"]();
+							}
+						} finally {
+							if (_didIteratorError) {
+								throw _iteratorError;
+							}
+						}
+					}
+				},
+				writable: true,
+				configurable: true
+			}
+		});
+	
+		return Grid;
+	})();
+	
+	module.exports = Grid;
 
 /***/ },
 /* 21 */
@@ -13167,6 +13562,153 @@
 /* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	
+	function type(items, field) {
+		if (!items || !items.length) {
+			return "str";
+		}var i, v, t, item;
+		for (i = 0; item = items[i]; i++) {
+			if (item && item[field]) v = typeof item[field];
+			if (v === "number" || v === "string") t = v.substr(0, 3);
+			if (t) break;
+		}
+		return t || "str";
+	}
+	
+	function sortFn(sort, items) {
+		var by = sort.by,
+		    order = sort.order,
+		    sortType = type(items, by),
+		    strCmp = function strCmp(a, b, by) {
+			return ("" + a[by]).toLowerCase().localeCompare(("" + b[by]).toLowerCase());
+		};
+	
+		if (sortType === "num") {
+			if (order === "asc") {
+				return function (a, b) {
+					return a[by] - b[by];
+				};
+			} else {
+				return function (a, b) {
+					return b[by] - a[by];
+				};
+			}
+		} else {
+			if (order === "asc") {
+				return function (a, b) {
+					return strCmp(a, b, by);
+				};
+			} else {
+				return function (a, b) {
+					return strCmp(b, a, by);
+				};
+			}
+		}
+	}
+	
+	function closest(el, selector) {
+		var has = false;
+		while (!has && el) {
+			has = el.matches(selector);
+			if (has) {
+				return el;
+			}el = el.parentNode;
+			if (el.tagName === "HTML") {
+				return null;
+			}
+		}
+		return null;
+	}
+	
+	function merge(target) {
+		for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			sources[_key - 1] = arguments[_key];
+		}
+	
+		if (!target) throw new TypeError("Cannot convert first argument to object");
+		var to = Object(target);
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = sources[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var source = _step.value;
+	
+				var keys = Object.keys(Object(source));
+				var _iteratorNormalCompletion2 = true;
+				var _didIteratorError2 = false;
+				var _iteratorError2 = undefined;
+	
+				try {
+					for (var _iterator2 = keys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+						var key = _step2.value;
+	
+						var desc = Object.getOwnPropertyDescriptor(source, key);
+						if (desc !== undefined && desc.enumerable) to[key] = source[key];
+					}
+				} catch (err) {
+					_didIteratorError2 = true;
+					_iteratorError2 = err;
+				} finally {
+					try {
+						if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+							_iterator2["return"]();
+						}
+					} finally {
+						if (_didIteratorError2) {
+							throw _iteratorError2;
+						}
+					}
+				}
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		return to;
+	}
+	
+	if (!Object.assign) Object.defineProperty(Object, "assign", { value: merge,
+		enumerable: false, configurable: true, writable: true
+	});
+	
+	module.exports = {
+		type: type,
+		sortFn: sortFn,
+		closest: closest
+	};
+
+/***/ },
+/* 104 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var H = __webpack_require__(106);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<table class=\"grid-table grid-header-table\">\r");t.b("\n" + i);t.b("	<thead><tr class=\"grid-header\"></tr></thead>\r");t.b("\n" + i);t.b("</table>\r");t.b("\n" + i);t.b("<div class=\"grid-scroller\">\r");t.b("\n" + i);t.b("	<table class=\"grid-table grid-body-table\">\r");t.b("\n" + i);t.b("		<tbody class=\"grid-body\"></tbody>\r");t.b("\n" + i);t.b("	</table>\r");t.b("\n" + i);t.b("</div>\r");t.b("\n" + i);t.b("<table class=\"grid-table grid-footer-table\">\r");t.b("\n" + i);t.b("	<tfoot><tr class=\"grid-footer\"></tr></tfoot>\r");t.b("\n" + i);t.b("</table>");return t.fl(); },partials: {}, subs: {  }}, "<table class=\"grid-table grid-header-table\">\r\n\t<thead><tr class=\"grid-header\"></tr></thead>\r\n</table>\r\n<div class=\"grid-scroller\">\r\n\t<table class=\"grid-table grid-body-table\">\r\n\t\t<tbody class=\"grid-body\"></tbody>\r\n\t</table>\r\n</div>\r\n<table class=\"grid-table grid-footer-table\">\r\n\t<tfoot><tr class=\"grid-footer\"></tr></tfoot>\r\n</table>", H); return T.render.apply(T, arguments); };
+
+/***/ },
+/* 105 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var H = __webpack_require__(106);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<tr data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\" class=\"grid-row\">\r");t.b("\n" + i);if(t.s(t.f("cells",c,p,1),c,p,0,51,140,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("		<td class=\"grid-cell ");t.b(t.v(t.f("cls",c,p,0)));t.b("\"><span class=\"grid-cell-inner\">");t.b(t.t(t.f("text",c,p,0)));t.b("</span></td>\r");t.b("\n" + i);});c.pop();}t.b("</tr>");return t.fl(); },partials: {}, subs: {  }}, "<tr data-id=\"{{id}}\" class=\"grid-row\">\r\n\t{{#cells}}\r\n\t\t<td class=\"grid-cell {{cls}}\"><span class=\"grid-cell-inner\">{{{text}}}</span></td>\r\n\t{{/cells}}\r\n</tr>", H); return T.render.apply(T, arguments); };
+
+/***/ },
+/* 106 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/*
 	 *  Copyright 2011 Twitter, Inc.
 	 *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -13184,14 +13726,14 @@
 	
 	// This file is for use with Node.js. See dist/ for browser files.
 	
-	var Hogan = __webpack_require__(104);
-	Hogan.Template = __webpack_require__(105).Template;
+	var Hogan = __webpack_require__(107);
+	Hogan.Template = __webpack_require__(108).Template;
 	Hogan.template = Hogan.Template;
 	module.exports = Hogan;
 
 
 /***/ },
-/* 104 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -13620,7 +14162,7 @@
 
 
 /***/ },
-/* 105 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

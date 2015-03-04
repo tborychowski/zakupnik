@@ -2,15 +2,14 @@ import $ from 'util';
 import Data from 'data/entries';
 import Categories from 'data/categories';
 import Calendar from 'calendar';
+import Grid from 'grid';
 
-var tableTpl = require('./table.html');
+// var tableTpl = require('./table.html');
 var formTpl = require('./form.html');
-var el, formContainer, form, tableContainer, subforms, catList = [], isReady = false;
+var el, formContainer, form, tableContainer, grid, subforms, catList = [], isReady = false;
 
 function load (initial = false) {
-	Data.get().then(function (entries) {
-		tableContainer.html(tableTpl({ entries }));
-	});
+	grid.load();
 	Categories.getTree().then(function (data) {
 		catList = data;
 		if (initial) subforms.html('');
@@ -57,20 +56,19 @@ function add () {
 	});
 }
 
-function del (row, id) {
-	row.addClass('active');
+function del (item, row) {
+	this.selectRow(row, true);
 	if (window.confirm('Are you sure you wish to delete this row?')) {
-		Data.del({ id: id }).then(function (resp) {
+		Data.del({ id: item.id }).then(function (resp) {
 			if (resp.result === 'success') row.remove();
 		});
 	}
 
 }
 
-function edit (row, id) {
-	tableContainer.find('.active').removeClass('active');
-	row.addClass('active');
-	Data.get(id).then(function (data) {
+function edit (item, row) {
+	this.selectRow(row, true);
+	Data.get(item.id).then(function (data) {
 		Calendar.set(data.date);
 		resetForm();
 		form.set(data);
@@ -105,19 +103,24 @@ function init () {
 			if (target.is('.btn-del')) unsplit(target);
 		});
 
-		tableContainer.on('click', function (e) {
-			var btn = $(e.target),
-				row = btn.closest('.row'),
-				id = row && row.data('id');
-
-			if (btn.is('.fa')) btn = btn.closest('.btn');
-			if (btn.is('.btn-del')) del(row, id);
-			else if (btn.is('.btn-mod')) edit(row, id);
-			else if (row) edit(row, id);
-			else return;
-			e.preventDefault();
+		grid = new Grid({
+			target: tableContainer[0],
+			sort: { by: 'date', order: 'desc' },
+			dataSource: () => Data.get(),
+			columns: [
+				{ width: 52, cls: 'action', icons: {
+					edit: { cls: 'pencil', action: edit },
+					del: { cls: 'trash-o', action: del }
+				}},
+				{ name: 'Date', field: 'date', cls: 'date', sortable: true, width: 90 },
+				{ name: 'Category', field: 'category', cls: 'category', sortable: true, width: '25%' },
+				{ name: 'Description', field: 'description', cls: 'category', sortable: true },
+				{ name: 'Amount', field: 'amount', cls: 'amount', sortable: true, width: 100,
+					renderer: (v, item) => '€' + item.amount_str,
+					footer: () => '€0'
+				}
+			]
 		});
-
 	}
 
 	load(true);

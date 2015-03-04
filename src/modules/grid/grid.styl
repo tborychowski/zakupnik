@@ -1,0 +1,113 @@
+@import "_lib";
+
+header-height = 30;
+footer-height = 24;
+
+text-color = #333;
+border-color = #B3B3B4;
+border-color-inner = #ddd;
+
+header-bg = #DAE1ED;
+row-bg = #fff;
+row-alt-bg = #FAFCFD;
+row-hover-bg = #E4EBF7;
+
+.grid
+	cursor default; min-height 240px; font 13; border border-color; margin-right 10;
+	not-selectable();
+	*
+		box-sizing border-box;
+
+.grid-table
+	width 100%; color text-color; border-collapse collapse; table-layout fixed;
+
+.grid-scroller
+	pos header-height 0 footer-height 0; overflow hidden; overflow-y auto; bg row-bg;
+	border-top border-color; border-bottom border-color;
+
+.grid-cell
+.grid-row .grid-cell
+	padding 0 5; white-space nowrap; overflow hidden; text-overflow ellipsis;
+	&:last-of-type
+		padding-right 20;
+
+	a
+		color text-color; u 1;
+		&:hover
+			u 0;
+
+.grid-row
+	.grid-cell
+		bg row-bg; padding 5; transition background-color .1s;
+		border-right border-color
+
+		&:last-child
+			border none;
+
+	&:first-child
+		border none;
+
+	&:nth-child(odd) .grid-cell
+		background-color row-alt-bg;
+
+	&.selected .grid-cell
+		bg header-bg;
+
+	&:hover .grid-cell
+		bg row-hover-bg;
+
+	&.grid-row:first-child .grid-cell
+		border-top none;
+
+	.grid-no-items
+		color #999; padding-left 20; border-width 0 0 1px;
+		&:hover
+			bg row-bg;
+
+	.action
+		text-align right; padding-left 0;
+		.row-action
+			size 21; font 14; padding 3 4 0; text-align right; u 0; show 1;
+		.fa
+			u 0;
+
+
+
+.grid-header-table
+	position relative; z 10;
+
+	.grid-cell
+		height header-height; bg header-bg; b 1;
+
+		&.sort-asc, &.sort-desc
+			text-overflow clip;
+
+
+	.grid-header-cell-inner
+		display block; overflow hidden; text-overflow ellipsis; white-space nowrap;
+
+	.sort-asc, .sort-desc
+		.grid-header-cell-inner
+			margin-right 10
+
+	.sort em
+		position relative; float right; size 20 16; margin -1 -5 -16 0;
+		bg 'sortable.png';
+
+	.sort-asc em
+		display block; bg 'sort-asc.png';
+
+	.sort-desc em
+		display block; bg 'sort-desc.png';
+
+
+.grid-footer-table
+	pos auto 0 0 0;
+	.grid-cell
+		height footer-height; background-color header-bg;
+		b 1; white-space nowrap; overflow hidden; text-overflow ellipsis;
+
+
+.grid-header-scroll-over
+	shadow 0 3 3 #000 .3, 0 1 0 #ddd;
+

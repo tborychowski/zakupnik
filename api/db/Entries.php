@@ -21,9 +21,8 @@ class Entries extends DB {
 					'ORDER' => 'entries.date DESC',
 					'LIMIT' => 25
 				]);
-
+			$this->integerise('id,category_id,amount');
 			foreach ($this->output as &$e) {
-				$e['amount'] = intval($e['amount']);
 				$e['amount_str'] = number_format($e['amount'], 2, '.', ',');
 			}
 

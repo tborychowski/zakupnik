@@ -10,36 +10,8 @@
 			color #888;
 
 .expenses-table
-	pos 60 0 10 500; padding-right 10px;
+	pos 60 0 10 500;
 
-	table
-		width 100%; border-collapse collapse; font 13; border #ccc;
-
-		td
-			padding 7; //border #ccc; border-width 1px 0 1px;
-
-		thead td
-			bg rgba(#fff, .3);
-
-		.active td
-			bg rgba(#FFFFD4, 0.2);
-		tr:hover td
-			bg rgba(#fff, .1);
-
-
-	.amount
+	.grid-body .amount
+	.grid-footer .amount
 		text-align right;
-
-	.actions
-		text-align right; width 60; padding 0;
-		.btn
-			float right; font 14; size 24; text-align center; u 0;
-			margin-left 5px; padding-top 4px;
-			color rgba(#fff, 0.3); transition color .3s ease-out;
-
-			&:last-child
-				margin-left 0;
-			&:hover
-				color #fff;
-			&:active
-				color #aaa;

@@ -14,7 +14,16 @@ i(n) { if n is 0 { font-style: normal } else { font-style: italic } }				// i:1 
 u(n) { if n is 0 { text-decoration: none } else { text-decoration: underline } }	// u:1 -> text-decoration: underline;
 
 padding() { padding: joinArgs(arguments) }
+padding-left(a) { padding-left: px(a) }
+padding-right(a) { padding-right: px(a) }
+padding-top(a) { padding-top: px(a) }
+padding-bottom(a) { padding-bottom: px(a) }
+
 margin() { margin: joinArgs(arguments) }
+margin-left(a) { margin-left: px(a) }
+margin-right(a) { margin-right: px(a) }
+margin-top(a) { margin-top: px(a) }
+margin-bottom(a) { margin-bottom: px(a) }
 
 size(w, h=w) { width: px(w); height: px(h); }
 width(n = 0) { width: px(n) }
