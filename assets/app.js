@@ -347,7 +347,7 @@
 				columns: [{ width: 52, cls: "action", icons: {
 						edit: { cls: "pencil", action: edit },
 						del: { cls: "trash-o", action: del }
-					} }, { name: "Date", field: "date", cls: "date", sortable: true, width: 90 }, { name: "Category", field: "category", cls: "category", sortable: true, width: "25%" }, { name: "Description", field: "description", cls: "category", sortable: true }, { name: "Amount", field: "amount", cls: "amount", sortable: true, width: 100,
+					} }, { name: "Date", field: "date", sortable: true, width: 90 }, { name: "Category", field: "category", sortable: true, width: "25%" }, { name: "Description", field: "description", sortable: true }, { name: "Amount", field: "amount", sortable: true, width: 100,
 					renderer: function (v, item) {
 						return "€" + item.amount_str;
 					},
@@ -5561,7 +5561,8 @@
 				value: function getHeader() {
 					var cells = this.cfg.columns.map(function (col) {
 						var text = col.name || "";
-						var cls = "grid-cell grid-header-cell" + (col.cls ? " " + col.cls : "");
+						var cls = "grid-cell grid-header-cell " + (col.field || "");
+						if (col.cls) cls += " " + col.cls;
 						if (col.sortable) cls += " sort";
 						return "<td class=\"" + cls + "\" data-sortby=\"" + col.field + "\">" + "<em></em><span class=\"grid-header-cell-inner\">" + text + "</span></td>";
 					}, this);

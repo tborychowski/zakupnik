@@ -1,7 +1,7 @@
 @import "_lib";
 
-header-height = 30;
-footer-height = 24;
+header-height = 30px;
+footer-height = 24px;
 
 text-color = #333;
 border-color = #B3B3B4;
@@ -78,20 +78,20 @@ row-hover-bg = #E4EBF7;
 
 	.grid-cell
 		height header-height; bg header-bg; b 1;
-
 		&.sort-asc, &.sort-desc
 			text-overflow clip;
 
 
 	.grid-header-cell-inner
 		display block; overflow hidden; text-overflow ellipsis; white-space nowrap;
+		line-height header-height;
 
 	.sort-asc, .sort-desc
 		.grid-header-cell-inner
 			margin-right 10
 
 	.sort em
-		position relative; float right; size 20 16; margin -1 -5 -16 0;
+		position relative; float right; size 20 16; margin 8 -5 -16 0;
 		bg 'sortable.png';
 
 	.sort-asc em

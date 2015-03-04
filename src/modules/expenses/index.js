@@ -112,10 +112,10 @@ function init () {
 					edit: { cls: 'pencil', action: edit },
 					del: { cls: 'trash-o', action: del }
 				}},
-				{ name: 'Date', field: 'date', cls: 'date', sortable: true, width: 90 },
-				{ name: 'Category', field: 'category', cls: 'category', sortable: true, width: '25%' },
-				{ name: 'Description', field: 'description', cls: 'category', sortable: true },
-				{ name: 'Amount', field: 'amount', cls: 'amount', sortable: true, width: 100,
+				{ name: 'Date', field: 'date', sortable: true, width: 90 },
+				{ name: 'Category', field: 'category', sortable: true, width: '25%' },
+				{ name: 'Description', field: 'description', sortable: true },
+				{ name: 'Amount', field: 'amount', sortable: true, width: 100,
 					renderer: (v, item) => '€' + item.amount_str,
 					footer: () => '€0'
 				}

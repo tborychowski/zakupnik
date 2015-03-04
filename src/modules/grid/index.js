@@ -163,7 +163,8 @@ export default class Grid {
 	getHeader () {
 		var cells = this.cfg.columns.map(col => {
 			let text = col.name || '';
-			let cls = 'grid-cell grid-header-cell' + (col.cls ? ' ' + col.cls : '');
+			let cls = 'grid-cell grid-header-cell ' + (col.field || '');
+			if (col.cls) cls += ' ' + col.cls;
 			if (col.sortable) cls += ' sort';
 			return '<td class="' + cls + '" data-sortby="' + col.field + '">' +
 				'<em></em><span class="grid-header-cell-inner">' + text + '</span></td>';
