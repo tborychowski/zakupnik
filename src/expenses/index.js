@@ -4,7 +4,6 @@ import Categories from 'data/categories';
 import Calendar from 'calendar';
 import Grid from 'grid';
 
-// var tableTpl = require('./table.html');
 var formTpl = require('./form.html');
 var el, formContainer, form, tableContainer, grid, subforms, catList = [], isReady = false;
 
@@ -18,7 +17,7 @@ function load (initial = false) {
 }
 
 function resetForm () {
-	tableContainer.find('.active').removeClass('active');
+	grid.unselectRows();
 	subforms.html('');
 	split(true);
 }
@@ -67,11 +66,11 @@ function del (item, row) {
 }
 
 function edit (item, row) {
-	this.selectRow(row, true);
 	Data.get(item.id).then(function (data) {
 		Calendar.set(data.date);
 		resetForm();
 		form.set(data);
+		grid.selectRow(row, true);
 	});
 }
 
@@ -108,16 +107,13 @@ function init () {
 			sort: { by: 'date', order: 'desc' },
 			dataSource: () => Data.get(),
 			columns: [
-				{ width: 52, cls: 'action', icons: {
-					edit: { cls: 'pencil', action: edit },
-					del: { cls: 'trash-o', action: del }
-				}},
-				{ name: 'Date', field: 'date', sortable: true, width: 90 },
-				{ name: 'Category', field: 'category', sortable: true, width: '25%' },
-				{ name: 'Description', field: 'description', sortable: true },
-				{ name: 'Amount', field: 'amount', sortable: true, width: 100,
+				{ width: 52, icons: { pencil: edit, 'trash-o': del }},
+				{ name: 'Date', field: 'date', width: 90 },
+				{ name: 'Category', field: 'category', width: '40%' },
+				{ name: 'Description', field: 'description' },
+				{ name: 'Amount', field: 'amount', width: 100,
 					renderer: (v, item) => '€' + item.amount_str,
-					footer: () => '€0'
+					footer: (d) => '€' + d.total_str
 				}
 			]
 		});

@@ -5,6 +5,7 @@ var gulp = require('gulp'),
 	cssmin = require('gulp-minify-css'),
 	webpack = require('gulp-webpack'),
     concat = require('gulp-concat'),
+	copy = require('gulp-copy'),
     stylus = require('gulp-stylus'),
     jshint = require('gulp-jshint'),
     live   = require('gulp-livereload'),
@@ -19,7 +20,15 @@ var gulp = require('gulp'),
 	};
 
 
-gulp.task('clean', function (cb) { del(['assets/**/*.{css,js,map}'], cb); });
+gulp.task('clean', function (cb) {
+	del(['fonts/*.*', 'assets/**/*.{css,js,map}'], cb);
+});
+
+gulp.task('fonts', function () {
+	return gulp.src([ 'node_modules/font-awesome/fonts/*.*' ])
+		.pipe(copy('./fonts', { prefix: 3 }));
+});
+
 
 gulp.task('js', function () {
 	return gulp.src(['src/app.js'])
@@ -37,9 +46,9 @@ gulp.task('jshint', function () {
 });
 
 gulp.task('styl', function () {
-	return gulp.src(['src/app.styl', 'src/modules/**/*.styl'])
+	return gulp.src(['src/app.styl', 'src/**/*.styl'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-		.pipe(stylus({ paths: ['src']}))
+		.pipe(stylus({ paths: ['src'], 'include css': true }))
 		.pipe(cssmin({ keepSpecialComments: 0 }))
 		.pipe(concat('app.css'))
 		.pipe(gulp.dest('assets'))
@@ -49,7 +58,7 @@ gulp.task('styl', function () {
 gulp.task('watch', function () {
 	live.listen();
 	gulp.watch('src/**/*.styl', ['styl']);
-	gulp.watch(['src/*.js', 'src/modules/**/*.js'], ['js', 'jshint']);
+	gulp.watch(['src/**/*.js'], ['js', 'jshint']);
 });
 
-gulp.task('default', ['clean', 'js', 'styl', 'watch']);
+gulp.task('default', ['clean', 'js', 'styl', 'fonts', 'watch']);

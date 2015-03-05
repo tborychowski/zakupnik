@@ -22,10 +22,16 @@ class Entries extends DB {
 					'LIMIT' => 25
 				]);
 			$this->integerise('id,category_id,amount');
+			$total = 0;
 			foreach ($this->output as &$e) {
+				$total += $e['amount'];
 				$e['amount_str'] = number_format($e['amount'], 2, '.', ',');
 			}
-
+			$this->output = [
+				'total' => $total,
+				'total_str' => number_format($total, 2, '.', ','),
+				'items' => $this->output
+			];
 		}
 		return $this;
 	}

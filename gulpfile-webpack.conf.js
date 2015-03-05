@@ -9,8 +9,8 @@ module.exports = {
 		publicPath: './assets/'
 	},
 	resolve: {
-		modulesDirectories: ['modules', 'node_modules'],
-		root: path.join(__dirname, '/src/modules'),
+		modulesDirectories: ['src', 'node_modules'],
+		root: path.join(__dirname, '/src'),
 		extensions: ['', '.js', '.json']
 	},
 	module: {
@@ -18,7 +18,7 @@ module.exports = {
 			{ test: /\.html$/, loader: 'mustache' },
 			{
 				test: /\.js$/,
-				exclude: /node_modules/,
+				// exclude: /node_modules/,
 				loader: 'babel-loader?experimental&comments=false'
 			}
 		]
