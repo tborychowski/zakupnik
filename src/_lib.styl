@@ -7,8 +7,7 @@ menu-width = 50px;
 top-height = 40px;
 
 
-
-/*** SHORTCUTS ************************************************************************************/
+//*** SHORTCUTS ************************************************************************************
 b(n) { if n is 0 { font-weight: normal } else { font-weight: bold } }				// b:1 -> font-weight: bold;
 i(n) { if n is 0 { font-style: normal } else { font-style: italic } }				// i:1 -> font-style: italic;
 u(n) { if n is 0 { text-decoration: none } else { text-decoration: underline } }	// u:1 -> text-decoration: underline;
@@ -35,7 +34,7 @@ left(n = 0) { left: px(n) }
 bottom(n = 0) { bottom: px(n) }
 
 z(n = 0) { z-index: n }
-/*** SHORTCUTS ************************************************************************************/
+//*** SHORTCUTS ************************************************************************************
 
 
 // top, right, bottom, left
@@ -67,9 +66,6 @@ font()
 		font: arguments;
 
 
-radius()
-	vendor(border-radius, joinArgs(arguments), moz)
-	clip(padding)
 
 // x, y=1, blur=1, col=black, op =.3, io=, ext=
 shadow()
@@ -136,7 +132,7 @@ rotate(d = 0)
 
 
 
-/*** STYLE HELPERS ********************************************************************************/
+//*** STYLE HELPERS ********************************************************************************
 shadowMultiple()
 	for arg, idx in arguments
 		if length(arg) > 1 {
@@ -192,39 +188,33 @@ setBorder()
 setBg()
 	arg = arguments
 	return unquote('url(' + img-base + '/' + unquote(arg[0]) + ') ' + px(arg[1]) + ' ' + px(arg[2]) + ' ' + arg[3]);
-/*** STYLE HELPERS ********************************************************************************/
+//*** STYLE HELPERS ********************************************************************************
 
 
 
 
 
-/*** GENERIC HELPERS ******************************************************************************/
+//*** GENERIC HELPERS ******************************************************************************
 px(a)
 	if type(a) == 'unit'
 		if unit(a) == 'px' || a == 0 { return a } else { return (a + 0px) }
 	else
 		return a
 
-/**
- * Joins arguments with space and adds "px" to values if needed
- */
+// Joins arguments with space and adds "px" to values if needed
 joinArgs(args)
 	buf = ''
 	for arg, i in args
 		if i { buf += ' ' + px(arg)	} else { buf += px(arg) }
 	return unquote(buf)
 
-/**
- * Vendorize, e.g. -moz-box-shadow
- */
+// Vendorize, e.g. -moz-box-shadow
 vendor(prop, params, vendorList = webkit moz)
 	for vendor in vendorList { -{vendor}-{prop}: params }
 	{prop}: params
 
-/**
- * Vendorize property value, e.g.  -moz-linear-gradient
- */
+// Vendorize property value, e.g.  -moz-linear-gradient
 vendorVal(prop, params, vendorList = webkit moz)
 	for vendor in vendorList { {prop}: unquote('-' + vendor + '-' + params) }
 	{prop}: unquote(params)
-/*** GENERIC HELPERS ******************************************************************************/
+//*** GENERIC HELPERS ******************************************************************************
