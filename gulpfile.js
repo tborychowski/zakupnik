@@ -39,7 +39,7 @@ gulp.task('js', function () {
 });
 
 gulp.task('jshint', function () {
-	return gulp.src([ 'src/app.js', 'src/modules/**/*.js' ])
+	return gulp.src([ 'src/app.js', 'src/**/*.js' ])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(jshint('src/.jshintrc'))
 		.pipe(jshint.reporter('jshint-stylish'));
@@ -58,7 +58,7 @@ gulp.task('styl', function () {
 gulp.task('watch', function () {
 	live.listen();
 	gulp.watch('src/**/*.styl', ['styl']);
-	gulp.watch(['src/**/*.js'], ['js', 'jshint']);
+	gulp.watch(['src/**/*.js'], ['js']);
 });
 
-gulp.task('default', ['clean', 'js', 'styl', 'fonts', 'watch']);
+gulp.task('default', ['clean', 'jshint', 'js', 'styl', 'fonts', 'watch']);

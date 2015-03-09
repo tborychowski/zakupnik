@@ -19,8 +19,10 @@ function onSelect () { $.trigger('calendar/changed', picker.getMoment()); }
 
 function _set (date) { picker.setMoment(Moment(date)); }
 function _get (format) {
+	if (!isReady) init();
 	if (!format) return picker.getMoment();
-	return picker.getMoment().format('YYYY-MM-DD');
+	if (format === true) format = 'YYYY-MM-DD';
+	return picker.getMoment().format(format);
 }
 
 function onClick (e) {

@@ -12,13 +12,14 @@
 			color #888;
 
 .expenses-table
-	pos 60 0 10 500;
+	pos 0 0 0 500; bg rgba(#000, .4); shadow 2 0 3 #000 0.3 inset;
+
+	.grid
+		pos 10 10 10 15;
 
 	.grid-body .amount
 	.grid-footer .amount
 		text-align right;
-	.grid-row .grid-cell
-		padding 6 5;
 
 .expenses-form
 	position relative; width 457; z 9;
@@ -48,3 +49,17 @@
 	.btn-del
 		margin-left 5px;
 
+
+.preview
+	position relative; width 480; margin 50 0 0; opacity 0.5; pointer-events none;
+
+	.preview-table
+		position relative; margin 10 0 0;
+		.fa-sort
+			show 0;
+		.grid
+			min-height 160px;
+
+		.grid-body .amount
+		.grid-footer .amount
+			text-align right;

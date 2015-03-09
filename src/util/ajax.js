@@ -1,25 +1,21 @@
+import util from './util';
+
 const base_url = 'api/';
 
-export default function (options, data) {
-	var req = new XMLHttpRequest(), resp;
-
+function ajax (options) {
 	if (typeof options === 'string') options = { url: options };
-	data = data || options.data || '';
+
+	var req = new XMLHttpRequest(), resp, data = options.data || '';
 	options.url = base_url + options.url;
+	options.method = options.method || 'GET';
+	options.type = options.type || 'json';
 
 	if (data) {
-		options.method = options.method || 'POST';
-		options.type = 'json';
+		if (options.method.toLowerCase() === 'get') options.url += util.serialize(data);
+		else if (options.type === 'json') data = JSON.stringify(data);
 	}
-
-	// options.type = options.type || 'x-www-form-urlencoded';
-	options.type = options.type || 'json';
-	if (data && options.type === 'json') data = JSON.stringify(data);
-
-
 	return new Promise((resolve, reject) => {
-
-		req.open(options.method || 'GET', options.url, true);
+		req.open(options.method, options.url, true);
 		req.onload = function () {
 			if (req.status >= 200 && req.status < 400) {
 				resp = req.responseText;
@@ -34,3 +30,14 @@ export default function (options, data) {
 
 	});
 }
+
+
+
+
+export default {
+	ajax,
+	get  : (url, data) => ajax({ url, data: data || {} }),
+	post : (url, data) => ajax({ url, data: data || {}, method: 'POST' }),
+	put  : (url, data) => ajax({ url, data: data || {}, method: 'PUT' }),
+	del  : (url, data) => ajax({ url, data: data || {}, method: 'DELETE' }),
+};

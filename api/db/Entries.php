@@ -1,26 +1,29 @@
 <?php
 class Entries extends DB {
 
-	public function get ($id) {
-		if (!empty($id)) {
-			$this->get_by_id('entries', $id);
+	public function get ($p) {
+		if (!empty($p['id'])) {
+			$this->get_by_id('entries', $p['id']);
 			$this->integerise('category_id,amount');
 		}
 		else {
 			// select entries.*, categories.name as category from entries
 			// join categories on entries.category_id = categories.id
-			$this->output = $this->db->select('entries', [
-					'[>]categories' => ['category_id' => 'id']
-				], [
-					'entries.id',
-					'entries.date',
-					'categories.name(category)',
-					'entries.description',
-					'entries.amount'
-				], [
-					'ORDER' => 'entries.date DESC',
-					'LIMIT' => 25
-				]);
+
+			$where = [ /*'LIMIT' => 25*/ ];
+			if (!empty($p['date'])) $where['date[~]'] = $p['date'] . '%';
+
+			$join = [ '[>]categories' => ['category_id' => 'id'] ];
+
+			$columns = [
+				'entries.id',
+				'entries.date',
+				'categories.name(category)',
+				'entries.description',
+				'entries.amount'
+			];
+
+			$this->output = $this->db->select('entries', $join, $columns, $where);
 			$this->integerise('id,category_id,amount');
 			$total = 0;
 			foreach ($this->output as &$e) {

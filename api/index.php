@@ -30,7 +30,7 @@ Router::del('/categories/{id}', function ($params) {
 
 Router::get('/entries/{id}', function ($params) {
 	$db = new Entries();
-	echo $db->get($params['id'])->to_json();
+	echo $db->get($params)->to_json();
 });
 
 Router::post('/entries/{id}', function ($params) {

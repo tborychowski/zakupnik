@@ -7,12 +7,22 @@
 	right calc(50% - 170px);
 
 	.date
-		bg none; border none; width 160; padding 0; text-align center;
+		bg none; border none; width 180; padding 0; text-align center;
 		color #fff; cursor default;
-		font 20;
+		font 20; margin-right 30;
 
 		&:hover
 			u 1;
+	.btn
+		show 1; u 0; color #888; padding 7 5; font 16/1; vertical-align top;
+		transition color .2s;
+		&:hover
+			color #fff;
+		&:active
+			color #aaa;
+	.btn-today
+		padding-top 5;
+
 
 
 

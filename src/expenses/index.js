@@ -1,125 +1,98 @@
 import $ from 'util';
 import Data from 'data/entries';
-import Categories from 'data/categories';
 import Calendar from 'calendar';
 import Grid from 'grid';
+import Form from './form';
 
-var formTpl = require('./form.html');
-var el, formContainer, form, tableContainer, grid, subforms, catList = [], isReady = false;
+var el, grid, preview, previewGrid, form, isReady = false, lastLoadDate;
 
-function load (initial = false) {
-	grid.load();
-	Categories.getTree().then(function (data) {
-		catList = data;
-		if (initial) subforms.html('');
-		split(initial);
-	});
-}
-
-function resetForm () {
-	grid.unselectRows();
-	subforms.html('');
-	split(true);
-}
-
-function unsplit (btn) {
-	btn.closest('.form-row').remove();
-}
-
-function split (first) {
-	var subform = $(formTpl({ first: first === true, categories: catList }));
-	subform.appendTo(subforms).find('select')[0].focus();
-}
-
-function add () {
-	var formData = form.get(true), newData = [];
-	formData.date = Calendar.get(true);
-
-	if (!Array.isArray(formData.amount)) newData = [formData];
-	else {	// has split
-		let i, total = formData.amount[0];
-		for (i in formData.amount) {
-			newData.push({
-				date: formData.date,
-				category_id: formData.category_id[i],
-				amount: formData.amount[i]
-			});
-			if (i > 0) total -= formData.amount[i];
-		}
-		newData[0].amount = total;
+function load (force) {
+	let date = Calendar.get('YYYY-MM');
+	// don't reload if month the same
+	if (!lastLoadDate || lastLoadDate !== date || force === true) {
+		lastLoadDate = date;
+		grid.load({ date });
 	}
+	// update all inputs
+	let d = Calendar.get(true);
+	$.each(form.subforms.find('input[name=date]'), function (f) { f.value = d; });
+}
 
-	Data.save(newData).then(function (resp) {
-		if (resp.result === 'success') form.set({ date: formData.date });
-		load(true);
-	});
+function onResp (resp) {
+	if (resp.result === 'success') load(true);
 }
 
 function del (item, row) {
-	this.selectRow(row, true);
+	grid.selectRow(row, true);
 	if (window.confirm('Are you sure you wish to delete this row?')) {
-		Data.del({ id: item.id }).then(function (resp) {
-			if (resp.result === 'success') row.remove();
-		});
+		Data.del(item.id).then(onResp);
 	}
-
 }
 
 function edit (item, row) {
-	Data.get(item.id).then(function (data) {
+	grid.selectRow(row, true);
+	Data.get(item.id).then(data => {
 		Calendar.set(data.date);
-		resetForm();
 		form.set(data);
-		grid.selectRow(row, true);
 	});
 }
 
+function onReset (e) {
+	Calendar.set(new Date());
+	form.reset();
+	e.preventDefault();
+}
+
+function onPreview () {
+	var items = form.getData(), sum = 0, total_str;
+	if (!items) return;
+	for (let r of items) sum += r.amount;
+	total_str = sum.toLocaleString('en-GB', { minimumFractionDigits: 2 });
+	if (items) previewGrid.setData({ total_str, items });
+}
 
 
 function init () {
 	if (!isReady) {
 		el = $('#expenses');
-		tableContainer = el.find('.expenses-table');
-		formContainer = el.find('.expenses-form');
-		subforms = formContainer.find('.subforms');
-		form = $.form(formContainer[0]);
+		preview = el.find('.preview');
 
+		form = new Form({ target: el.find('.expenses-form'), onAdd: onResp });
 
-		formContainer.on('submit', function (e) {
-			e.preventDefault();
-			add();
-		});
-
-		el.find('.btn-reset').on('click', function (e) {
-			e.preventDefault();
-			Calendar.set(new Date());
-			resetForm();
-		});
-
-		formContainer.on('click', function (e) {
-			var target = $(e.target);
-			if (target.is('.btn-split')) split();
-			if (target.is('.btn-del')) unsplit(target);
-		});
+		let renderer = (v, item) => '€' + item.amount_str,
+			footer = (d) => '€' + d.total_str;
 
 		grid = new Grid({
-			target: tableContainer[0],
+			target: el.find('.expenses-table')[0],
 			sort: { by: 'date', order: 'desc' },
-			dataSource: () => Data.get(),
+			dataSource: (params) => Data.get(params),
 			columns: [
 				{ width: 52, icons: { pencil: edit, 'trash-o': del }},
 				{ name: 'Date', field: 'date', width: 90 },
 				{ name: 'Category', field: 'category', width: '40%' },
 				{ name: 'Description', field: 'description' },
-				{ name: 'Amount', field: 'amount', width: 100,
-					renderer: (v, item) => '€' + item.amount_str,
-					footer: (d) => '€' + d.total_str
-				}
+				{ name: 'Amount', field: 'amount', width: 100, renderer, footer }
 			]
 		});
+
+		previewGrid = new Grid({
+			target: el.find('.preview-table')[0],
+			sort: { by: 'date', order: 'desc' },
+			dataSource: (params) => Data.get(params),
+			columns: [
+				{ name: 'Date', field: 'date', width: 90 },
+				{ name: 'Category', field: 'category', width: '40%' },
+				{ name: 'Description', field: 'description' },
+				{ name: 'Amount', field: 'amount', width: 100, renderer, footer }
+			]
+		});
+
+		el.find('.btn-reset').on('click', onReset);
+		el.find('.btn-preview').on('click', onPreview);
+		$.on('calendar/changed', load);
 	}
 
-	load(true);
+	load();
 	isReady = true;
 }
 

@@ -9,6 +9,15 @@ function isNumber (v) {
 	return (/^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/).test(v);
 }
 
+function serialize (obj) {
+	var keys = Object.keys(obj);
+	if (!keys || !keys.length) return '';
+	return '?' + keys.reduce(function (a, k) {
+		a.push(k + '=' + encodeURIComponent(obj[k]));
+		return a;
+	}, []).join('&');
+}
+
 function varToRealType (v) {
 	if (isNumber(v)) {
 		let originalv = v;
@@ -31,9 +40,9 @@ function rand (max, min = 0) {
 	return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function each (arr, cb) {
-	if (type(arr) === 'object') for (var key in arr) cb.call(cb, arr[key], key);
-	else for (var i = 0, item; item = arr[i]; i++) cb.call(cb, item, i);
+function each (arr, cb, scope) {
+	if (type(arr) === 'object') for (var key in arr) cb.call(scope || cb, arr[key], key);
+	else for (var i = 0, item; item = arr[i]; i++) cb.call(scope || cb, item, i);
 	// return Array.prototype.forEach.call(collection, cb);
 }
 
@@ -76,5 +85,6 @@ export default {
 	isObjectEmpty,
 	merge,
 	sanitize,
+	serialize,
 	isNodeList
 };

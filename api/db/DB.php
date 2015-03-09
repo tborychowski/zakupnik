@@ -83,7 +83,7 @@ class DB {
 			foreach ($this->output as &$row) {
 				foreach ($fields as $f) {
 					if (isset($row[$f])) {
-						$row[$f] = intval($row[$f]);
+						$row[$f] = floatval($row[$f]);
 					}
 				}
 			}
@@ -92,7 +92,7 @@ class DB {
 		else {
 			foreach ($fields as $f) {
 				if (isset($this->output[$f])) {
-					$this->output[$f] = intval($this->output[$f]);
+					$this->output[$f] = floatval($this->output[$f]);
 				}
 			}
 		}
