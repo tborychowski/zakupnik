@@ -19,11 +19,22 @@ export default class Form {
 
 	constructor (config) {
 		this.cfg = Object.assign(_defaults, config);
+		this.el = this.cfg.target;
+		this.form = $.form(this.el[0]);
 		this.subforms = this.cfg.target.find('.subforms');
+
 		this.categories = [];
 		this.catMap = {};
-		this.cfg.target.on('submit', this.onSubmit.bind(this));
-		this.cfg.target.on('click', this.onClick.bind(this));
+
+		this.el.on('submit', this.onSubmit.bind(this));
+		this.el.on('click', this.onClick.bind(this));
+
+		if (typeof this.cfg.onChange === 'function') {
+			this.form.observe(function (nv, ov, f) {
+				this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
+			}.bind(this));
+		}
+
 		this.draw();
 	}
 
@@ -34,7 +45,6 @@ export default class Form {
 		else return;
 		e.preventDefault();
 	}
-
 
 	draw () {
 		if (this.categories.length) this.reset();
@@ -54,8 +64,7 @@ export default class Form {
 
 	set (data) {
 		this.reset();
-		var f = $.form(this.subforms.find('.form-row')[0]);
-		f.set(data);
+		this.form.set(data);
 		return this;
 	}
 
@@ -64,7 +73,8 @@ export default class Form {
 	}
 
 	split (first) {
-		$(tpl({ first: first === true, categories: this.categories }))
+		let idx = this.subforms.find('.form-row').length;
+		$(tpl({ first: first === true, categories: this.categories, idx }))
 			.appendTo(this.subforms)
 			.find('select')[0].focus();
 	}
@@ -77,34 +87,36 @@ export default class Form {
 		return parseFloat(amount);
 	}
 
-	getData () {
-		var forms = this.subforms.find('.form-row'),
-			date = Calendar.get(true),
+	getData (clean = false) {
+		var date = Calendar.get(true),
 			format = (n) => n.toLocaleString('en-GB', { minimumFractionDigits: 2 }),
+			items = this.form.get(true).items,
 			data = [],
 			errors = [],
 			total = 0;
 
-		$.each(forms, function (f, i) {
-			let fd = $.form(f).get(true);
-			if (!fd.date) fd.date = date;
-			if (!fd.amount) return errors.push('Please enter amount!');
-			fd.amount = this.parseAmount(fd.amount);
-			fd.amount_str = format(fd.amount);
-			fd.category = this.catMap[fd.category_id];
-			if (i === 0) total = fd.amount;
-			else total -= fd.amount;
-			data.push(fd);
+		$.each(items, function (item, i) {
+			if (!item.date) item.date = date;
+			if (!item.amount) return errors.push('Please enter amount!');
+			item.amount = this.parseAmount(item.amount);
+			if (i.toString() === '0') total = item.amount;
+			else total -= item.amount;
+			if (!clean) {
+				item.amount_str = format(item.amount);
+				item.category = this.catMap[item.category_id];
+			}
+			data.push(item);
 		}, this);
+
 		if (errors.length) return false;
 		data[0].amount = total;
-		data[0].amount_str = format(total);
+		if (!clean) data[0].amount_str = format(total);
 		return data;
 	}
 
 	onSubmit (e) {
 		e.preventDefault();
-		let data = this.getData();
+		let data = this.getData(true);
 		if (data) Data.save(data)
 			.then(resp => { if (resp.result === 'success') this.reset(); return resp; })
 			.then(this.cfg.onAdd);

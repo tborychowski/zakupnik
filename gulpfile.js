@@ -21,12 +21,19 @@ var gulp = require('gulp'),
 
 
 gulp.task('clean', function (cb) {
-	del(['fonts/*.*', 'assets/**/*.{css,js,map}'], cb);
+	del(['assets/**/*.{css,js,map}' ], cb);
 });
 
 gulp.task('fonts', function () {
+	del([ 'fonts/*.*' ]);
 	return gulp.src([ 'node_modules/font-awesome/fonts/*.*' ])
 		.pipe(copy('./fonts', { prefix: 3 }));
+});
+
+gulp.task('grid', function () {
+	del(['src/grid/**/*.*']);
+	return gulp.src([ 'node_modules/grid/src/**/*.*' ])
+		.pipe(copy('./src/grid', { prefix: 3 }));
 });
 
 
@@ -37,6 +44,7 @@ gulp.task('js', function () {
 		.pipe(gulp.dest('assets/'))
 		.pipe(live());
 });
+
 
 gulp.task('jshint', function () {
 	return gulp.src([ 'src/app.js', 'src/**/*.js' ])
@@ -55,10 +63,18 @@ gulp.task('styl', function () {
 		.pipe(live());
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['js', 'styl'], function () {
 	live.listen();
 	gulp.watch('src/**/*.styl', ['styl']);
 	gulp.watch(['src/**/*.js'], ['js']);
 });
 
-gulp.task('default', ['clean', 'jshint', 'js', 'styl', 'fonts', 'watch']);
+gulp.task('deps', [ 'grid', 'fonts' ]);
+
+gulp.task('default', [
+	'clean',
+	'jshint',
+	'js',
+	'styl',
+	'watch'
+]);

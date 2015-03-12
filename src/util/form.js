@@ -30,20 +30,20 @@ function Form (el) {
 	if (!el) return null;
 	if (!(this instanceof Form)) return new Form(el);
 	this.form = el;
+	if (el.elements) this.inputs = el.elements;
 }
 
 Form.prototype.set = function (params, clear) {
-	_getInputs(this.form).forEach(input => {
+	var inputs = _getInputs(this.form);
+	for (let input of inputs) {
 		var name = input.name,
-			value = (typeof params[name] === 'undefined' ? '' : params[name]),
-			names, i, n, v;
+			value = (typeof params[name] === 'undefined' ? '' : params[name]);
 
 		// if name is object, e.g. user[name], userData[address][street], update value to read this correctly
 		if (name.indexOf('[') > -1) {
-			names = name.replace(/\]/g, '').split('[');
-			n = null;
-			v = params;
-			for (i = 0; n = names[i++] ;) {
+			let v = params;
+			let names = name.replace(/[\[\]]/g, '|').split('|');
+			for (let n of names) {
 				if (v[n]) v = v[n];
 				else { v = undefined; break; }
 			}
@@ -66,35 +66,34 @@ Form.prototype.set = function (params, clear) {
 			else input.value = value;
 		}
 		else input.value = value;
-	});
+	}
+
 	return this;
 };
 
 
 Form.prototype.get = function (convert = false) {
-	var data = {}, current, i;
+	var inputs = _getInputs(this.form), data = {}, current;
 
-	_getInputs(this.form).forEach(el => {
-		var type = el.type && el.type.toLowerCase(),
-			key, value, parts, lastPart, tv, cmp, last;
+	for (let input of inputs) {
+		let type = input.type && input.type.toLowerCase(), value, parts, lastPart, last;
 
 		// if we are submit or disabled - ignore
-		if ((type === 'submit') || !el.name || el.disabled)  return;
+		if ((type === 'submit') || !input.name || input.disabled)  return;
 
-		key = el.name;
-		value = el.value;
-		parts = key.match(keyBreaker);
+		value = input.value;
+		parts = input.name.match(keyBreaker);
 
 		// return only "checked" radio value
-		if (type === 'radio' && !el.checked) return;
+		if (type === 'radio' && !input.checked) return;
 
 		// convert chekbox to [true | false]
-		if (type === 'checkbox') value = el.checked;
+		if (type === 'checkbox') value = input.checked;
 
 		if (convert) {
 			if (_isNumber(value)) {
-				tv = parseFloat(value);
-				cmp = tv + '';
+				let tv = parseFloat(value);
+				let cmp = tv + '';
 				// convert (string)100.00 to (int)100
 				if (value.indexOf('.') > 0) cmp = tv.toFixed(value.split('.')[1].length);
 				if (cmp === value) value = tv;
@@ -106,8 +105,8 @@ Form.prototype.get = function (convert = false) {
 
 		current = data;
 		// go through and create nested objects
-		for (i = 0; i < parts.length - 1; i++) {
-			if (!current[parts[i]]) current[parts[i]] = {};
+		for (let i = 0; i < parts.length - 1; i++) {
+			current[parts[i]] = current[parts[i]] || {};
 			current = current[parts[i]];
 		}
 		lastPart = parts[parts.length - 1];
@@ -118,14 +117,44 @@ Form.prototype.get = function (convert = false) {
 			if (!Array.isArray(last)) current[lastPart] = (last === undefined ? [] : [last]);
 			current[lastPart].push(value);
 		}
-		else if (!last) current[lastPart] = value;
-	});
+		else current[lastPart] = value;
+	}
+
 	return data;
 };
 
 Form.prototype.reset = function () { this.set({}); };
 
 Form.prototype.clear = function () { this.set({}, true); };
+
+
+Form.prototype.update = function () {
+	if (!this.observeCb) return;
+	for (let field of this.form.elements) {
+		let fname = field.name.replace(/[\[\]]/g, '_') + 'val',
+			ov = this.form.dataset[fname],
+			v = field.value;
+
+		if (field.type === 'checkbox') {
+			v = field.checked;
+			ov = (ov === 'true');
+		}
+		else if (field.type === 'radio' && !field.checked) continue;
+		if (typeof ov === 'undefined' && typeof v !== 'undefined') {
+			if (field.type === 'radio') this.observeCb(v, ov, field);
+			ov = this.form.dataset[fname] = v;
+		}
+		else if (ov !== v) {
+			this.form.dataset[fname] = v;
+			this.observeCb(v, ov, field);
+		}
+	}
+
+	requestAnimationFrame(this.update.bind(this));
+};
+Form.prototype.observe = function (cb) { this.update(this.observeCb = cb); };
+Form.prototype.observeStop = function () { this.observeCb = null; };
+
 
 
 module.exports = Form;

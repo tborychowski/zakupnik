@@ -1,17 +1,17 @@
 <div class="form-row">
-	<input type="hidden" name="id">
-	<input type="hidden" name="date">
-	<select name="category_id" class="category">
+	<input type="hidden" name="items[{{idx}}]id">
+
+	<input type="hidden" name="items[{{idx}}]date">
+	<select name="items[{{idx}}]category_id" class="category">
 		{{#categories}}
 		<optgroup label="{{name}}">
-			{{#items}}
-				<option value="{{id}}">{{name}}</option>
-			{{/items}}
+			{{#items}}<option value="{{id}}">{{name}}</option>{{/items}}
 		</optgroup>
 		{{/categories}}
 	</select>
-	<input name="amount" class="amount" placeholder="0.00">
-	<input name="description" class="description" placeholder="description">
+	<input name="items[{{idx}}]amount" class="amount" placeholder="0.00">
+	<input name="items[{{idx}}]description" class="description" placeholder="description">
 	{{#first}}<a href="#" title="Split" class="btn-split fa fa-share-alt"></a>{{/first}}
 	{{^first}}<a href="#" title="Remove" class="btn-del fa fa-trash-o"></a>{{/first}}
+
 </div>

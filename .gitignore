@@ -9,3 +9,5 @@ Desktop.ini
 .DS_Store
 *.sublime-*
 __*.php
+
+src/grid

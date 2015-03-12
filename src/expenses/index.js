@@ -33,7 +33,7 @@ function edit (item, row) {
 	grid.selectRow(row, true);
 	Data.get(item.id).then(data => {
 		Calendar.set(data.date);
-		form.set(data);
+		form.set({ items: { 0: data } });
 	});
 }
 
@@ -48,6 +48,7 @@ function onPreview () {
 	if (!items) return;
 	for (let r of items) sum += r.amount;
 	total_str = sum.toLocaleString('en-GB', { minimumFractionDigits: 2 });
+
 	if (items) previewGrid.setData({ total_str, items });
 }
 
@@ -57,7 +58,11 @@ function init () {
 		el = $('#expenses');
 		preview = el.find('.preview');
 
-		form = new Form({ target: el.find('.expenses-form'), onAdd: onResp });
+		form = new Form({
+			target: el.find('.expenses-form'),
+			onAdd: onResp,
+			onChange: onPreview
+		});
 
 		let renderer = (v, item) => '€' + item.amount_str,
 			footer = (d) => '€' + d.total_str;
@@ -88,7 +93,6 @@ function init () {
 		});
 
 		el.find('.btn-reset').on('click', onReset);
-		el.find('.btn-preview').on('click', onPreview);
 		$.on('calendar/changed', load);
 	}
 
