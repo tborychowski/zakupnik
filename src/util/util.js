@@ -41,6 +41,7 @@ function rand (max, min = 0) {
 }
 
 function each (arr, cb, scope) {
+	if (!arr) return;
 	if (type(arr) === 'object') for (var key in arr) cb.call(scope || cb, arr[key], key);
 	else for (var i = 0, item; item = arr[i]; i++) cb.call(scope || cb, item, i);
 	// return Array.prototype.forEach.call(collection, cb);

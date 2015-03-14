@@ -1,4 +1,5 @@
 import $ from 'util';
+import Toaster from 'toaster';
 import Data from 'data/entries';
 import Categories from 'data/categories';
 import Calendar from 'calendar';
@@ -38,14 +39,6 @@ export default class Form {
 		this.draw();
 	}
 
-	onClick (e) {
-		var target = $(e.target);
-		if (target.is('.btn-split')) this.split();
-		else if (target.is('.btn-del')) this.unsplit(target);
-		else return;
-		e.preventDefault();
-	}
-
 	draw () {
 		if (this.categories.length) this.reset();
 		else Categories.getTree().then(data => {
@@ -74,17 +67,14 @@ export default class Form {
 
 	split (first) {
 		let idx = this.subforms.find('.form-row').length;
-		$(tpl({ first: first === true, categories: this.categories, idx }))
-			.appendTo(this.subforms)
-			.find('select')[0].focus();
+		let subform = $(tpl({ first: first === true, categories: this.categories, idx }));
+		subform.appendTo(this.subforms).find('select')[0].focus();
+		this.addInputEvents(subform);
 	}
 
-	parseAmount (amount) {
-		/*jshint evil: true */
-		amount = ('' + amount).replace(/\s/g, '');
-		if (!(/^[\+\-\\*\/\(\)\d\.]+$/i).test(amount)) return 0;
-		if ((/[\+\-\\*\/\.]+/i).test(amount)) amount = eval(amount);
-		return parseFloat(amount);
+	setDate (date) {
+		var dates = this.subforms.find('input[name$="date"]');
+		$.each(dates, function (f) { f.value = date; });
 	}
 
 	getData (clean = false) {
@@ -109,14 +99,62 @@ export default class Form {
 		}, this);
 
 		if (errors.length) return false;
-		data[0].amount = total;
-		if (!clean) data[0].amount_str = format(total);
+		if (data && data.length) {
+			data[0].amount = total;
+			if (!clean) data[0].amount_str = format(total);
+		}
 		return data;
 	}
+
+
+	parseAmount (amount) {
+		/*jshint evil: true */
+		amount = ('' + amount).replace(/\s/g, '');
+		if (!(/^[\+\-\\*\/\(\)\d\.]+$/i).test(amount)) return 0;
+		if ((/[\+\-\\*\/\.]+/i).test(amount)) {
+			try { amount = eval(amount); }
+			catch(e) { amount = 0; }
+		}
+		return parseFloat(amount);
+	}
+
+	validate (data) {
+		if (!data || !data.length) return false;
+		for (let d of data) {
+			if (d.amount <= 0) {
+				Toaster.error('Amount cannot be negative');
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+	addInputEvents (subform) {
+		let inputs = subform.find('.amount');
+		inputs.on('keydown', this.onKeyDown.bind(this));
+		// inputs.on('input', this.onInput.bind(this));
+	}
+
+
+	onKeyDown (e) {
+		if ($.isAllowed(e)) return true;
+		e.preventDefault();
+	}
+
+	onClick (e) {
+		var target = $(e.target);
+		if (target.is('.btn-split')) this.split();
+		else if (target.is('.btn-del')) this.unsplit(target);
+		else return;
+		e.preventDefault();
+	}
+
 
 	onSubmit (e) {
 		e.preventDefault();
 		let data = this.getData(true);
+		if (!this.validate(data)) return;
 		if (data) Data.save(data)
 			.then(resp => { if (resp.result === 'success') this.reset(); return resp; })
 			.then(this.cfg.onAdd);

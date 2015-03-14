@@ -51,15 +51,23 @@
 
 
 .preview
-	position relative; width 480; margin 50 0 0; opacity 0.5; pointer-events none;
+	position absolute; bottom 0; size 480 242; margin 50 0 0; opacity 0.5;
+	transition opacity .3s ease-out; pointer-events none;
+
+	&.hidden
+		opacity 0;
 
 	.preview-table
 		position relative; margin 10 0 0;
 		.fa-sort
 			show 0;
 		.grid
-			min-height 160px;
+			min-height 204px;
 
 		.grid-body .amount
 		.grid-footer .amount
 			text-align right;
+
+		.warn .fa
+			color #FF6A44; margin-right 5;
+			position relative; top -1;

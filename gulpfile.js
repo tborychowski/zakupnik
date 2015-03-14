@@ -5,7 +5,6 @@ var gulp = require('gulp'),
 	cssmin = require('gulp-minify-css'),
 	webpack = require('gulp-webpack'),
     concat = require('gulp-concat'),
-	copy = require('gulp-copy'),
     stylus = require('gulp-stylus'),
     jshint = require('gulp-jshint'),
     live   = require('gulp-livereload'),
@@ -22,18 +21,6 @@ var gulp = require('gulp'),
 
 gulp.task('clean', function (cb) {
 	del(['assets/**/*.{css,js,map}' ], cb);
-});
-
-gulp.task('fonts', function () {
-	del([ 'fonts/*.*' ]);
-	return gulp.src([ 'node_modules/font-awesome/fonts/*.*' ])
-		.pipe(copy('./fonts', { prefix: 3 }));
-});
-
-gulp.task('grid', function () {
-	del(['src/grid/**/*.*']);
-	return gulp.src([ 'node_modules/grid/src/**/*.*' ])
-		.pipe(copy('./src/grid', { prefix: 3 }));
 });
 
 
@@ -68,8 +55,6 @@ gulp.task('watch', ['js', 'styl'], function () {
 	gulp.watch('src/**/*.styl', ['styl']);
 	gulp.watch(['src/**/*.js'], ['js']);
 });
-
-gulp.task('deps', [ 'grid', 'fonts' ]);
 
 gulp.task('default', [
 	'clean',

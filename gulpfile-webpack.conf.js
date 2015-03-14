@@ -9,7 +9,7 @@ module.exports = {
 		publicPath: './assets/'
 	},
 	resolve: {
-		modulesDirectories: ['src', 'node_modules'],
+		// modulesDirectories: ['src', 'node_modules'],
 		root: path.join(__dirname, '/src'),
 		extensions: ['', '.js', '.json']
 	},

@@ -4,18 +4,18 @@ import Calendar from 'calendar';
 import Grid from 'grid';
 import Form from './form';
 
-var el, grid, preview, previewGrid, form, isReady = false, lastLoadDate;
+var el, grid, previewGrid, preview, form, isReady = false, lastLoadDate;
 
 function load (force) {
 	let date = Calendar.get('YYYY-MM');
 	// don't reload if month the same
 	if (!lastLoadDate || lastLoadDate !== date || force === true) {
 		lastLoadDate = date;
-		grid.load({ date });
+		grid.load();
 	}
 	// update all inputs
-	let d = Calendar.get(true);
-	$.each(form.subforms.find('input[name=date]'), function (f) { f.value = d; });
+	form.setDate(Calendar.get(true));
+	onPreview();
 }
 
 function onResp (resp) {
@@ -38,13 +38,15 @@ function edit (item, row) {
 }
 
 function onReset (e) {
+	e.preventDefault();
 	Calendar.set(new Date());
 	form.reset();
-	e.preventDefault();
+	onPreview();
 }
 
 function onPreview () {
 	var items = form.getData(), sum = 0, total_str;
+	preview.toggleClass('hidden', !(items && items.length > 1));
 	if (!items) return;
 	for (let r of items) sum += r.amount;
 	total_str = sum.toLocaleString('en-GB', { minimumFractionDigits: 2 });
@@ -52,6 +54,23 @@ function onPreview () {
 	if (items) previewGrid.setData({ total_str, items });
 }
 
+/**
+ * Amount cell renderer/formatter
+ */
+function renderer (v, item) {
+	if (v <= 0) {
+		return '<span class="warn"><i class="fa fa-exclamation-circle"></i> €' +
+			item.amount_str + '</span>';
+	}
+	return '€' + item.amount_str;
+}
+
+/**
+ * Footer renderer/formatter
+ */
+function footer (data) {
+	return '€' + data.total_str;
+}
 
 function init () {
 	if (!isReady) {
@@ -63,9 +82,6 @@ function init () {
 			onAdd: onResp,
 			onChange: onPreview
 		});
-
-		let renderer = (v, item) => '€' + item.amount_str,
-			footer = (d) => '€' + d.total_str;
 
 		grid = new Grid({
 			target: el.find('.expenses-table')[0],
