@@ -11,7 +11,7 @@ function load (force) {
 	// don't reload if month the same
 	if (!lastLoadDate || lastLoadDate !== date || force === true) {
 		lastLoadDate = date;
-		grid.load();
+		grid.load({ date });
 	}
 	// update all inputs
 	form.setDate(Calendar.get(true));
@@ -45,13 +45,13 @@ function onReset (e) {
 }
 
 function onPreview () {
-	var items = form.getData(), sum = 0, total_str;
-	preview.toggleClass('hidden', !(items && items.length > 1));
-	if (!items) return;
-	for (let r of items) sum += r.amount;
-	total_str = sum.toLocaleString('en-GB', { minimumFractionDigits: 2 });
+	var data = form.getData(), sum = 0, total_str;
+	preview.toggleClass('hidden', !(data.items && data.items.length));
 
-	if (items) previewGrid.setData({ total_str, items });
+	if (!data.items) return;
+	for (let r of data.items) sum += r.amount;
+	total_str = sum.toLocaleString('en-GB', { minimumFractionDigits: 2 });
+	if (data.items) previewGrid.setData({ total_str, items: data.items });
 }
 
 /**

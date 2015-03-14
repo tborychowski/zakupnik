@@ -3,6 +3,7 @@ import Toaster from 'toaster';
 import Data from 'data/entries';
 import Categories from 'data/categories';
 import Calendar from 'calendar';
+import Moment from 'moment';
 
 var tpl = require('./form.html');
 var _defaults = {
@@ -14,6 +15,26 @@ function parseCategories (cats) {
 		for (let c of p.items) map[c.id] = c.name;
 	}
 	return map;
+}
+
+function cloneItem (item, addMonths = 1) {
+	let newItem = JSON.parse(JSON.stringify(item));
+	newItem.date = Moment(newItem.date).add(addMonths, 'months').format('YYYY-MM-DD');
+	return newItem;
+}
+
+// items repeat for X months
+function repeatItems (items, times) {
+	if (!items || !items.length) return [];
+	var newItems = [];
+	for (let item of items) {
+		for (let i = 1; i < times; i++) {
+			newItems.push(cloneItem(item, i));
+		}
+	}
+	items = items.concat(newItems);
+	items.sort((a, b) => a.date.localeCompare(b.date));
+	return items;
 }
 
 export default class Form {
@@ -35,7 +56,6 @@ export default class Form {
 				this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
 			}.bind(this));
 		}
-
 		this.draw();
 	}
 
@@ -52,6 +72,8 @@ export default class Form {
 	reset () {
 		this.subforms.html('');
 		this.split(true);
+		let rep = this.el.find('.repeat-in');
+		if (rep) rep[0].value = 1;
 		return this;
 	}
 
@@ -63,6 +85,15 @@ export default class Form {
 
 	unsplit (btn) {
 		btn.closest('.form-row').remove();
+		let rows = this.el.find('.form-row');
+		$.each(rows, function (row, i) {
+			let fields = $(row).find('input,select');
+			$.each(fields, function (f) {
+				if (!f.name) return;
+				f.name = f.name.replace(/\[\d+\]/, '[' + i + ']');
+			});
+		});
+		this.cfg.onChange.call(this.cfg.onChange);
 	}
 
 	split (first) {
@@ -80,12 +111,12 @@ export default class Form {
 	getData (clean = false) {
 		var date = Calendar.get(true),
 			format = (n) => n.toLocaleString('en-GB', { minimumFractionDigits: 2 }),
-			items = this.form.get(true).items,
+			formData = this.form.get(true),
 			data = [],
 			errors = [],
 			total = 0;
 
-		$.each(items, function (item, i) {
+		$.each(formData.items, function (item, i) {
 			if (!item.date) item.date = date;
 			if (!item.amount) return errors.push('Please enter amount!');
 			item.amount = this.parseAmount(item.amount);
@@ -97,15 +128,14 @@ export default class Form {
 			}
 			data.push(item);
 		}, this);
-
-		if (errors.length) return false;
+		if (errors.length && clean) return Toaster.error(errors[0]);
 		if (data && data.length) {
 			data[0].amount = total;
 			if (!clean) data[0].amount_str = format(total);
 		}
-		return data;
+		formData.items = repeatItems(data, formData.repeat);
+		return formData;
 	}
-
 
 	parseAmount (amount) {
 		/*jshint evil: true */
@@ -121,10 +151,7 @@ export default class Form {
 	validate (data) {
 		if (!data || !data.length) return false;
 		for (let d of data) {
-			if (d.amount <= 0) {
-				Toaster.error('Amount cannot be negative');
-				return false;
-			}
+			if (d.amount <= 0) return Toaster.error('Amount cannot be negative');
 		}
 		return true;
 	}
@@ -153,7 +180,7 @@ export default class Form {
 
 	onSubmit (e) {
 		e.preventDefault();
-		let data = this.getData(true);
+		let data = this.getData(true).items;
 		if (!this.validate(data)) return;
 		if (data) Data.save(data)
 			.then(resp => { if (resp.result === 'success') this.reset(); return resp; })

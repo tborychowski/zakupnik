@@ -134,7 +134,7 @@ Form.prototype.update = function () {
 		let fname = field.name.replace(/[\[\]]/g, '_') + 'val',
 			ov = this.form.dataset[fname],
 			v = field.value;
-
+		if (fname === 'val') continue;
 		if (field.type === 'checkbox') {
 			v = field.checked;
 			ov = (ov === 'true');

@@ -5,10 +5,12 @@ function Toaster (msg) {
 
 Toaster.error = function (msg) {
 	console.error(msg);
+	return false;
 };
 
 Toaster.warning = function (msg) {
 	console.warn(msg);
+	return false;
 };
 
 Toaster.info = function (msg) {

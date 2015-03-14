@@ -230,13 +230,13 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(19));
+	var Data = _interopRequire(__webpack_require__(20));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
 	var Grid = _interopRequire(__webpack_require__(21));
 	
-	var Form = _interopRequire(__webpack_require__(11));
+	var Form = _interopRequire(__webpack_require__(12));
 	
 	var el,
 	    grid,
@@ -251,7 +251,7 @@
 	
 		if (!lastLoadDate || lastLoadDate !== date || force === true) {
 			lastLoadDate = date;
-			grid.load();
+			grid.load({ date: date });
 		}
 	
 		form.setDate(Calendar.get(true));
@@ -285,18 +285,19 @@
 	}
 	
 	function onPreview() {
-		var items = form.getData(),
+		var data = form.getData(),
 		    sum = 0,
 		    total_str;
-		preview.toggleClass("hidden", !(items && items.length > 1));
-		if (!items) {
+		preview.toggleClass("hidden", !(data.items && data.items.length));
+	
+		if (!data.items) {
 			return;
 		}var _iteratorNormalCompletion = true;
 		var _didIteratorError = false;
 		var _iteratorError = undefined;
 	
 		try {
-			for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+			for (var _iterator = data.items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 				var r = _step.value;
 				sum += r.amount;
 			}
@@ -316,8 +317,7 @@
 		}
 	
 		total_str = sum.toLocaleString("en-GB", { minimumFractionDigits: 2 });
-	
-		if (items) previewGrid.setData({ total_str: total_str, items: items });
+		if (data.items) previewGrid.setData({ total_str: total_str, items: data.items });
 	}
 	
 	function renderer(v, item) {
@@ -422,7 +422,7 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(20));
+	var Data = _interopRequire(__webpack_require__(19));
 	
 	var el,
 	    treeContainer,
@@ -430,7 +430,7 @@
 	    form,
 	    btn = {},
 	    catSel;
-	var tpl = __webpack_require__(12);
+	var tpl = __webpack_require__(11);
 	
 	function updateCatSelect(data) {
 		var options = ["<option value=\"0\"></option>"];
@@ -4639,7 +4639,7 @@
 	    }
 	}).call(this);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(24)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(23)(module)))
 
 /***/ },
 /* 10 */
@@ -4652,6 +4652,13 @@
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var H = __webpack_require__(25);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -4662,13 +4669,15 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Toaster = _interopRequire(__webpack_require__(23));
+	var Toaster = _interopRequire(__webpack_require__(24));
 	
-	var Data = _interopRequire(__webpack_require__(19));
+	var Data = _interopRequire(__webpack_require__(20));
 	
-	var Categories = _interopRequire(__webpack_require__(20));
+	var Categories = _interopRequire(__webpack_require__(19));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
+	
+	var Moment = _interopRequire(__webpack_require__(9));
 	
 	var tpl = __webpack_require__(22);
 	var _defaults = {
@@ -4725,6 +4734,52 @@
 		return map;
 	}
 	
+	function cloneItem(item) {
+		var addMonths = arguments[1] === undefined ? 1 : arguments[1];
+	
+		var newItem = JSON.parse(JSON.stringify(item));
+		newItem.date = Moment(newItem.date).add(addMonths, "months").format("YYYY-MM-DD");
+		return newItem;
+	}
+	
+	function repeatItems(items, times) {
+		if (!items || !items.length) {
+			return [];
+		}var newItems = [];
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var item = _step.value;
+	
+				for (var i = 1; i < times; i++) {
+					newItems.push(cloneItem(item, i));
+				}
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		items = items.concat(newItems);
+		items.sort(function (a, b) {
+			return a.date.localeCompare(b.date);
+		});
+		return items;
+	}
+	
 	var Form = (function () {
 		function Form(config) {
 			_classCallCheck(this, Form);
@@ -4745,7 +4800,6 @@
 					this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
 				}).bind(this));
 			}
-	
 			this.draw();
 		}
 	
@@ -4768,6 +4822,8 @@
 				value: function reset() {
 					this.subforms.html("");
 					this.split(true);
+					var rep = this.el.find(".repeat-in");
+					if (rep) rep[0].value = 1;
 					return this;
 				},
 				writable: true,
@@ -4785,6 +4841,15 @@
 			unsplit: {
 				value: function unsplit(btn) {
 					btn.closest(".form-row").remove();
+					var rows = this.el.find(".form-row");
+					$.each(rows, function (row, i) {
+						var fields = $(row).find("input,select");
+						$.each(fields, function (f) {
+							if (!f.name) return;
+							f.name = f.name.replace(/\[\d+\]/, "[" + i + "]");
+						});
+					});
+					this.cfg.onChange.call(this.cfg.onChange);
 				},
 				writable: true,
 				configurable: true
@@ -4817,12 +4882,12 @@
 					    format = function (n) {
 						return n.toLocaleString("en-GB", { minimumFractionDigits: 2 });
 					},
-					    items = this.form.get(true).items,
+					    formData = this.form.get(true),
 					    data = [],
 					    errors = [],
 					    total = 0;
 	
-					$.each(items, function (item, i) {
+					$.each(formData.items, function (item, i) {
 						if (!item.date) item.date = date;
 						if (!item.amount) return errors.push("Please enter amount!");
 						item.amount = this.parseAmount(item.amount);
@@ -4833,14 +4898,14 @@
 						}
 						data.push(item);
 					}, this);
-	
-					if (errors.length) {
-						return false;
+					if (errors.length && clean) {
+						return Toaster.error(errors[0]);
 					}if (data && data.length) {
 						data[0].amount = total;
 						if (!clean) data[0].amount_str = format(total);
 					}
-					return data;
+					formData.items = repeatItems(data, formData.repeat);
+					return formData;
 				},
 				writable: true,
 				configurable: true
@@ -4874,10 +4939,7 @@
 						for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 							var d = _step.value;
 	
-							if (d.amount <= 0) {
-								Toaster.error("Amount cannot be negative");
-								return false;
-							}
+							if (d.amount <= 0) return Toaster.error("Amount cannot be negative");
 						}
 					} catch (err) {
 						_didIteratorError = true;
@@ -4931,7 +4993,7 @@
 					var _this = this;
 	
 					e.preventDefault();
-					var data = this.getData(true);
+					var data = this.getData(true).items;
 					if (!this.validate(data)) {
 						return;
 					}if (data) Data.save(data).then(function (resp) {
@@ -4947,13 +5009,6 @@
 	})();
 	
 	module.exports = Form;
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var H = __webpack_require__(25);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
 
 /***/ },
 /* 13 */
@@ -5405,7 +5460,7 @@
 				var fname = field.name.replace(/[\[\]]/g, "_") + "val",
 				    ov = this.form.dataset[fname],
 				    v = field.value;
-	
+				if (fname === "val") continue;
 				if (field.type === "checkbox") {
 					v = field.checked;
 					ov = ov === "true";
@@ -5760,34 +5815,6 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var _url = "entries";
-	
-	module.exports = {
-		get: function (params) {
-			var id = typeof params === "number" ? params : null;
-			return $.get(_url + (id ? "/" + id : ""), params || {});
-		},
-	
-		save: function (params) {
-			if (params.length === 1 && params[0].id) params = params[0];
-			return $.post(_url + (params.id ? "/" + params.id : ""), params);
-		},
-	
-		del: function (id) {
-			return $.del(_url + "/" + id);
-		}
-	};
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
 	var _url = "categories";
 	
 	module.exports = {
@@ -5803,6 +5830,34 @@
 		},
 		del: function (params) {
 			return $.del(_url + "/" + params.id);
+		}
+	};
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var _url = "entries";
+	
+	module.exports = {
+		get: function (params) {
+			var id = typeof params === "number" ? params : null;
+			return $.get(_url + (id ? "/" + id : ""), params || {});
+		},
+	
+		save: function (params) {
+			if (params.length === 1 && params[0].id) params = params[0];
+			return $.post(_url + (params.id ? "/" + params.id : ""), params);
+		},
+	
+		del: function (id) {
+			return $.del(_url + "/" + id);
 		}
 	};
 
@@ -7305,34 +7360,6 @@
 /* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-	
-	function Toaster(msg) {
-		console.log(msg);
-	}
-	
-	Toaster.error = function (msg) {
-		console.error(msg);
-	};
-	
-	Toaster.warning = function (msg) {
-		console.warn(msg);
-	};
-	
-	Toaster.info = function (msg) {
-		console.info(msg);
-	};
-	
-	Toaster.success = function (msg) {
-		console.log(msg);
-	};
-	
-	module.exports = Toaster;
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
 	module.exports = function(module) {
 		if(!module.webpackPolyfill) {
 			module.deprecate = function() {};
@@ -7344,6 +7371,36 @@
 		return module;
 	}
 
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	function Toaster(msg) {
+		console.log(msg);
+	}
+	
+	Toaster.error = function (msg) {
+		console.error(msg);
+		return false;
+	};
+	
+	Toaster.warning = function (msg) {
+		console.warn(msg);
+		return false;
+	};
+	
+	Toaster.info = function (msg) {
+		console.info(msg);
+	};
+	
+	Toaster.success = function (msg) {
+		console.log(msg);
+	};
+	
+	module.exports = Toaster;
 
 /***/ },
 /* 25 */
