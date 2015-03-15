@@ -47,6 +47,7 @@ function del () {
 function onClick (e) {
 	var target = $(e.target);
 	if (target.is('.cat')) edit(target.data());
+	else if (target.is('.btn-reset')) edit({});
 	else if (target.is('.btn-del')) del();
 	else return;
 	e.preventDefault();

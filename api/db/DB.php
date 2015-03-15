@@ -61,8 +61,9 @@ class DB {
 		$id = $data['id'];
 		unset($data['id']);
 		$res = $this->db->update($table, $data, [ 'id' => intval($id) ]);
-		if ($res == 0) $this->output = ['result' => 'error'];
-		else $this->output = ['result' => 'success'];
+		// if ($res == 0) $this->output = ['result' => 'error'];
+		// else $this->output = ['result' => 'success'];
+		$this->output = ['result' => 'success'];
 		return $this;
 	}
 

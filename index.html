@@ -45,11 +45,36 @@
 		</div>
 
 
-		<div class="section" id="income"><h2>Income</h2></div>
+		<div class="section" id="income">
+			<h2>Income <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
+			<form class="income-form">
+				<div class="subforms">
+					<div class="form-row">
+						<input type="hidden" name="id">
+						<input type="hidden" name="date">
+						<input name="amount" class="amount" placeholder="0.00">
+						<input name="description" class="description" placeholder="description">
+					</div>
+				</div>
+				<div class="form-row">
+					<button type="submit" class="btn-add">Add</button>
+					<label>Repeat every month, for months</label>
+					<input type="number" class="repeat-in" min="1" max="12" name="repeat"/>
+				</div>
+			</form>
+			<div class="preview hidden">
+				<h3>Preview</h3>
+				<div class="preview-table"></div>
+			</div>
+			<div class="income-table"></div>
+		</div>
+
 
 		<div class="section" id="stats"><h2>Stats</h2></div>
 
-		<div class="section" id="categories"><h2>Categories</h2>
+
+		<div class="section" id="categories">
+			<h2>Categories <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
 			<div class="tree"></div>
 			<div class="form">
 				<form>
@@ -60,7 +85,6 @@
 					<button type="submit" class="btn btn-sav">Save</button>
 					<button type="button" class="btn btn-del">Remove</button>
 				</form>
-				<a href="#" class="cat">+ Add New</a>
 			</div>
 		</div>
 

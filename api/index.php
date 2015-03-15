@@ -46,6 +46,24 @@ Router::del('/entries/{id}', function ($params) {
 
 
 
+Router::get('/incomes/{id}', function ($params) {
+	$db = new Incomes();
+	echo $db->get($params)->to_json();
+});
+
+Router::post('/incomes/{id}', function ($params) {
+	$db = new Incomes();
+	if (!empty($params['id'])) echo $db->save($params)->to_json();
+	else echo $db->add($params['data'])->to_json();
+});
+
+Router::del('/incomes/{id}', function ($params) {
+	$db = new Incomes();
+	if (!empty($params['id'])) echo $db->del($params['id'])->to_json();
+});
+
+
+
 
 
 

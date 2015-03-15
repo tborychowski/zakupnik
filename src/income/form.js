@@ -1,21 +1,12 @@
 import $ from 'util';
 import Toaster from 'toaster';
-import Data from 'data/entries';
-import Categories from 'data/categories';
+import Data from 'data/incomes';
 import Calendar from 'calendar';
 import Moment from 'moment';
 
-var tpl = require('./form.html');
 var _defaults = {
 	onAdd: function () {}
 };
-function parseCategories (cats) {
-	let map = {};
-	for (let p of cats) {
-		for (let c of p.items) map[c.id] = c.name;
-	}
-	return map;
-}
 
 function cloneItem (item, addMonths = 1) {
 	let newItem = JSON.parse(JSON.stringify(item));
@@ -49,29 +40,22 @@ export default class Form {
 		this.catMap = {};
 
 		this.el.on('submit', this.onSubmit.bind(this));
-		this.el.on('click', this.onClick.bind(this));
 
 		if (typeof this.cfg.onChange === 'function') {
 			this.form.observe(function (nv, ov, f) {
 				this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
 			}.bind(this));
 		}
-		this.draw();
-	}
 
-	draw () {
-		if (this.categories.length) this.reset();
-		else Categories.getTree().then(data => {
-			this.categories = data;
-			this.catMap = parseCategories(data);
-			this.reset();
-		});
-		return this;
+		let subform = this.subforms.find('.form-row');
+		subform.find('input')[0].focus();
+		this.addInputEvents(subform);
+
+		return this.reset();
 	}
 
 	reset () {
-		this.subforms.html('');
-		this.split(true);
+		this.form.reset();
 		let rep = this.el.find('.repeat-in');
 		if (rep) rep[0].value = 1;
 		return this;
@@ -83,26 +67,6 @@ export default class Form {
 		return this;
 	}
 
-	unsplit (btn) {
-		btn.closest('.form-row').remove();
-		let rows = this.el.find('.form-row');
-		$.each(rows, function (row, i) {
-			let fields = $(row).find('input,select');
-			$.each(fields, function (f) {
-				if (!f.name) return;
-				f.name = f.name.replace(/\[\d+\]/, '[' + i + ']');
-			});
-		});
-		this.cfg.onChange.call(this.cfg.onChange);
-	}
-
-	split (first) {
-		let idx = this.subforms.find('.form-row').length;
-		let subform = $(tpl({ first: first === true, categories: this.categories, idx }));
-		subform.appendTo(this.subforms).find('select')[0].focus();
-		this.addInputEvents(subform);
-	}
-
 	setDate (date) {
 		var dates = this.subforms.find('input[name$="date"]');
 		$.each(dates, function (f) { f.value = date; });
@@ -111,32 +75,20 @@ export default class Form {
 	getData (clean = false) {
 		var date = Calendar.get(true),
 			format = (n) => n.toLocaleString('en-GB', { minimumFractionDigits: 2 }),
-			formData = this.form.get(true),
-			data = [],
-			errors = [],
-			total = 0;
+			item = this.form.get(true),
+			repeat = item.repeat,
+			errors = [];
 
-		$.each(formData.items, function (item, i) {
-			if (!item.date) item.date = date;
-			if (!item.amount) errors.push('Please enter amount!');
-			else {
-				item.amount = this.parseAmount(item.amount);
-				if (i.toString() === '0') total = item.amount;
-				else total -= item.amount;
-				if (!clean) {
-					item.amount_str = format(item.amount);
-					item.category = this.catMap[item.category_id];
-				}
-				data.push(item);
-			}
-		}, this);
-		if (errors.length && clean) return Toaster.error(errors[0]);
-		if (data && data.length) {
-			data[0].amount = total;
-			if (!clean) data[0].amount_str = format(total);
+		delete item.repeat;
+		if (!item.date) item.date = date;
+		if (!item.amount) errors.push('Please enter amount!');
+		else {
+			item.amount = this.parseAmount(item.amount);
+			if (!clean) item.amount_str = format(item.amount);
 		}
-		formData.items = repeatItems(data, formData.repeat);
-		return formData;
+		if (errors.length && clean) return Toaster.error(errors[0]);
+		if (!errors.length) return { items: repeatItems([item], repeat) };
+		return {};
 	}
 
 	parseAmount (amount) {
@@ -170,20 +122,12 @@ export default class Form {
 		e.preventDefault();
 	}
 
-	onClick (e) {
-		var target = $(e.target);
-		if (target.is('.btn-split')) this.split();
-		else if (target.is('.btn-del')) this.unsplit(target);
-		else return;
-		e.preventDefault();
-	}
-
 
 	onSubmit (e) {
 		e.preventDefault();
-		let data = this.getData(true).items;
-		if (!this.validate(data)) return;
-		if (data) Data.save(data)
+		let data = this.getData(true);
+		if (!this.validate(data.items)) return;
+		if (data.items) Data.save(data.items)
 			.then(resp => { if (resp.result === 'success') this.reset(); return resp; })
 			.then(this.cfg.onAdd);
 	}
