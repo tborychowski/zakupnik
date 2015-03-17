@@ -19,10 +19,10 @@
 	<div id="calendar"></div>
 
 	<ul id="menu">
-		<li><a class="fa fa-shopping-cart" href="#expenses">Expenses</a></li>
-		<li><a class="fa fa-money" href="#income">Income</a></li>
-		<li><a class="fa fa-pie-chart" href="#stats">Stats</a></li>
-		<li><a class="fa fa-tags" href="#categories">Categories</a></li>
+		<li><a class="fa fa-shopping-cart" href="#expenses" title="Expenses">Expenses</a></li>
+		<li><a class="fa fa-money" href="#income" title="Incomes">Income</a></li>
+		<li><a class="fa fa-line-chart" href="#stats" title="Stats">Stats</a></li>
+		<li><a class="fa fa-tags" href="#categories" title="Categories">Categories</a></li>
 	</ul>
 
 	<div id="content">
@@ -70,7 +70,22 @@
 		</div>
 
 
-		<div class="section" id="stats"><h2>Stats</h2></div>
+		<div class="section" id="stats">
+			<h2>Stats</h2>
+			<div class="chart chart0">
+				<h3>Spending by category (this month)</h3>
+				<div class="legend"></div>
+				<canvas class="chart-container"></canvas>
+			</div>
+			<div class="chart chart1">
+				<h3>Income vs Expenses (month-by-month, this year)</h3>
+				<canvas class="chart-container"></canvas>
+			</div>
+			<div class="chart chart2">
+				<h3>Spending by time (day-by-day), for [categories dropdown]</h3>
+				<canvas class="chart-container"></canvas>
+			</div>
+		</div>
 
 
 		<div class="section" id="categories">

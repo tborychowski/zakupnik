@@ -3,3 +3,36 @@
 
 #stats
 	color #fff;
+
+	h3
+		font 15;
+
+.chart
+	float left; size 49% 320; position relative; overflow hidden;
+	margin 0 1% 1% 0; padding 20; bg rgba(#000, .4); border-radius 2px;
+
+.chart-container
+	size 100% 220; margin 30 10;
+
+.chart0
+	.chart-container
+		width 220; float right;
+
+	.legend
+		pos 50; left 20; max-height 245px; overflow hidden;
+		.pie-legend
+			margin 0; padding 0; list-style none;
+		li
+			position relative; show 2; padding 1 5 3 22; cursor default; margin-bottom 7;
+			bg #2C3844; font 12; opacity 0.8; transition all .2s ease-out;
+
+			&:hover
+				opacity 1
+			.sq
+				pos 0; left 0; show 2; size 15; border-radius 2px
+			.val
+				padding-left 5; color #bbb;
+
+
+.chart2
+	width 99%; margin 0;

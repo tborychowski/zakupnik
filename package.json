@@ -9,11 +9,12 @@
     "url": "https://github.com/tborychowski/zakupnik.git"
   },
   "scripts": {
-  	"postinstall": "cp -r node_modules/font-awesome/fonts/ ./ && rm -rf node_modules/moment/locale"
+    "postinstall": "cp -r node_modules/font-awesome/fonts/ ./ && rm -rf node_modules/moment/locale"
   },
   "devDependencies": {
     "babel-core": "^4.6.1",
     "babel-loader": "^4.0.0",
+    "chart.js": "^1.0.2",
     "del": "^1.1.1",
     "font-awesome": "^4.3.0",
     "grid": "git://github.com/tborychowski/grid",
