@@ -72,18 +72,25 @@
 
 		<div class="section" id="stats">
 			<h2>Stats</h2>
-			<div class="chart chart0">
-				<h3>Spending by category (this month)</h3>
-				<div class="legend"></div>
-				<canvas class="chart-container"></canvas>
-			</div>
-			<div class="chart chart1">
-				<h3>Income vs Expenses (month-by-month, this year)</h3>
-				<canvas class="chart-container"></canvas>
-			</div>
-			<div class="chart chart2">
-				<h3>Spending by time (day-by-day), for [categories dropdown]</h3>
-				<canvas class="chart-container"></canvas>
+			<div class="charts-wrapper">
+				<div class="chart chart0">
+					<h3>Spending by category (this month)</h3>
+					<ul class="legend"></ul>
+					<canvas class="chart-container"></canvas>
+				</div>
+				<div class="chart chart1">
+					<h3>Income vs Expenses (this year)</h3>
+					<ul class="legend">
+						<li class="inc"><span class="sq"></span>Income</li>
+						<li class="exp"><span class="sq"></span>Expenses</li>
+					</ul>
+					<canvas class="chart-container"></canvas>
+				</div>
+				<div class="chart chart2">
+					<h3>Spending by time (day-by-day), for [categories dropdown]</h3>
+					<div class="legend"></div>
+					<canvas class="chart-container"></canvas>
+				</div>
 			</div>
 		</div>
 

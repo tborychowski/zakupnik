@@ -50,6 +50,11 @@ Router::get('/spendingByCategory', function ($params) {
 	$db = new Stats();
 	echo $db->spendingByCategory($params)->to_json();
 });
+
+Router::get('/incomeVsExpenses', function ($params) {
+	$db = new Stats();
+	echo $db->incomeVsExpenses($params)->to_json();
+});
 /*** STATS ****************************************************************************************/
 
 

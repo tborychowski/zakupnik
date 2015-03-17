@@ -22,6 +22,27 @@ class Stats extends DB {
 	}
 
 
+	private function getIncomeForMonth($m) {
+		return $this->db->sum('incomes', 'amount', [ 'date[~]' => $m . '%' ]);
+	}
+
+	private function getExpensesSumForMonth($m) {
+		return $this->db->sum($this->table, 'amount', [ 'date[~]' => $m . '%' ]);
+	}
+
+	public function incomeVsExpenses ($p) {
+		$y = isset($p['year']) ? $p['year'] : date('Y');
+		$this->output = [ 'income' => [], 'expenses' => [] ];
+		for ($m = 1; $m <= 12; $m++) {
+			$month = $y . '-' . substr('0' . $m, -2);
+			array_push($this->output['income'], $this->getIncomeForMonth($month));
+			array_push($this->output['expenses'], $this->getExpensesSumForMonth($month));
+		}
+
+		return $this;
+	}
+
+
 
 
 

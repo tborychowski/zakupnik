@@ -66,9 +66,9 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Pikaday = _interopRequire(__webpack_require__(8));
+	var Pikaday = _interopRequire(__webpack_require__(9));
 	
-	var Moment = _interopRequire(__webpack_require__(9));
+	var Moment = _interopRequire(__webpack_require__(8));
 	
 	var tpl = __webpack_require__(10);
 	var el,
@@ -202,19 +202,19 @@
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var sizzle = _interopRequire(__webpack_require__(11));
+	var sizzle = _interopRequire(__webpack_require__(16));
 	
-	var ajax = _interopRequire(__webpack_require__(12));
+	var ajax = _interopRequire(__webpack_require__(17));
 	
-	var form = _interopRequire(__webpack_require__(13));
+	var form = _interopRequire(__webpack_require__(18));
 	
-	var pubsub = _interopRequire(__webpack_require__(14));
+	var pubsub = _interopRequire(__webpack_require__(19));
 	
-	var keys = _interopRequire(__webpack_require__(15));
+	var keys = _interopRequire(__webpack_require__(20));
 	
-	var colors = _interopRequire(__webpack_require__(16));
+	var colors = _interopRequire(__webpack_require__(21));
 	
-	var util = _interopRequire(__webpack_require__(17));
+	var util = _interopRequire(__webpack_require__(22));
 	
 	var all = { ajax: ajax, form: form };
 	Object.assign(all, ajax, pubsub, keys, colors, util);
@@ -232,13 +232,13 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(21));
+	var Data = _interopRequire(__webpack_require__(23));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Grid = _interopRequire(__webpack_require__(25));
+	var Grid = _interopRequire(__webpack_require__(27));
 	
-	var Form = _interopRequire(__webpack_require__(18));
+	var Form = _interopRequire(__webpack_require__(11));
 	
 	var el,
 	    grid,
@@ -384,13 +384,13 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(23));
+	var Data = _interopRequire(__webpack_require__(25));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Grid = _interopRequire(__webpack_require__(25));
+	var Grid = _interopRequire(__webpack_require__(27));
 	
-	var Form = _interopRequire(__webpack_require__(20));
+	var Form = _interopRequire(__webpack_require__(14));
 	
 	var el,
 	    grid,
@@ -535,59 +535,29 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Chart = _interopRequire(__webpack_require__(26));
-	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
 	var Data = _interopRequire(__webpack_require__(24));
 	
-	var pieOptions = {
-		segmentShowStroke: false,
-		percentageInnerCutout: 50,
-		animateRotate: true,
-		animateScale: false,
-		tooltipTemplate: "<%=label%> €<%= value %>",
-		legendTemplate: "<ul class=\"pie-legend\"><%for(var i=0;i<segments.length;i++){%>" + "<li><span class=\"sq\" style=\"background-color:<%=segments[i].fillColor%>\"></span>" + "<%=segments[i].label%>" + "<span class=\"val\">€<%=segments[i].value%></span></li><%}%></ul>"
-	},
-	    charts = [{ el: null, canvas: null, ctx: null, chart: null, options: pieOptions }, { el: null, canvas: null, ctx: null, chart: null, options: {} }, { el: null, canvas: null, ctx: null, chart: null, options: {} }],
-	    el;
+	var chart0 = _interopRequire(__webpack_require__(12));
 	
-	function chart0(data) {
-		var chart = charts[0],
-		    _data = $.addColors(data);
-		if (!chart.isReady) {
-			chart.chart = new Chart(chart.ctx).Pie(_data, chart.options);
-			chart.legend.html(chart.chart.generateLegend());
+	var chart1 = _interopRequire(__webpack_require__(13));
 	
-			$.each(chart.legend.find("li"), function (legendNode, index) {
-				$(legendNode).on("mouseover", function () {
-					var activeSegment = chart.chart.segments[index];
-					activeSegment.save();
-					activeSegment.fillColor = activeSegment.highlightColor;
-					chart.chart.showTooltip([activeSegment]);
-					activeSegment.restore();
-				});
-			});
-			chart.legend.on("mouseout", function () {
-				chart.chart.draw();
-			});
-			chart.isReady = true;
-		} else chart.chart.update(_data);
-	}
+	var lastLoadDate;
 	
-	function loadData() {
-		Data.spendingByCategory({ date: Calendar.get("YYYY-MM") }).then(chart0);
+	function load(force) {
+		var date = Calendar.get("YYYY-MM");
+	
+		if (!lastLoadDate || lastLoadDate !== date || force === true) {
+			lastLoadDate = date;
+			Data.spendingByCategory({ date: date }).then(chart0);
+			Data.incomeVsExpenses({ year: Calendar.get("YYYY") }).then(chart1);
+		}
 	}
 	
 	function init() {
-		el = $("#stats");
-		charts.forEach(function (ch, i) {
-			ch.el = el.find(".chart" + i);
-			ch.legend = ch.el.find(".legend");
-			ch.canvas = ch.el.find(".chart-container");
-			ch.ctx = ch.canvas[0].getContext("2d");
-		});
-		loadData();
+		$.on("calendar/changed", load);
+		load();
 	}
 	
 	module.exports = {
@@ -604,7 +574,7 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(22));
+	var Data = _interopRequire(__webpack_require__(26));
 	
 	var el,
 	    treeContainer,
@@ -612,7 +582,7 @@
 	    form,
 	    btn = {},
 	    catSel;
-	var tpl = __webpack_require__(19);
+	var tpl = __webpack_require__(15);
 	
 	function updateCatSelect(data) {
 		var options = ["<option value=\"0\"></option>"];
@@ -740,1041 +710,6 @@
 
 /***/ },
 /* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*!
-	 * Pikaday
-	 *
-	 * Copyright © 2014 David Bushell | BSD & MIT license | https://github.com/dbushell/Pikaday
-	 */
-	
-	(function (root, factory)
-	{
-	    'use strict';
-	
-	    var moment;
-	    if (true) {
-	        // CommonJS module
-	        // Load moment.js as an optional dependency
-	        try { moment = __webpack_require__(9); } catch (e) {}
-	        module.exports = factory(moment);
-	    } else if (typeof define === 'function' && define.amd) {
-	        // AMD. Register as an anonymous module.
-	        define(function (req)
-	        {
-	            // Load moment.js as an optional dependency
-	            var id = 'moment';
-	            try { moment = req(id); } catch (e) {}
-	            return factory(moment);
-	        });
-	    } else {
-	        root.Pikaday = factory(root.moment);
-	    }
-	}(this, function (moment)
-	{
-	    'use strict';
-	
-	    /**
-	     * feature detection and helper functions
-	     */
-	    var hasMoment = typeof moment === 'function',
-	
-	    hasEventListeners = !!window.addEventListener,
-	
-	    document = window.document,
-	
-	    sto = window.setTimeout,
-	
-	    addEvent = function(el, e, callback, capture)
-	    {
-	        if (hasEventListeners) {
-	            el.addEventListener(e, callback, !!capture);
-	        } else {
-	            el.attachEvent('on' + e, callback);
-	        }
-	    },
-	
-	    removeEvent = function(el, e, callback, capture)
-	    {
-	        if (hasEventListeners) {
-	            el.removeEventListener(e, callback, !!capture);
-	        } else {
-	            el.detachEvent('on' + e, callback);
-	        }
-	    },
-	
-	    fireEvent = function(el, eventName, data)
-	    {
-	        var ev;
-	
-	        if (document.createEvent) {
-	            ev = document.createEvent('HTMLEvents');
-	            ev.initEvent(eventName, true, false);
-	            ev = extend(ev, data);
-	            el.dispatchEvent(ev);
-	        } else if (document.createEventObject) {
-	            ev = document.createEventObject();
-	            ev = extend(ev, data);
-	            el.fireEvent('on' + eventName, ev);
-	        }
-	    },
-	
-	    trim = function(str)
-	    {
-	        return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g,'');
-	    },
-	
-	    hasClass = function(el, cn)
-	    {
-	        return (' ' + el.className + ' ').indexOf(' ' + cn + ' ') !== -1;
-	    },
-	
-	    addClass = function(el, cn)
-	    {
-	        if (!hasClass(el, cn)) {
-	            el.className = (el.className === '') ? cn : el.className + ' ' + cn;
-	        }
-	    },
-	
-	    removeClass = function(el, cn)
-	    {
-	        el.className = trim((' ' + el.className + ' ').replace(' ' + cn + ' ', ' '));
-	    },
-	
-	    isArray = function(obj)
-	    {
-	        return (/Array/).test(Object.prototype.toString.call(obj));
-	    },
-	
-	    isDate = function(obj)
-	    {
-	        return (/Date/).test(Object.prototype.toString.call(obj)) && !isNaN(obj.getTime());
-	    },
-	
-	    isWeekend = function(date)
-	    {
-	        var day = date.getDay();
-	        return day === 0 || day === 6;
-	    },
-	
-	    isLeapYear = function(year)
-	    {
-	        // solution by Matti Virkkunen: http://stackoverflow.com/a/4881951
-	        return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
-	    },
-	
-	    getDaysInMonth = function(year, month)
-	    {
-	        return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
-	    },
-	
-	    setToStartOfDay = function(date)
-	    {
-	        if (isDate(date)) date.setHours(0,0,0,0);
-	    },
-	
-	    compareDates = function(a,b)
-	    {
-	        // weak date comparison (use setToStartOfDay(date) to ensure correct result)
-	        return a.getTime() === b.getTime();
-	    },
-	
-	    extend = function(to, from, overwrite)
-	    {
-	        var prop, hasProp;
-	        for (prop in from) {
-	            hasProp = to[prop] !== undefined;
-	            if (hasProp && typeof from[prop] === 'object' && from[prop] !== null && from[prop].nodeName === undefined) {
-	                if (isDate(from[prop])) {
-	                    if (overwrite) {
-	                        to[prop] = new Date(from[prop].getTime());
-	                    }
-	                }
-	                else if (isArray(from[prop])) {
-	                    if (overwrite) {
-	                        to[prop] = from[prop].slice(0);
-	                    }
-	                } else {
-	                    to[prop] = extend({}, from[prop], overwrite);
-	                }
-	            } else if (overwrite || !hasProp) {
-	                to[prop] = from[prop];
-	            }
-	        }
-	        return to;
-	    },
-	
-	    adjustCalendar = function(calendar) {
-	        if (calendar.month < 0) {
-	            calendar.year -= Math.ceil(Math.abs(calendar.month)/12);
-	            calendar.month += 12;
-	        }
-	        if (calendar.month > 11) {
-	            calendar.year += Math.floor(Math.abs(calendar.month)/12);
-	            calendar.month -= 12;
-	        }
-	        return calendar;
-	    },
-	
-	    /**
-	     * defaults and localisation
-	     */
-	    defaults = {
-	
-	        // bind the picker to a form field
-	        field: null,
-	
-	        // automatically show/hide the picker on `field` focus (default `true` if `field` is set)
-	        bound: undefined,
-	
-	        // position of the datepicker, relative to the field (default to bottom & left)
-	        // ('bottom' & 'left' keywords are not used, 'top' & 'right' are modifier on the bottom/left position)
-	        position: 'bottom left',
-	
-	        // automatically fit in the viewport even if it means repositioning from the position option
-	        reposition: true,
-	
-	        // the default output format for `.toString()` and `field` value
-	        format: 'YYYY-MM-DD',
-	
-	        // the initial date to view when first opened
-	        defaultDate: null,
-	
-	        // make the `defaultDate` the initial selected value
-	        setDefaultDate: false,
-	
-	        // first day of week (0: Sunday, 1: Monday etc)
-	        firstDay: 0,
-	
-	        // the minimum/earliest date that can be selected
-	        minDate: null,
-	        // the maximum/latest date that can be selected
-	        maxDate: null,
-	
-	        // number of years either side, or array of upper/lower range
-	        yearRange: 10,
-	
-	        // show week numbers at head of row
-	        showWeekNumber: false,
-	
-	        // used internally (don't config outside)
-	        minYear: 0,
-	        maxYear: 9999,
-	        minMonth: undefined,
-	        maxMonth: undefined,
-	
-	        isRTL: false,
-	
-	        // Additional text to append to the year in the calendar title
-	        yearSuffix: '',
-	
-	        // Render the month after year in the calendar title
-	        showMonthAfterYear: false,
-	
-	        // how many months are visible
-	        numberOfMonths: 1,
-	
-	        // when numberOfMonths is used, this will help you to choose where the main calendar will be (default `left`, can be set to `right`)
-	        // only used for the first display or when a selected date is not visible
-	        mainCalendar: 'left',
-	
-	        // Specify a DOM element to render the calendar in
-	        container: undefined,
-	
-	        // internationalization
-	        i18n: {
-	            previousMonth : 'Previous Month',
-	            nextMonth     : 'Next Month',
-	            months        : ['January','February','March','April','May','June','July','August','September','October','November','December'],
-	            weekdays      : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-	            weekdaysShort : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
-	        },
-	
-	        // callback function
-	        onSelect: null,
-	        onOpen: null,
-	        onClose: null,
-	        onDraw: null
-	    },
-	
-	
-	    /**
-	     * templating functions to abstract HTML rendering
-	     */
-	    renderDayName = function(opts, day, abbr)
-	    {
-	        day += opts.firstDay;
-	        while (day >= 7) {
-	            day -= 7;
-	        }
-	        return abbr ? opts.i18n.weekdaysShort[day] : opts.i18n.weekdays[day];
-	    },
-	
-	    renderDay = function(d, m, y, isSelected, isToday, isDisabled, isEmpty)
-	    {
-	        if (isEmpty) {
-	            return '<td class="is-empty"></td>';
-	        }
-	        var arr = [];
-	        if (isDisabled) {
-	            arr.push('is-disabled');
-	        }
-	        if (isToday) {
-	            arr.push('is-today');
-	        }
-	        if (isSelected) {
-	            arr.push('is-selected');
-	        }
-	        return '<td data-day="' + d + '" class="' + arr.join(' ') + '">' +
-	                 '<button class="pika-button pika-day" type="button" ' +
-	                    'data-pika-year="' + y + '" data-pika-month="' + m + '" data-pika-day="' + d + '">' +
-	                        d +
-	                 '</button>' +
-	               '</td>';
-	    },
-	
-	    renderWeek = function (d, m, y) {
-	        // Lifted from http://javascript.about.com/library/blweekyear.htm, lightly modified.
-	        var onejan = new Date(y, 0, 1),
-	            weekNum = Math.ceil((((new Date(y, m, d) - onejan) / 86400000) + onejan.getDay()+1)/7);
-	        return '<td class="pika-week">' + weekNum + '</td>';
-	    },
-	
-	    renderRow = function(days, isRTL)
-	    {
-	        return '<tr>' + (isRTL ? days.reverse() : days).join('') + '</tr>';
-	    },
-	
-	    renderBody = function(rows)
-	    {
-	        return '<tbody>' + rows.join('') + '</tbody>';
-	    },
-	
-	    renderHead = function(opts)
-	    {
-	        var i, arr = [];
-	        if (opts.showWeekNumber) {
-	            arr.push('<th></th>');
-	        }
-	        for (i = 0; i < 7; i++) {
-	            arr.push('<th scope="col"><abbr title="' + renderDayName(opts, i) + '">' + renderDayName(opts, i, true) + '</abbr></th>');
-	        }
-	        return '<thead>' + (opts.isRTL ? arr.reverse() : arr).join('') + '</thead>';
-	    },
-	
-	    renderTitle = function(instance, c, year, month, refYear)
-	    {
-	        var i, j, arr,
-	            opts = instance._o,
-	            isMinYear = year === opts.minYear,
-	            isMaxYear = year === opts.maxYear,
-	            html = '<div class="pika-title">',
-	            monthHtml,
-	            yearHtml,
-	            prev = true,
-	            next = true;
-	
-	        for (arr = [], i = 0; i < 12; i++) {
-	            arr.push('<option value="' + (year === refYear ? i - c : 12 + i - c) + '"' +
-	                (i === month ? ' selected': '') +
-	                ((isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth) ? 'disabled' : '') + '>' +
-	                opts.i18n.months[i] + '</option>');
-	        }
-	        monthHtml = '<div class="pika-label">' + opts.i18n.months[month] + '<select class="pika-select pika-select-month">' + arr.join('') + '</select></div>';
-	
-	        if (isArray(opts.yearRange)) {
-	            i = opts.yearRange[0];
-	            j = opts.yearRange[1] + 1;
-	        } else {
-	            i = year - opts.yearRange;
-	            j = 1 + year + opts.yearRange;
-	        }
-	
-	        for (arr = []; i < j && i <= opts.maxYear; i++) {
-	            if (i >= opts.minYear) {
-	                arr.push('<option value="' + i + '"' + (i === year ? ' selected': '') + '>' + (i) + '</option>');
-	            }
-	        }
-	        yearHtml = '<div class="pika-label">' + year + opts.yearSuffix + '<select class="pika-select pika-select-year">' + arr.join('') + '</select></div>';
-	
-	        if (opts.showMonthAfterYear) {
-	            html += yearHtml + monthHtml;
-	        } else {
-	            html += monthHtml + yearHtml;
-	        }
-	
-	        if (isMinYear && (month === 0 || opts.minMonth >= month)) {
-	            prev = false;
-	        }
-	
-	        if (isMaxYear && (month === 11 || opts.maxMonth <= month)) {
-	            next = false;
-	        }
-	
-	        if (c === 0) {
-	            html += '<button class="pika-prev' + (prev ? '' : ' is-disabled') + '" type="button">' + opts.i18n.previousMonth + '</button>';
-	        }
-	        if (c === (instance._o.numberOfMonths - 1) ) {
-	            html += '<button class="pika-next' + (next ? '' : ' is-disabled') + '" type="button">' + opts.i18n.nextMonth + '</button>';
-	        }
-	
-	        return html += '</div>';
-	    },
-	
-	    renderTable = function(opts, data)
-	    {
-	        return '<table cellpadding="0" cellspacing="0" class="pika-table">' + renderHead(opts) + renderBody(data) + '</table>';
-	    },
-	
-	
-	    /**
-	     * Pikaday constructor
-	     */
-	    Pikaday = function(options)
-	    {
-	        var self = this,
-	            opts = self.config(options);
-	
-	        self._onMouseDown = function(e)
-	        {
-	            if (!self._v) {
-	                return;
-	            }
-	            e = e || window.event;
-	            var target = e.target || e.srcElement;
-	            if (!target) {
-	                return;
-	            }
-	
-	            if (!hasClass(target, 'is-disabled')) {
-	                if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty')) {
-	                    self.setDate(new Date(target.getAttribute('data-pika-year'), target.getAttribute('data-pika-month'), target.getAttribute('data-pika-day')));
-	                    if (opts.bound) {
-	                        sto(function() {
-	                            self.hide();
-	                            if (opts.field) {
-	                                opts.field.blur();
-	                            }
-	                        }, 100);
-	                    }
-	                    return;
-	                }
-	                else if (hasClass(target, 'pika-prev')) {
-	                    self.prevMonth();
-	                }
-	                else if (hasClass(target, 'pika-next')) {
-	                    self.nextMonth();
-	                }
-	            }
-	            if (!hasClass(target, 'pika-select')) {
-	                if (e.preventDefault) {
-	                    e.preventDefault();
-	                } else {
-	                    e.returnValue = false;
-	                    return false;
-	                }
-	            } else {
-	                self._c = true;
-	            }
-	        };
-	
-	        self._onChange = function(e)
-	        {
-	            e = e || window.event;
-	            var target = e.target || e.srcElement;
-	            if (!target) {
-	                return;
-	            }
-	            if (hasClass(target, 'pika-select-month')) {
-	                self.gotoMonth(target.value);
-	            }
-	            else if (hasClass(target, 'pika-select-year')) {
-	                self.gotoYear(target.value);
-	            }
-	        };
-	
-	        self._onInputChange = function(e)
-	        {
-	            var date;
-	
-	            if (e.firedBy === self) {
-	                return;
-	            }
-	            if (hasMoment) {
-	                date = moment(opts.field.value, opts.format);
-	                date = (date && date.isValid()) ? date.toDate() : null;
-	            }
-	            else {
-	                date = new Date(Date.parse(opts.field.value));
-	            }
-	            self.setDate(isDate(date) ? date : null);
-	            if (!self._v) {
-	                self.show();
-	            }
-	        };
-	
-	        self._onInputFocus = function()
-	        {
-	            self.show();
-	        };
-	
-	        self._onInputClick = function()
-	        {
-	            self.show();
-	        };
-	
-	        self._onInputBlur = function()
-	        {
-	            // IE allows pika div to gain focus; catch blur the input field
-	            var pEl = document.activeElement;
-	            do {
-	                if (hasClass(pEl, 'pika-single')) {
-	                    return;
-	                }
-	            }
-	            while ((pEl = pEl.parentNode));
-	            
-	            if (!self._c) {
-	                self._b = sto(function() {
-	                    self.hide();
-	                }, 50);
-	            }
-	            self._c = false;
-	        };
-	
-	        self._onClick = function(e)
-	        {
-	            e = e || window.event;
-	            var target = e.target || e.srcElement,
-	                pEl = target;
-	            if (!target) {
-	                return;
-	            }
-	            if (!hasEventListeners && hasClass(target, 'pika-select')) {
-	                if (!target.onchange) {
-	                    target.setAttribute('onchange', 'return;');
-	                    addEvent(target, 'change', self._onChange);
-	                }
-	            }
-	            do {
-	                if (hasClass(pEl, 'pika-single') || pEl === opts.trigger) {
-	                    return;
-	                }
-	            }
-	            while ((pEl = pEl.parentNode));
-	            if (self._v && target !== opts.trigger && pEl !== opts.trigger) {
-	                self.hide();
-	            }
-	        };
-	
-	        self.el = document.createElement('div');
-	        self.el.className = 'pika-single' + (opts.isRTL ? ' is-rtl' : '');
-	
-	        addEvent(self.el, 'mousedown', self._onMouseDown, true);
-	        addEvent(self.el, 'change', self._onChange);
-	
-	        if (opts.field) {
-	            if (opts.container) {
-	                opts.container.appendChild(self.el);
-	            } else if (opts.bound) {
-	                document.body.appendChild(self.el);
-	            } else {
-	                opts.field.parentNode.insertBefore(self.el, opts.field.nextSibling);
-	            }
-	            addEvent(opts.field, 'change', self._onInputChange);
-	
-	            if (!opts.defaultDate) {
-	                if (hasMoment && opts.field.value) {
-	                    opts.defaultDate = moment(opts.field.value, opts.format).toDate();
-	                } else {
-	                    opts.defaultDate = new Date(Date.parse(opts.field.value));
-	                }
-	                opts.setDefaultDate = true;
-	            }
-	        }
-	
-	        var defDate = opts.defaultDate;
-	
-	        if (isDate(defDate)) {
-	            if (opts.setDefaultDate) {
-	                self.setDate(defDate, true);
-	            } else {
-	                self.gotoDate(defDate);
-	            }
-	        } else {
-	            self.gotoDate(new Date());
-	        }
-	
-	        if (opts.bound) {
-	            this.hide();
-	            self.el.className += ' is-bound';
-	            addEvent(opts.trigger, 'click', self._onInputClick);
-	            addEvent(opts.trigger, 'focus', self._onInputFocus);
-	            addEvent(opts.trigger, 'blur', self._onInputBlur);
-	        } else {
-	            this.show();
-	        }
-	    };
-	
-	
-	    /**
-	     * public Pikaday API
-	     */
-	    Pikaday.prototype = {
-	
-	
-	        /**
-	         * configure functionality
-	         */
-	        config: function(options)
-	        {
-	            if (!this._o) {
-	                this._o = extend({}, defaults, true);
-	            }
-	
-	            var opts = extend(this._o, options, true);
-	
-	            opts.isRTL = !!opts.isRTL;
-	
-	            opts.field = (opts.field && opts.field.nodeName) ? opts.field : null;
-	
-	            opts.bound = !!(opts.bound !== undefined ? opts.field && opts.bound : opts.field);
-	
-	            opts.trigger = (opts.trigger && opts.trigger.nodeName) ? opts.trigger : opts.field;
-	
-	            opts.disableWeekends = !!opts.disableWeekends;
-	
-	            opts.disableDayFn = (typeof opts.disableDayFn) == "function" ? opts.disableDayFn : null;
-	
-	            var nom = parseInt(opts.numberOfMonths, 10) || 1;
-	            opts.numberOfMonths = nom > 4 ? 4 : nom;
-	
-	            if (!isDate(opts.minDate)) {
-	                opts.minDate = false;
-	            }
-	            if (!isDate(opts.maxDate)) {
-	                opts.maxDate = false;
-	            }
-	            if ((opts.minDate && opts.maxDate) && opts.maxDate < opts.minDate) {
-	                opts.maxDate = opts.minDate = false;
-	            }
-	            if (opts.minDate) {
-	                setToStartOfDay(opts.minDate);
-	                opts.minYear  = opts.minDate.getFullYear();
-	                opts.minMonth = opts.minDate.getMonth();
-	            }
-	            if (opts.maxDate) {
-	                setToStartOfDay(opts.maxDate);
-	                opts.maxYear  = opts.maxDate.getFullYear();
-	                opts.maxMonth = opts.maxDate.getMonth();
-	            }
-	
-	            if (isArray(opts.yearRange)) {
-	                var fallback = new Date().getFullYear() - 10;
-	                opts.yearRange[0] = parseInt(opts.yearRange[0], 10) || fallback;
-	                opts.yearRange[1] = parseInt(opts.yearRange[1], 10) || fallback;
-	            } else {
-	                opts.yearRange = Math.abs(parseInt(opts.yearRange, 10)) || defaults.yearRange;
-	                if (opts.yearRange > 100) {
-	                    opts.yearRange = 100;
-	                }
-	            }
-	
-	            return opts;
-	        },
-	
-	        /**
-	         * return a formatted string of the current selection (using Moment.js if available)
-	         */
-	        toString: function(format)
-	        {
-	            return !isDate(this._d) ? '' : hasMoment ? moment(this._d).format(format || this._o.format) : this._d.toDateString();
-	        },
-	
-	        /**
-	         * return a Moment.js object of the current selection (if available)
-	         */
-	        getMoment: function()
-	        {
-	            return hasMoment ? moment(this._d) : null;
-	        },
-	
-	        /**
-	         * set the current selection from a Moment.js object (if available)
-	         */
-	        setMoment: function(date, preventOnSelect)
-	        {
-	            if (hasMoment && moment.isMoment(date)) {
-	                this.setDate(date.toDate(), preventOnSelect);
-	            }
-	        },
-	
-	        /**
-	         * return a Date object of the current selection
-	         */
-	        getDate: function()
-	        {
-	            return isDate(this._d) ? new Date(this._d.getTime()) : null;
-	        },
-	
-	        /**
-	         * set the current selection
-	         */
-	        setDate: function(date, preventOnSelect)
-	        {
-	            if (!date) {
-	                this._d = null;
-	
-	                if (this._o.field) {
-	                    this._o.field.value = '';
-	                    fireEvent(this._o.field, 'change', { firedBy: this });
-	                }
-	
-	                return this.draw();
-	            }
-	            if (typeof date === 'string') {
-	                date = new Date(Date.parse(date));
-	            }
-	            if (!isDate(date)) {
-	                return;
-	            }
-	
-	            var min = this._o.minDate,
-	                max = this._o.maxDate;
-	
-	            if (isDate(min) && date < min) {
-	                date = min;
-	            } else if (isDate(max) && date > max) {
-	                date = max;
-	            }
-	
-	            this._d = new Date(date.getTime());
-	            setToStartOfDay(this._d);
-	            this.gotoDate(this._d);
-	
-	            if (this._o.field) {
-	                this._o.field.value = this.toString();
-	                fireEvent(this._o.field, 'change', { firedBy: this });
-	            }
-	            if (!preventOnSelect && typeof this._o.onSelect === 'function') {
-	                this._o.onSelect.call(this, this.getDate());
-	            }
-	        },
-	
-	        /**
-	         * change view to a specific date
-	         */
-	        gotoDate: function(date)
-	        {
-	            var newCalendar = true;
-	
-	            if (!isDate(date)) {
-	                return;
-	            }
-	
-	            if (this.calendars) {
-	                var firstVisibleDate = new Date(this.calendars[0].year, this.calendars[0].month, 1),
-	                    lastVisibleDate = new Date(this.calendars[this.calendars.length-1].year, this.calendars[this.calendars.length-1].month, 1),
-	                    visibleDate = date.getTime();
-	                // get the end of the month
-	                lastVisibleDate.setMonth(lastVisibleDate.getMonth()+1);
-	                lastVisibleDate.setDate(lastVisibleDate.getDate()-1);
-	                newCalendar = (visibleDate < firstVisibleDate.getTime() || lastVisibleDate.getTime() < visibleDate);
-	            }
-	
-	            if (newCalendar) {
-	                this.calendars = [{
-	                    month: date.getMonth(),
-	                    year: date.getFullYear()
-	                }];
-	                if (this._o.mainCalendar === 'right') {
-	                    this.calendars[0].month += 1 - this._o.numberOfMonths;
-	                }
-	            }
-	
-	            this.adjustCalendars();
-	        },
-	
-	        adjustCalendars: function() {
-	            this.calendars[0] = adjustCalendar(this.calendars[0]);
-	            for (var c = 1; c < this._o.numberOfMonths; c++) {
-	                this.calendars[c] = adjustCalendar({
-	                    month: this.calendars[0].month + c,
-	                    year: this.calendars[0].year
-	                });
-	            }
-	            this.draw();
-	        },
-	
-	        gotoToday: function()
-	        {
-	            this.gotoDate(new Date());
-	        },
-	
-	        /**
-	         * change view to a specific month (zero-index, e.g. 0: January)
-	         */
-	        gotoMonth: function(month)
-	        {
-	            if (!isNaN(month)) {
-	                this.calendars[0].month = parseInt(month, 10);
-	                this.adjustCalendars();
-	            }
-	        },
-	
-	        nextMonth: function()
-	        {
-	            this.calendars[0].month++;
-	            this.adjustCalendars();
-	        },
-	
-	        prevMonth: function()
-	        {
-	            this.calendars[0].month--;
-	            this.adjustCalendars();
-	        },
-	
-	        /**
-	         * change view to a specific full year (e.g. "2012")
-	         */
-	        gotoYear: function(year)
-	        {
-	            if (!isNaN(year)) {
-	                this.calendars[0].year = parseInt(year, 10);
-	                this.adjustCalendars();
-	            }
-	        },
-	
-	        /**
-	         * change the minDate
-	         */
-	        setMinDate: function(value)
-	        {
-	            this._o.minDate = value;
-	        },
-	
-	        /**
-	         * change the maxDate
-	         */
-	        setMaxDate: function(value)
-	        {
-	            this._o.maxDate = value;
-	        },
-	
-	        /**
-	         * refresh the HTML
-	         */
-	        draw: function(force)
-	        {
-	            if (!this._v && !force) {
-	                return;
-	            }
-	            var opts = this._o,
-	                minYear = opts.minYear,
-	                maxYear = opts.maxYear,
-	                minMonth = opts.minMonth,
-	                maxMonth = opts.maxMonth,
-	                html = '';
-	
-	            if (this._y <= minYear) {
-	                this._y = minYear;
-	                if (!isNaN(minMonth) && this._m < minMonth) {
-	                    this._m = minMonth;
-	                }
-	            }
-	            if (this._y >= maxYear) {
-	                this._y = maxYear;
-	                if (!isNaN(maxMonth) && this._m > maxMonth) {
-	                    this._m = maxMonth;
-	                }
-	            }
-	
-	            for (var c = 0; c < opts.numberOfMonths; c++) {
-	                html += '<div class="pika-lendar">' + renderTitle(this, c, this.calendars[c].year, this.calendars[c].month, this.calendars[0].year) + this.render(this.calendars[c].year, this.calendars[c].month) + '</div>';
-	            }
-	
-	            this.el.innerHTML = html;
-	
-	            if (opts.bound) {
-	                if(opts.field.type !== 'hidden') {
-	                    sto(function() {
-	                        opts.trigger.focus();
-	                    }, 1);
-	                }
-	            }
-	
-	            if (typeof this._o.onDraw === 'function') {
-	                var self = this;
-	                sto(function() {
-	                    self._o.onDraw.call(self);
-	                }, 0);
-	            }
-	        },
-	
-	        adjustPosition: function()
-	        {
-	            if (this._o.container) return;
-	            var field = this._o.trigger, pEl = field,
-	            width = this.el.offsetWidth, height = this.el.offsetHeight,
-	            viewportWidth = window.innerWidth || document.documentElement.clientWidth,
-	            viewportHeight = window.innerHeight || document.documentElement.clientHeight,
-	            scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop,
-	            left, top, clientRect;
-	
-	            if (typeof field.getBoundingClientRect === 'function') {
-	                clientRect = field.getBoundingClientRect();
-	                left = clientRect.left + window.pageXOffset;
-	                top = clientRect.bottom + window.pageYOffset;
-	            } else {
-	                left = pEl.offsetLeft;
-	                top  = pEl.offsetTop + pEl.offsetHeight;
-	                while((pEl = pEl.offsetParent)) {
-	                    left += pEl.offsetLeft;
-	                    top  += pEl.offsetTop;
-	                }
-	            }
-	
-	            // default position is bottom & left
-	            if ((this._o.reposition && left + width > viewportWidth) ||
-	                (
-	                    this._o.position.indexOf('right') > -1 &&
-	                    left - width + field.offsetWidth > 0
-	                )
-	            ) {
-	                left = left - width + field.offsetWidth;
-	            }
-	            if ((this._o.reposition && top + height > viewportHeight + scrollTop) ||
-	                (
-	                    this._o.position.indexOf('top') > -1 &&
-	                    top - height - field.offsetHeight > 0
-	                )
-	            ) {
-	                top = top - height - field.offsetHeight;
-	            }
-	
-	            this.el.style.cssText = [
-	                'position: absolute',
-	                'left: ' + left + 'px',
-	                'top: ' + top + 'px'
-	            ].join(';');
-	        },
-	
-	        /**
-	         * render HTML for a particular month
-	         */
-	        render: function(year, month)
-	        {
-	            var opts   = this._o,
-	                now    = new Date(),
-	                days   = getDaysInMonth(year, month),
-	                before = new Date(year, month, 1).getDay(),
-	                data   = [],
-	                row    = [];
-	            setToStartOfDay(now);
-	            if (opts.firstDay > 0) {
-	                before -= opts.firstDay;
-	                if (before < 0) {
-	                    before += 7;
-	                }
-	            }
-	            var cells = days + before,
-	                after = cells;
-	            while(after > 7) {
-	                after -= 7;
-	            }
-	            cells += 7 - after;
-	            for (var i = 0, r = 0; i < cells; i++)
-	            {
-	                var day = new Date(year, month, 1 + (i - before)),
-	                    isSelected = isDate(this._d) ? compareDates(day, this._d) : false,
-	                    isToday = compareDates(day, now),
-	                    isEmpty = i < before || i >= (days + before),
-	                    isDisabled = (opts.minDate && day < opts.minDate) ||
-	                                 (opts.maxDate && day > opts.maxDate) ||
-	                                 (opts.disableWeekends && isWeekend(day)) ||
-	                                 (opts.disableDayFn && opts.disableDayFn(day));
-	
-	                row.push(renderDay(1 + (i - before), month, year, isSelected, isToday, isDisabled, isEmpty));
-	
-	                if (++r === 7) {
-	                    if (opts.showWeekNumber) {
-	                        row.unshift(renderWeek(i - before, month, year));
-	                    }
-	                    data.push(renderRow(row, opts.isRTL));
-	                    row = [];
-	                    r = 0;
-	                }
-	            }
-	            return renderTable(opts, data);
-	        },
-	
-	        isVisible: function()
-	        {
-	            return this._v;
-	        },
-	
-	        show: function()
-	        {
-	            if (!this._v) {
-	                removeClass(this.el, 'is-hidden');
-	                this._v = true;
-	                this.draw();
-	                if (this._o.bound) {
-	                    addEvent(document, 'click', this._onClick);
-	                    this.adjustPosition();
-	                }
-	                if (typeof this._o.onOpen === 'function') {
-	                    this._o.onOpen.call(this);
-	                }
-	            }
-	        },
-	
-	        hide: function()
-	        {
-	            var v = this._v;
-	            if (v !== false) {
-	                if (this._o.bound) {
-	                    removeEvent(document, 'click', this._onClick);
-	                }
-	                this.el.style.cssText = '';
-	                addClass(this.el, 'is-hidden');
-	                this._v = false;
-	                if (v !== undefined && typeof this._o.onClose === 'function') {
-	                    this._o.onClose.call(this);
-	                }
-	            }
-	        },
-	
-	        /**
-	         * GAME OVER
-	         */
-	        destroy: function()
-	        {
-	            this.hide();
-	            removeEvent(this.el, 'mousedown', this._onMouseDown, true);
-	            removeEvent(this.el, 'change', this._onChange);
-	            if (this._o.field) {
-	                removeEvent(this._o.field, 'change', this._onInputChange);
-	                if (this._o.bound) {
-	                    removeEvent(this._o.trigger, 'click', this._onInputClick);
-	                    removeEvent(this._o.trigger, 'focus', this._onInputFocus);
-	                    removeEvent(this._o.trigger, 'blur', this._onInputBlur);
-	                }
-	            }
-	            if (this.el.parentNode) {
-	                this.el.parentNode.removeChild(this.el);
-	            }
-	        }
-	
-	    };
-	
-	    return Pikaday;
-	
-	}));
-
-
-/***/ },
-/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {//! moment.js
@@ -4821,852 +3756,1052 @@
 	    }
 	}).call(this);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(28)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(30)(module)))
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*!
+	 * Pikaday
+	 *
+	 * Copyright © 2014 David Bushell | BSD & MIT license | https://github.com/dbushell/Pikaday
+	 */
+	
+	(function (root, factory)
+	{
+	    'use strict';
+	
+	    var moment;
+	    if (true) {
+	        // CommonJS module
+	        // Load moment.js as an optional dependency
+	        try { moment = __webpack_require__(8); } catch (e) {}
+	        module.exports = factory(moment);
+	    } else if (typeof define === 'function' && define.amd) {
+	        // AMD. Register as an anonymous module.
+	        define(function (req)
+	        {
+	            // Load moment.js as an optional dependency
+	            var id = 'moment';
+	            try { moment = req(id); } catch (e) {}
+	            return factory(moment);
+	        });
+	    } else {
+	        root.Pikaday = factory(root.moment);
+	    }
+	}(this, function (moment)
+	{
+	    'use strict';
+	
+	    /**
+	     * feature detection and helper functions
+	     */
+	    var hasMoment = typeof moment === 'function',
+	
+	    hasEventListeners = !!window.addEventListener,
+	
+	    document = window.document,
+	
+	    sto = window.setTimeout,
+	
+	    addEvent = function(el, e, callback, capture)
+	    {
+	        if (hasEventListeners) {
+	            el.addEventListener(e, callback, !!capture);
+	        } else {
+	            el.attachEvent('on' + e, callback);
+	        }
+	    },
+	
+	    removeEvent = function(el, e, callback, capture)
+	    {
+	        if (hasEventListeners) {
+	            el.removeEventListener(e, callback, !!capture);
+	        } else {
+	            el.detachEvent('on' + e, callback);
+	        }
+	    },
+	
+	    fireEvent = function(el, eventName, data)
+	    {
+	        var ev;
+	
+	        if (document.createEvent) {
+	            ev = document.createEvent('HTMLEvents');
+	            ev.initEvent(eventName, true, false);
+	            ev = extend(ev, data);
+	            el.dispatchEvent(ev);
+	        } else if (document.createEventObject) {
+	            ev = document.createEventObject();
+	            ev = extend(ev, data);
+	            el.fireEvent('on' + eventName, ev);
+	        }
+	    },
+	
+	    trim = function(str)
+	    {
+	        return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g,'');
+	    },
+	
+	    hasClass = function(el, cn)
+	    {
+	        return (' ' + el.className + ' ').indexOf(' ' + cn + ' ') !== -1;
+	    },
+	
+	    addClass = function(el, cn)
+	    {
+	        if (!hasClass(el, cn)) {
+	            el.className = (el.className === '') ? cn : el.className + ' ' + cn;
+	        }
+	    },
+	
+	    removeClass = function(el, cn)
+	    {
+	        el.className = trim((' ' + el.className + ' ').replace(' ' + cn + ' ', ' '));
+	    },
+	
+	    isArray = function(obj)
+	    {
+	        return (/Array/).test(Object.prototype.toString.call(obj));
+	    },
+	
+	    isDate = function(obj)
+	    {
+	        return (/Date/).test(Object.prototype.toString.call(obj)) && !isNaN(obj.getTime());
+	    },
+	
+	    isWeekend = function(date)
+	    {
+	        var day = date.getDay();
+	        return day === 0 || day === 6;
+	    },
+	
+	    isLeapYear = function(year)
+	    {
+	        // solution by Matti Virkkunen: http://stackoverflow.com/a/4881951
+	        return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
+	    },
+	
+	    getDaysInMonth = function(year, month)
+	    {
+	        return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+	    },
+	
+	    setToStartOfDay = function(date)
+	    {
+	        if (isDate(date)) date.setHours(0,0,0,0);
+	    },
+	
+	    compareDates = function(a,b)
+	    {
+	        // weak date comparison (use setToStartOfDay(date) to ensure correct result)
+	        return a.getTime() === b.getTime();
+	    },
+	
+	    extend = function(to, from, overwrite)
+	    {
+	        var prop, hasProp;
+	        for (prop in from) {
+	            hasProp = to[prop] !== undefined;
+	            if (hasProp && typeof from[prop] === 'object' && from[prop] !== null && from[prop].nodeName === undefined) {
+	                if (isDate(from[prop])) {
+	                    if (overwrite) {
+	                        to[prop] = new Date(from[prop].getTime());
+	                    }
+	                }
+	                else if (isArray(from[prop])) {
+	                    if (overwrite) {
+	                        to[prop] = from[prop].slice(0);
+	                    }
+	                } else {
+	                    to[prop] = extend({}, from[prop], overwrite);
+	                }
+	            } else if (overwrite || !hasProp) {
+	                to[prop] = from[prop];
+	            }
+	        }
+	        return to;
+	    },
+	
+	    adjustCalendar = function(calendar) {
+	        if (calendar.month < 0) {
+	            calendar.year -= Math.ceil(Math.abs(calendar.month)/12);
+	            calendar.month += 12;
+	        }
+	        if (calendar.month > 11) {
+	            calendar.year += Math.floor(Math.abs(calendar.month)/12);
+	            calendar.month -= 12;
+	        }
+	        return calendar;
+	    },
+	
+	    /**
+	     * defaults and localisation
+	     */
+	    defaults = {
+	
+	        // bind the picker to a form field
+	        field: null,
+	
+	        // automatically show/hide the picker on `field` focus (default `true` if `field` is set)
+	        bound: undefined,
+	
+	        // position of the datepicker, relative to the field (default to bottom & left)
+	        // ('bottom' & 'left' keywords are not used, 'top' & 'right' are modifier on the bottom/left position)
+	        position: 'bottom left',
+	
+	        // automatically fit in the viewport even if it means repositioning from the position option
+	        reposition: true,
+	
+	        // the default output format for `.toString()` and `field` value
+	        format: 'YYYY-MM-DD',
+	
+	        // the initial date to view when first opened
+	        defaultDate: null,
+	
+	        // make the `defaultDate` the initial selected value
+	        setDefaultDate: false,
+	
+	        // first day of week (0: Sunday, 1: Monday etc)
+	        firstDay: 0,
+	
+	        // the minimum/earliest date that can be selected
+	        minDate: null,
+	        // the maximum/latest date that can be selected
+	        maxDate: null,
+	
+	        // number of years either side, or array of upper/lower range
+	        yearRange: 10,
+	
+	        // show week numbers at head of row
+	        showWeekNumber: false,
+	
+	        // used internally (don't config outside)
+	        minYear: 0,
+	        maxYear: 9999,
+	        minMonth: undefined,
+	        maxMonth: undefined,
+	
+	        isRTL: false,
+	
+	        // Additional text to append to the year in the calendar title
+	        yearSuffix: '',
+	
+	        // Render the month after year in the calendar title
+	        showMonthAfterYear: false,
+	
+	        // how many months are visible
+	        numberOfMonths: 1,
+	
+	        // when numberOfMonths is used, this will help you to choose where the main calendar will be (default `left`, can be set to `right`)
+	        // only used for the first display or when a selected date is not visible
+	        mainCalendar: 'left',
+	
+	        // Specify a DOM element to render the calendar in
+	        container: undefined,
+	
+	        // internationalization
+	        i18n: {
+	            previousMonth : 'Previous Month',
+	            nextMonth     : 'Next Month',
+	            months        : ['January','February','March','April','May','June','July','August','September','October','November','December'],
+	            weekdays      : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+	            weekdaysShort : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+	        },
+	
+	        // callback function
+	        onSelect: null,
+	        onOpen: null,
+	        onClose: null,
+	        onDraw: null
+	    },
+	
+	
+	    /**
+	     * templating functions to abstract HTML rendering
+	     */
+	    renderDayName = function(opts, day, abbr)
+	    {
+	        day += opts.firstDay;
+	        while (day >= 7) {
+	            day -= 7;
+	        }
+	        return abbr ? opts.i18n.weekdaysShort[day] : opts.i18n.weekdays[day];
+	    },
+	
+	    renderDay = function(d, m, y, isSelected, isToday, isDisabled, isEmpty)
+	    {
+	        if (isEmpty) {
+	            return '<td class="is-empty"></td>';
+	        }
+	        var arr = [];
+	        if (isDisabled) {
+	            arr.push('is-disabled');
+	        }
+	        if (isToday) {
+	            arr.push('is-today');
+	        }
+	        if (isSelected) {
+	            arr.push('is-selected');
+	        }
+	        return '<td data-day="' + d + '" class="' + arr.join(' ') + '">' +
+	                 '<button class="pika-button pika-day" type="button" ' +
+	                    'data-pika-year="' + y + '" data-pika-month="' + m + '" data-pika-day="' + d + '">' +
+	                        d +
+	                 '</button>' +
+	               '</td>';
+	    },
+	
+	    renderWeek = function (d, m, y) {
+	        // Lifted from http://javascript.about.com/library/blweekyear.htm, lightly modified.
+	        var onejan = new Date(y, 0, 1),
+	            weekNum = Math.ceil((((new Date(y, m, d) - onejan) / 86400000) + onejan.getDay()+1)/7);
+	        return '<td class="pika-week">' + weekNum + '</td>';
+	    },
+	
+	    renderRow = function(days, isRTL)
+	    {
+	        return '<tr>' + (isRTL ? days.reverse() : days).join('') + '</tr>';
+	    },
+	
+	    renderBody = function(rows)
+	    {
+	        return '<tbody>' + rows.join('') + '</tbody>';
+	    },
+	
+	    renderHead = function(opts)
+	    {
+	        var i, arr = [];
+	        if (opts.showWeekNumber) {
+	            arr.push('<th></th>');
+	        }
+	        for (i = 0; i < 7; i++) {
+	            arr.push('<th scope="col"><abbr title="' + renderDayName(opts, i) + '">' + renderDayName(opts, i, true) + '</abbr></th>');
+	        }
+	        return '<thead>' + (opts.isRTL ? arr.reverse() : arr).join('') + '</thead>';
+	    },
+	
+	    renderTitle = function(instance, c, year, month, refYear)
+	    {
+	        var i, j, arr,
+	            opts = instance._o,
+	            isMinYear = year === opts.minYear,
+	            isMaxYear = year === opts.maxYear,
+	            html = '<div class="pika-title">',
+	            monthHtml,
+	            yearHtml,
+	            prev = true,
+	            next = true;
+	
+	        for (arr = [], i = 0; i < 12; i++) {
+	            arr.push('<option value="' + (year === refYear ? i - c : 12 + i - c) + '"' +
+	                (i === month ? ' selected': '') +
+	                ((isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth) ? 'disabled' : '') + '>' +
+	                opts.i18n.months[i] + '</option>');
+	        }
+	        monthHtml = '<div class="pika-label">' + opts.i18n.months[month] + '<select class="pika-select pika-select-month">' + arr.join('') + '</select></div>';
+	
+	        if (isArray(opts.yearRange)) {
+	            i = opts.yearRange[0];
+	            j = opts.yearRange[1] + 1;
+	        } else {
+	            i = year - opts.yearRange;
+	            j = 1 + year + opts.yearRange;
+	        }
+	
+	        for (arr = []; i < j && i <= opts.maxYear; i++) {
+	            if (i >= opts.minYear) {
+	                arr.push('<option value="' + i + '"' + (i === year ? ' selected': '') + '>' + (i) + '</option>');
+	            }
+	        }
+	        yearHtml = '<div class="pika-label">' + year + opts.yearSuffix + '<select class="pika-select pika-select-year">' + arr.join('') + '</select></div>';
+	
+	        if (opts.showMonthAfterYear) {
+	            html += yearHtml + monthHtml;
+	        } else {
+	            html += monthHtml + yearHtml;
+	        }
+	
+	        if (isMinYear && (month === 0 || opts.minMonth >= month)) {
+	            prev = false;
+	        }
+	
+	        if (isMaxYear && (month === 11 || opts.maxMonth <= month)) {
+	            next = false;
+	        }
+	
+	        if (c === 0) {
+	            html += '<button class="pika-prev' + (prev ? '' : ' is-disabled') + '" type="button">' + opts.i18n.previousMonth + '</button>';
+	        }
+	        if (c === (instance._o.numberOfMonths - 1) ) {
+	            html += '<button class="pika-next' + (next ? '' : ' is-disabled') + '" type="button">' + opts.i18n.nextMonth + '</button>';
+	        }
+	
+	        return html += '</div>';
+	    },
+	
+	    renderTable = function(opts, data)
+	    {
+	        return '<table cellpadding="0" cellspacing="0" class="pika-table">' + renderHead(opts) + renderBody(data) + '</table>';
+	    },
+	
+	
+	    /**
+	     * Pikaday constructor
+	     */
+	    Pikaday = function(options)
+	    {
+	        var self = this,
+	            opts = self.config(options);
+	
+	        self._onMouseDown = function(e)
+	        {
+	            if (!self._v) {
+	                return;
+	            }
+	            e = e || window.event;
+	            var target = e.target || e.srcElement;
+	            if (!target) {
+	                return;
+	            }
+	
+	            if (!hasClass(target, 'is-disabled')) {
+	                if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty')) {
+	                    self.setDate(new Date(target.getAttribute('data-pika-year'), target.getAttribute('data-pika-month'), target.getAttribute('data-pika-day')));
+	                    if (opts.bound) {
+	                        sto(function() {
+	                            self.hide();
+	                            if (opts.field) {
+	                                opts.field.blur();
+	                            }
+	                        }, 100);
+	                    }
+	                    return;
+	                }
+	                else if (hasClass(target, 'pika-prev')) {
+	                    self.prevMonth();
+	                }
+	                else if (hasClass(target, 'pika-next')) {
+	                    self.nextMonth();
+	                }
+	            }
+	            if (!hasClass(target, 'pika-select')) {
+	                if (e.preventDefault) {
+	                    e.preventDefault();
+	                } else {
+	                    e.returnValue = false;
+	                    return false;
+	                }
+	            } else {
+	                self._c = true;
+	            }
+	        };
+	
+	        self._onChange = function(e)
+	        {
+	            e = e || window.event;
+	            var target = e.target || e.srcElement;
+	            if (!target) {
+	                return;
+	            }
+	            if (hasClass(target, 'pika-select-month')) {
+	                self.gotoMonth(target.value);
+	            }
+	            else if (hasClass(target, 'pika-select-year')) {
+	                self.gotoYear(target.value);
+	            }
+	        };
+	
+	        self._onInputChange = function(e)
+	        {
+	            var date;
+	
+	            if (e.firedBy === self) {
+	                return;
+	            }
+	            if (hasMoment) {
+	                date = moment(opts.field.value, opts.format);
+	                date = (date && date.isValid()) ? date.toDate() : null;
+	            }
+	            else {
+	                date = new Date(Date.parse(opts.field.value));
+	            }
+	            self.setDate(isDate(date) ? date : null);
+	            if (!self._v) {
+	                self.show();
+	            }
+	        };
+	
+	        self._onInputFocus = function()
+	        {
+	            self.show();
+	        };
+	
+	        self._onInputClick = function()
+	        {
+	            self.show();
+	        };
+	
+	        self._onInputBlur = function()
+	        {
+	            // IE allows pika div to gain focus; catch blur the input field
+	            var pEl = document.activeElement;
+	            do {
+	                if (hasClass(pEl, 'pika-single')) {
+	                    return;
+	                }
+	            }
+	            while ((pEl = pEl.parentNode));
+	            
+	            if (!self._c) {
+	                self._b = sto(function() {
+	                    self.hide();
+	                }, 50);
+	            }
+	            self._c = false;
+	        };
+	
+	        self._onClick = function(e)
+	        {
+	            e = e || window.event;
+	            var target = e.target || e.srcElement,
+	                pEl = target;
+	            if (!target) {
+	                return;
+	            }
+	            if (!hasEventListeners && hasClass(target, 'pika-select')) {
+	                if (!target.onchange) {
+	                    target.setAttribute('onchange', 'return;');
+	                    addEvent(target, 'change', self._onChange);
+	                }
+	            }
+	            do {
+	                if (hasClass(pEl, 'pika-single') || pEl === opts.trigger) {
+	                    return;
+	                }
+	            }
+	            while ((pEl = pEl.parentNode));
+	            if (self._v && target !== opts.trigger && pEl !== opts.trigger) {
+	                self.hide();
+	            }
+	        };
+	
+	        self.el = document.createElement('div');
+	        self.el.className = 'pika-single' + (opts.isRTL ? ' is-rtl' : '');
+	
+	        addEvent(self.el, 'mousedown', self._onMouseDown, true);
+	        addEvent(self.el, 'change', self._onChange);
+	
+	        if (opts.field) {
+	            if (opts.container) {
+	                opts.container.appendChild(self.el);
+	            } else if (opts.bound) {
+	                document.body.appendChild(self.el);
+	            } else {
+	                opts.field.parentNode.insertBefore(self.el, opts.field.nextSibling);
+	            }
+	            addEvent(opts.field, 'change', self._onInputChange);
+	
+	            if (!opts.defaultDate) {
+	                if (hasMoment && opts.field.value) {
+	                    opts.defaultDate = moment(opts.field.value, opts.format).toDate();
+	                } else {
+	                    opts.defaultDate = new Date(Date.parse(opts.field.value));
+	                }
+	                opts.setDefaultDate = true;
+	            }
+	        }
+	
+	        var defDate = opts.defaultDate;
+	
+	        if (isDate(defDate)) {
+	            if (opts.setDefaultDate) {
+	                self.setDate(defDate, true);
+	            } else {
+	                self.gotoDate(defDate);
+	            }
+	        } else {
+	            self.gotoDate(new Date());
+	        }
+	
+	        if (opts.bound) {
+	            this.hide();
+	            self.el.className += ' is-bound';
+	            addEvent(opts.trigger, 'click', self._onInputClick);
+	            addEvent(opts.trigger, 'focus', self._onInputFocus);
+	            addEvent(opts.trigger, 'blur', self._onInputBlur);
+	        } else {
+	            this.show();
+	        }
+	    };
+	
+	
+	    /**
+	     * public Pikaday API
+	     */
+	    Pikaday.prototype = {
+	
+	
+	        /**
+	         * configure functionality
+	         */
+	        config: function(options)
+	        {
+	            if (!this._o) {
+	                this._o = extend({}, defaults, true);
+	            }
+	
+	            var opts = extend(this._o, options, true);
+	
+	            opts.isRTL = !!opts.isRTL;
+	
+	            opts.field = (opts.field && opts.field.nodeName) ? opts.field : null;
+	
+	            opts.bound = !!(opts.bound !== undefined ? opts.field && opts.bound : opts.field);
+	
+	            opts.trigger = (opts.trigger && opts.trigger.nodeName) ? opts.trigger : opts.field;
+	
+	            opts.disableWeekends = !!opts.disableWeekends;
+	
+	            opts.disableDayFn = (typeof opts.disableDayFn) == "function" ? opts.disableDayFn : null;
+	
+	            var nom = parseInt(opts.numberOfMonths, 10) || 1;
+	            opts.numberOfMonths = nom > 4 ? 4 : nom;
+	
+	            if (!isDate(opts.minDate)) {
+	                opts.minDate = false;
+	            }
+	            if (!isDate(opts.maxDate)) {
+	                opts.maxDate = false;
+	            }
+	            if ((opts.minDate && opts.maxDate) && opts.maxDate < opts.minDate) {
+	                opts.maxDate = opts.minDate = false;
+	            }
+	            if (opts.minDate) {
+	                setToStartOfDay(opts.minDate);
+	                opts.minYear  = opts.minDate.getFullYear();
+	                opts.minMonth = opts.minDate.getMonth();
+	            }
+	            if (opts.maxDate) {
+	                setToStartOfDay(opts.maxDate);
+	                opts.maxYear  = opts.maxDate.getFullYear();
+	                opts.maxMonth = opts.maxDate.getMonth();
+	            }
+	
+	            if (isArray(opts.yearRange)) {
+	                var fallback = new Date().getFullYear() - 10;
+	                opts.yearRange[0] = parseInt(opts.yearRange[0], 10) || fallback;
+	                opts.yearRange[1] = parseInt(opts.yearRange[1], 10) || fallback;
+	            } else {
+	                opts.yearRange = Math.abs(parseInt(opts.yearRange, 10)) || defaults.yearRange;
+	                if (opts.yearRange > 100) {
+	                    opts.yearRange = 100;
+	                }
+	            }
+	
+	            return opts;
+	        },
+	
+	        /**
+	         * return a formatted string of the current selection (using Moment.js if available)
+	         */
+	        toString: function(format)
+	        {
+	            return !isDate(this._d) ? '' : hasMoment ? moment(this._d).format(format || this._o.format) : this._d.toDateString();
+	        },
+	
+	        /**
+	         * return a Moment.js object of the current selection (if available)
+	         */
+	        getMoment: function()
+	        {
+	            return hasMoment ? moment(this._d) : null;
+	        },
+	
+	        /**
+	         * set the current selection from a Moment.js object (if available)
+	         */
+	        setMoment: function(date, preventOnSelect)
+	        {
+	            if (hasMoment && moment.isMoment(date)) {
+	                this.setDate(date.toDate(), preventOnSelect);
+	            }
+	        },
+	
+	        /**
+	         * return a Date object of the current selection
+	         */
+	        getDate: function()
+	        {
+	            return isDate(this._d) ? new Date(this._d.getTime()) : null;
+	        },
+	
+	        /**
+	         * set the current selection
+	         */
+	        setDate: function(date, preventOnSelect)
+	        {
+	            if (!date) {
+	                this._d = null;
+	
+	                if (this._o.field) {
+	                    this._o.field.value = '';
+	                    fireEvent(this._o.field, 'change', { firedBy: this });
+	                }
+	
+	                return this.draw();
+	            }
+	            if (typeof date === 'string') {
+	                date = new Date(Date.parse(date));
+	            }
+	            if (!isDate(date)) {
+	                return;
+	            }
+	
+	            var min = this._o.minDate,
+	                max = this._o.maxDate;
+	
+	            if (isDate(min) && date < min) {
+	                date = min;
+	            } else if (isDate(max) && date > max) {
+	                date = max;
+	            }
+	
+	            this._d = new Date(date.getTime());
+	            setToStartOfDay(this._d);
+	            this.gotoDate(this._d);
+	
+	            if (this._o.field) {
+	                this._o.field.value = this.toString();
+	                fireEvent(this._o.field, 'change', { firedBy: this });
+	            }
+	            if (!preventOnSelect && typeof this._o.onSelect === 'function') {
+	                this._o.onSelect.call(this, this.getDate());
+	            }
+	        },
+	
+	        /**
+	         * change view to a specific date
+	         */
+	        gotoDate: function(date)
+	        {
+	            var newCalendar = true;
+	
+	            if (!isDate(date)) {
+	                return;
+	            }
+	
+	            if (this.calendars) {
+	                var firstVisibleDate = new Date(this.calendars[0].year, this.calendars[0].month, 1),
+	                    lastVisibleDate = new Date(this.calendars[this.calendars.length-1].year, this.calendars[this.calendars.length-1].month, 1),
+	                    visibleDate = date.getTime();
+	                // get the end of the month
+	                lastVisibleDate.setMonth(lastVisibleDate.getMonth()+1);
+	                lastVisibleDate.setDate(lastVisibleDate.getDate()-1);
+	                newCalendar = (visibleDate < firstVisibleDate.getTime() || lastVisibleDate.getTime() < visibleDate);
+	            }
+	
+	            if (newCalendar) {
+	                this.calendars = [{
+	                    month: date.getMonth(),
+	                    year: date.getFullYear()
+	                }];
+	                if (this._o.mainCalendar === 'right') {
+	                    this.calendars[0].month += 1 - this._o.numberOfMonths;
+	                }
+	            }
+	
+	            this.adjustCalendars();
+	        },
+	
+	        adjustCalendars: function() {
+	            this.calendars[0] = adjustCalendar(this.calendars[0]);
+	            for (var c = 1; c < this._o.numberOfMonths; c++) {
+	                this.calendars[c] = adjustCalendar({
+	                    month: this.calendars[0].month + c,
+	                    year: this.calendars[0].year
+	                });
+	            }
+	            this.draw();
+	        },
+	
+	        gotoToday: function()
+	        {
+	            this.gotoDate(new Date());
+	        },
+	
+	        /**
+	         * change view to a specific month (zero-index, e.g. 0: January)
+	         */
+	        gotoMonth: function(month)
+	        {
+	            if (!isNaN(month)) {
+	                this.calendars[0].month = parseInt(month, 10);
+	                this.adjustCalendars();
+	            }
+	        },
+	
+	        nextMonth: function()
+	        {
+	            this.calendars[0].month++;
+	            this.adjustCalendars();
+	        },
+	
+	        prevMonth: function()
+	        {
+	            this.calendars[0].month--;
+	            this.adjustCalendars();
+	        },
+	
+	        /**
+	         * change view to a specific full year (e.g. "2012")
+	         */
+	        gotoYear: function(year)
+	        {
+	            if (!isNaN(year)) {
+	                this.calendars[0].year = parseInt(year, 10);
+	                this.adjustCalendars();
+	            }
+	        },
+	
+	        /**
+	         * change the minDate
+	         */
+	        setMinDate: function(value)
+	        {
+	            this._o.minDate = value;
+	        },
+	
+	        /**
+	         * change the maxDate
+	         */
+	        setMaxDate: function(value)
+	        {
+	            this._o.maxDate = value;
+	        },
+	
+	        /**
+	         * refresh the HTML
+	         */
+	        draw: function(force)
+	        {
+	            if (!this._v && !force) {
+	                return;
+	            }
+	            var opts = this._o,
+	                minYear = opts.minYear,
+	                maxYear = opts.maxYear,
+	                minMonth = opts.minMonth,
+	                maxMonth = opts.maxMonth,
+	                html = '';
+	
+	            if (this._y <= minYear) {
+	                this._y = minYear;
+	                if (!isNaN(minMonth) && this._m < minMonth) {
+	                    this._m = minMonth;
+	                }
+	            }
+	            if (this._y >= maxYear) {
+	                this._y = maxYear;
+	                if (!isNaN(maxMonth) && this._m > maxMonth) {
+	                    this._m = maxMonth;
+	                }
+	            }
+	
+	            for (var c = 0; c < opts.numberOfMonths; c++) {
+	                html += '<div class="pika-lendar">' + renderTitle(this, c, this.calendars[c].year, this.calendars[c].month, this.calendars[0].year) + this.render(this.calendars[c].year, this.calendars[c].month) + '</div>';
+	            }
+	
+	            this.el.innerHTML = html;
+	
+	            if (opts.bound) {
+	                if(opts.field.type !== 'hidden') {
+	                    sto(function() {
+	                        opts.trigger.focus();
+	                    }, 1);
+	                }
+	            }
+	
+	            if (typeof this._o.onDraw === 'function') {
+	                var self = this;
+	                sto(function() {
+	                    self._o.onDraw.call(self);
+	                }, 0);
+	            }
+	        },
+	
+	        adjustPosition: function()
+	        {
+	            if (this._o.container) return;
+	            var field = this._o.trigger, pEl = field,
+	            width = this.el.offsetWidth, height = this.el.offsetHeight,
+	            viewportWidth = window.innerWidth || document.documentElement.clientWidth,
+	            viewportHeight = window.innerHeight || document.documentElement.clientHeight,
+	            scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop,
+	            left, top, clientRect;
+	
+	            if (typeof field.getBoundingClientRect === 'function') {
+	                clientRect = field.getBoundingClientRect();
+	                left = clientRect.left + window.pageXOffset;
+	                top = clientRect.bottom + window.pageYOffset;
+	            } else {
+	                left = pEl.offsetLeft;
+	                top  = pEl.offsetTop + pEl.offsetHeight;
+	                while((pEl = pEl.offsetParent)) {
+	                    left += pEl.offsetLeft;
+	                    top  += pEl.offsetTop;
+	                }
+	            }
+	
+	            // default position is bottom & left
+	            if ((this._o.reposition && left + width > viewportWidth) ||
+	                (
+	                    this._o.position.indexOf('right') > -1 &&
+	                    left - width + field.offsetWidth > 0
+	                )
+	            ) {
+	                left = left - width + field.offsetWidth;
+	            }
+	            if ((this._o.reposition && top + height > viewportHeight + scrollTop) ||
+	                (
+	                    this._o.position.indexOf('top') > -1 &&
+	                    top - height - field.offsetHeight > 0
+	                )
+	            ) {
+	                top = top - height - field.offsetHeight;
+	            }
+	
+	            this.el.style.cssText = [
+	                'position: absolute',
+	                'left: ' + left + 'px',
+	                'top: ' + top + 'px'
+	            ].join(';');
+	        },
+	
+	        /**
+	         * render HTML for a particular month
+	         */
+	        render: function(year, month)
+	        {
+	            var opts   = this._o,
+	                now    = new Date(),
+	                days   = getDaysInMonth(year, month),
+	                before = new Date(year, month, 1).getDay(),
+	                data   = [],
+	                row    = [];
+	            setToStartOfDay(now);
+	            if (opts.firstDay > 0) {
+	                before -= opts.firstDay;
+	                if (before < 0) {
+	                    before += 7;
+	                }
+	            }
+	            var cells = days + before,
+	                after = cells;
+	            while(after > 7) {
+	                after -= 7;
+	            }
+	            cells += 7 - after;
+	            for (var i = 0, r = 0; i < cells; i++)
+	            {
+	                var day = new Date(year, month, 1 + (i - before)),
+	                    isSelected = isDate(this._d) ? compareDates(day, this._d) : false,
+	                    isToday = compareDates(day, now),
+	                    isEmpty = i < before || i >= (days + before),
+	                    isDisabled = (opts.minDate && day < opts.minDate) ||
+	                                 (opts.maxDate && day > opts.maxDate) ||
+	                                 (opts.disableWeekends && isWeekend(day)) ||
+	                                 (opts.disableDayFn && opts.disableDayFn(day));
+	
+	                row.push(renderDay(1 + (i - before), month, year, isSelected, isToday, isDisabled, isEmpty));
+	
+	                if (++r === 7) {
+	                    if (opts.showWeekNumber) {
+	                        row.unshift(renderWeek(i - before, month, year));
+	                    }
+	                    data.push(renderRow(row, opts.isRTL));
+	                    row = [];
+	                    r = 0;
+	                }
+	            }
+	            return renderTable(opts, data);
+	        },
+	
+	        isVisible: function()
+	        {
+	            return this._v;
+	        },
+	
+	        show: function()
+	        {
+	            if (!this._v) {
+	                removeClass(this.el, 'is-hidden');
+	                this._v = true;
+	                this.draw();
+	                if (this._o.bound) {
+	                    addEvent(document, 'click', this._onClick);
+	                    this.adjustPosition();
+	                }
+	                if (typeof this._o.onOpen === 'function') {
+	                    this._o.onOpen.call(this);
+	                }
+	            }
+	        },
+	
+	        hide: function()
+	        {
+	            var v = this._v;
+	            if (v !== false) {
+	                if (this._o.bound) {
+	                    removeEvent(document, 'click', this._onClick);
+	                }
+	                this.el.style.cssText = '';
+	                addClass(this.el, 'is-hidden');
+	                this._v = false;
+	                if (v !== undefined && typeof this._o.onClose === 'function') {
+	                    this._o.onClose.call(this);
+	                }
+	            }
+	        },
+	
+	        /**
+	         * GAME OVER
+	         */
+	        destroy: function()
+	        {
+	            this.hide();
+	            removeEvent(this.el, 'mousedown', this._onMouseDown, true);
+	            removeEvent(this.el, 'change', this._onChange);
+	            if (this._o.field) {
+	                removeEvent(this._o.field, 'change', this._onInputChange);
+	                if (this._o.bound) {
+	                    removeEvent(this._o.trigger, 'click', this._onInputClick);
+	                    removeEvent(this._o.trigger, 'focus', this._onInputFocus);
+	                    removeEvent(this._o.trigger, 'blur', this._onInputBlur);
+	                }
+	            }
+	            if (this.el.parentNode) {
+	                this.el.parentNode.removeChild(this.el);
+	            }
+	        }
+	
+	    };
+	
+	    return Pikaday;
+	
+	}));
+
 
 /***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var H = __webpack_require__(30);
+	var H = __webpack_require__(31);
 	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<input type=\"text\" class=\"date\">\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>");return t.fl(); },partials: {}, subs: {  }}, "<input type=\"text\" class=\"date\">\r\n<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r\n<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r\n<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>", H);return T.render.apply(T, arguments); };
 
 /***/ },
 /* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var util = _interopRequire(__webpack_require__(17));
-	
-	function sizzle(mixed, context) {
-		if (!mixed) {
-			return [];
-		}var el;
-		if (typeof mixed !== "string") el = mixed;else if (/<[a-z][\s\S]*>/i.test(mixed)) {
-			el = new DOMParser().parseFromString(mixed, "text/html").body.firstChild;
-		} else el = (context || document).querySelectorAll(mixed);
-	
-		if (el.nodeType) el = [el];else if (util.isNodeList(el)) el = Array.prototype.slice.call(el);
-	
-		return Object.assign(el || [], sizzle.fn);
-	}
-	
-	sizzle.fn = {};
-	sizzle.fn.find = function (selector) {
-		return sizzle(selector, this[0]);
-	};
-	sizzle.fn.filter = function (selector) {
-		var elems = Array.prototype.filter.call(this, function (el) {
-			return el.matches(selector);
-		});
-		return sizzle(elems);
-	};
-	
-	sizzle.fn.first = function () {
-		return sizzle(this[0]);
-	};
-	sizzle.fn.last = function () {
-		return sizzle(this[this.length - 1]);
-	};
-	sizzle.fn.eq = function (idx) {
-		return sizzle(this[idx || 0]);
-	};
-	
-	sizzle.fn.appendTo = function (parent) {
-		if (!this || !this.length) return this;
-		if (typeof parent === "string") parent = sizzle(parent);
-		parent[0].appendChild(this[0]);
-		return this;
-	};
-	
-	sizzle.fn.append = function (child) {
-		if (!this || !this.length) return this;
-		if (typeof child === "string") child = sizzle(child);
-		this[0].appendChild(child[0]);
-		return this;
-	};
-	
-	sizzle.fn.on = function (eventName, cb) {
-		if (!this || !this.length) return this;
-		this.forEach(function (el) {
-			el.addEventListener(eventName, cb);
-		});
-		return this;
-	};
-	
-	sizzle.fn.off = function (eventName, cb) {
-		if (!this || !this.length) return this;
-		this.forEach(function (el) {
-			el.removeEventListener(eventName, cb);
-		});
-		return this;
-	};
-	
-	sizzle.fn.closest = function (cls) {
-		if (!this || !this.length) return false;
-		var has = false,
-		    el = this[0];
-		while (!has && el) {
-			has = el.matches(cls);
-			if (has) return sizzle(el);
-			el = el.parentNode;
-			if (el.tagName === "HTML") return null;
-		}
-		return null;
-	};
-	
-	sizzle.fn.is = function (selector) {
-		if (!this || !this.length) return false;
-		return this[0].matches(selector);
-	};
-	
-	sizzle.fn.isIn = function () {
-		for (var _len = arguments.length, classes = Array(_len), _key = 0; _key < _len; _key++) {
-			classes[_key] = arguments[_key];
-		}
-	
-		var target = this && this.length ? this : null;
-		if (target) {
-			var _iteratorNormalCompletion = true;
-			var _didIteratorError = false;
-			var _iteratorError = undefined;
-	
-			try {
-				for (var _iterator = classes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-					var cls = _step.value;
-					if (target.closest(cls)) return true;
-				}
-			} catch (err) {
-				_didIteratorError = true;
-				_iteratorError = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion && _iterator["return"]) {
-						_iterator["return"]();
-					}
-				} finally {
-					if (_didIteratorError) {
-						throw _iteratorError;
-					}
-				}
-			}
-		}
-		return false;
-	};
-	
-	function modElCls(el, action, cls, cond) {
-		if (!el || !el.length) {
-			return el;
-		}cls = cls.split(" ");
-		if (typeof cond === "boolean") {
-			el.forEach(function (el) {
-				cls.forEach(function (c) {
-					el.classList[action](c, cond);
-				});
-			});
-		} else {
-			el.forEach(function (el) {
-				cls.forEach(function (c) {
-					el.classList[action](c);
-				});
-			});
-		}
-		return el;
-	}
-	
-	sizzle.fn.addClass = function (cls) {
-		return modElCls(this, "add", cls);
-	};
-	sizzle.fn.removeClass = function (cls) {
-		return modElCls(this, "remove", cls);
-	};
-	sizzle.fn.toggleClass = function (cls, cond) {
-		return modElCls(this, "toggle", cls, cond);
-	};
-	sizzle.fn.hasClass = function (cls) {
-		if (!this || !this.length) return false;
-		return this[0].classList.contains(cls);
-	};
-	
-	sizzle.fn.html = function (html) {
-		if (!this || !this.length) return this;
-		this.forEach(function (el) {
-			el.innerHTML = html;
-		});
-		return this;
-	};
-	
-	sizzle.fn.remove = function () {
-		if (!this || !this.length) return this;
-		this.forEach(function (el) {
-			el.remove();
-		});
-		return this;
-	};
-	
-	sizzle.fn.data = function (key) {
-		if (!this || !this.length) return this;
-		if (!this[0].dataset) return null;
-		if (key) return this[0].dataset[key];
-		return this[0].dataset;
-	};
-	
-	module.exports = sizzle;
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var util = _interopRequire(__webpack_require__(17));
-	
-	var base_url = "api/";
-	
-	function ajax(options) {
-		if (typeof options === "string") options = { url: options };
-	
-		var req = new XMLHttpRequest(),
-		    resp,
-		    data = options.data || "";
-		options.url = base_url + options.url;
-		options.method = options.method || "GET";
-		options.type = options.type || "json";
-	
-		if (data) {
-			if (options.method.toLowerCase() === "get") options.url += util.serialize(data);else if (options.type === "json") data = JSON.stringify(data);
-		}
-		return new Promise(function (resolve, reject) {
-			req.open(options.method, options.url, true);
-			req.onload = function () {
-				if (req.status >= 200 && req.status < 400) {
-					resp = req.responseText;
-					try {
-						resp = JSON.parse(resp);
-					} catch (e) {}
-					resolve(resp);
-				} else reject(req.statusText);
-			};
-			req.onerror = function () {
-				reject(req.statusText);
-			};
-			req.setRequestHeader("Content-Type", "application/" + options.type + "; charset=UTF-8");
-			req.send(data);
-		});
-	}
-	
-	module.exports = {
-		ajax: ajax,
-		get: function (url, data) {
-			return ajax({ url: url, data: data || {} });
-		},
-		post: function (url, data) {
-			return ajax({ url: url, data: data || {}, method: "POST" });
-		},
-		put: function (url, data) {
-			return ajax({ url: url, data: data || {}, method: "PUT" });
-		},
-		del: function (url, data) {
-			return ajax({ url: url, data: data || {}, method: "DELETE" });
-		} };
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var keyBreaker = /[^\[\]]+/g;
-	var numberMatcher = /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/;
-	
-	function _isNumber(value) {
-		if (typeof value === "number") {
-			return true;
-		}if (typeof value !== "string") {
-			return false;
-		}return value.match(numberMatcher);
-	}
-	
-	function _decodeEntities(str) {
-		var d = document.createElement("div");
-		d.innerHTML = str;
-		return d.innerText || d.textContent;
-	}
-	
-	function _getInputs(form) {
-		var inputs = form.querySelectorAll("[name]");
-		return Array.prototype.slice.call(inputs) || [];
-	}
-	
-	function Form(el) {
-		if (!el) {
-			return null;
-		}if (!(this instanceof Form)) {
-			return new Form(el);
-		}this.form = el;
-		if (el.elements) this.inputs = el.elements;
-	}
-	
-	Form.prototype.set = function (params, clear) {
-		var inputs = _getInputs(this.form);
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-	
-		try {
-			for (var _iterator = inputs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var input = _step.value;
-	
-				var name = input.name,
-				    value = typeof params[name] === "undefined" ? "" : params[name];
-	
-				if (name.indexOf("[") > -1) {
-					var v = params;
-					var names = name.replace(/[\[\]]/g, "|").split("|");
-					var _iteratorNormalCompletion2 = true;
-					var _didIteratorError2 = false;
-					var _iteratorError2 = undefined;
-	
-					try {
-						for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-							var n = _step2.value;
-	
-							if (v[n]) v = v[n];else {
-								v = undefined;if (_iterator2["return"]) _iterator2["return"]();
-								break;
-							}
-						}
-					} catch (err) {
-						_didIteratorError2 = true;
-						_iteratorError2 = err;
-					} finally {
-						try {
-							if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-								_iterator2["return"]();
-							}
-						} finally {
-							if (_didIteratorError2) {
-								throw _iteratorError2;
-							}
-						}
-					}
-	
-					value = v;
-				}
-	
-				if (clear !== true && value === undefined) return;
-	
-				if (value === null || value === undefined) value = "";
-	
-				if (typeof value === "string" && value.indexOf("&") > -1) value = _decodeEntities(value);
-	
-				if (input.type === "radio") input.checked = input.value.toString() === value.toString();else if (input.type === "checkbox") input.checked = value;else if (input.tagName === "SELECT") {
-					if (value === "" || value === undefined) input.selectedIndex = 0;else input.value = value;
-				} else input.value = value;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	
-		return this;
-	};
-	
-	Form.prototype.get = function () {
-		var convert = arguments[0] === undefined ? false : arguments[0];
-	
-		var inputs = _getInputs(this.form),
-		    data = {},
-		    current;
-	
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-	
-		try {
-			for (var _iterator = inputs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var input = _step.value;
-	
-				var type = input.type && input.type.toLowerCase(),
-				    value = undefined,
-				    parts = undefined,
-				    lastPart = undefined,
-				    last = undefined;
-	
-				if (type === "submit" || !input.name || input.disabled) return;
-	
-				value = input.value;
-				parts = input.name.match(keyBreaker);
-	
-				if (type === "radio" && !input.checked) return;
-	
-				if (type === "checkbox") value = input.checked;
-	
-				if (convert) {
-					if (_isNumber(value)) {
-						var tv = parseFloat(value);
-						var cmp = tv + "";
-	
-						if (value.indexOf(".") > 0) cmp = tv.toFixed(value.split(".")[1].length);
-						if (cmp === value) value = tv;
-					} else if (value === "true") value = true;else if (value === "false") value = false;
-					if (value === "") value = null;
-				}
-	
-				current = data;
-	
-				for (var i = 0; i < parts.length - 1; i++) {
-					current[parts[i]] = current[parts[i]] || {};
-					current = current[parts[i]];
-				}
-				lastPart = parts[parts.length - 1];
-	
-				last = current[lastPart];
-				if (last) {
-					if (!Array.isArray(last)) current[lastPart] = last === undefined ? [] : [last];
-					current[lastPart].push(value);
-				} else current[lastPart] = value;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	
-		return data;
-	};
-	
-	Form.prototype.reset = function () {
-		this.set({});
-	};
-	
-	Form.prototype.clear = function () {
-		this.set({}, true);
-	};
-	
-	Form.prototype.update = function () {
-		if (!this.observeCb) return;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-	
-		try {
-			for (var _iterator = this.form.elements[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var field = _step.value;
-	
-				var fname = field.name.replace(/[\[\]]/g, "_") + "val",
-				    ov = this.form.dataset[fname],
-				    v = field.value;
-				if (fname === "val") continue;
-				if (field.type === "checkbox") {
-					v = field.checked;
-					ov = ov === "true";
-				} else if (field.type === "radio" && !field.checked) continue;
-				if (typeof ov === "undefined" && typeof v !== "undefined") {
-					if (field.type === "radio") this.observeCb(v, ov, field);
-					ov = this.form.dataset[fname] = v;
-				} else if (ov !== v) {
-					this.form.dataset[fname] = v;
-					this.observeCb(v, ov, field);
-				}
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	
-		requestAnimationFrame(this.update.bind(this));
-	};
-	Form.prototype.observe = function (cb) {
-		this.update(this.observeCb = cb);
-	};
-	Form.prototype.observeStop = function () {
-		this.observeCb = null;
-	};
-	
-	module.exports = Form;
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
-	
-	var _cache = {};
-	
-	function trigger(topic) {
-		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			args[_key - 1] = arguments[_key];
-		}
-	
-		if (!_cache[topic]) {
-			return;
-		}_cache[topic].forEach(function (cb) {
-			return cb.apply(cb, args);
-		});
-	}
-	
-	function on(topic, callback) {
-		if (!_cache[topic]) _cache[topic] = [];
-		_cache[topic].push(callback);
-		return [topic, callback];
-	}
-	
-	function off(handle) {
-		var _handle = _slicedToArray(handle, 2);
-	
-		var topic = _handle[0];
-		var cb = _handle[1];var ca = _cache[topic];
-		cb = cb.toString();
-		if (ca) ca.forEach(function (fn, i) {
-			if (fn.toString() === cb) ca.splice(i, 1);
-		});
-	}
-	
-	module.exports = { on: on, off: off, trigger: trigger };
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var keys = {
-		BCKSPC: 8,
-		BACKSPACE: 8,
-		TAB: 9,
-		ENTER: 13,
-		ESC: 27,
-		SPACE: 32,
-		PGUP: 33,
-		PGDOWN: 34,
-		END: 35,
-		HOME: 36,
-		LEFT: 37,
-		UP: 38,
-		RIGHT: 39,
-		DOWN: 40,
-		INS: 45,
-		DEL: 46,
-		A: 65,
-		X: 88,
-		C: 67,
-		V: 86,
-		Z: 90,
-		F1: 112,
-		F2: 113,
-		F5: 116,
-		MINUS: 173,
-		PLUS: 61,
-		DOT: 190,
-		SLASH: 191,
-	
-		NUMSTAR: 106,
-		NUMMINUS: 109,
-		NUMPLUS: 107,
-		NUMDOT: 110,
-		NUMSLASH: 111 },
-	    digits = {
-		48: 1,
-		49: 1,
-		50: 1,
-		51: 1,
-		52: 1,
-		53: 1,
-		54: 1,
-		55: 1,
-		56: 1,
-		57: 1,
-		96: 1,
-		97: 1,
-		98: 1,
-		99: 1,
-		100: 1,
-		101: 1,
-		102: 1,
-		103: 1,
-		104: 1,
-		105: 1 },
-	    allowedChars = {
-		8: 1,
-		9: 1,
-		46: 1,
-		35: 1,
-		36: 1,
-		37: 1,
-		39: 1 };
-	
-	function isMath(e) {
-		var k = e.keyCode;
-		if (k === keys.SPACE) {
-			return true;
-		}if (k === keys.NUMDOT || k === keys.DOT && !e.shiftKey) {
-			return true;
-		}if (k === keys.NUMMINUS || k === keys.MINUS && !e.shiftKey) {
-			return true;
-		}if (k === keys.NUMPLUS || k === keys.PLUS && e.shiftKey) {
-			return true;
-		}if (k === keys.NUMSLASH || k === keys.SLASH && !e.shiftKey) {
-			return true;
-		}if (e.shiftKey) {
-			if (k === 56 || k === 57 || k === 48) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	function isAllowed(e) {
-		var k = e.keyCode,
-		    allowed = allowedChars[k] === 1,
-		    isCtrlXCV = e && e.ctrlKey === true && (k === keys.X || k === keys.C || k === keys.V),
-		    math = isMath(e);
-		return isDigit(e) || allowed || isCtrlXCV || math;
-	}
-	
-	function isDigit(e) {
-		return digits[e.keyCode] === 1 && !e.shiftKey;
-	}
-	
-	function isAlpha(e) {
-		return e.keyCode >= 65 && e.keyCode <= 90 && !e.ctrlKey;
-	}
-	
-	function isAlphaNumeric(e) {
-		return isAlpha(e) || isDigit(e);
-	}
-	
-	module.exports = {
-		keys: keys,
-		isAllowed: isAllowed,
-		isDigit: isDigit,
-		isAlpha: isAlpha,
-		isAlphaNumeric: isAlphaNumeric
-	};
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var colors = ["#3498db", "#d35400", "#9b59b6", "#bdc3c7", "#e74c3c", "#1abc9c", "#ecf0f1", "#27ae60", "#8e44ad", "#e67e22", "#2980b9", "#f1c40f", "#16a085", "#95a5a6", "#f39c12", "#2ecc71", "#c0392b", "#7f8c8d", "#2f7ed8", "#0d233a", "#8bbc21", "#910000", "#1aadce", "#492970", "#f28f43", "#77a1e5", "#c42525", "#a6c96a"];
-	
-	function lighter(hex) {
-		var lum = arguments[1] === undefined ? 0.2 : arguments[1];
-	
-		hex = String(hex).replace(/[^0-9a-f]/gi, "");
-		if (hex.length < 6) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-		lum = lum || 0;
-	
-		var rgb = "#",
-		    c,
-		    i;
-		for (i = 0; i < 3; i++) {
-			c = parseInt(hex.substr(i * 2, 2), 16);
-			c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);
-			rgb += ("00" + c).substr(c.length);
-		}
-		return rgb;
-	}
-	
-	function addColors(items) {
-		return items.map(function (item, i) {
-			item.color = colors[i];
-			item.highlight = lighter(colors[i]);
-			return item;
-		});
-	}
-	
-	module.exports = {
-		colors: colors,
-		lighter: lighter,
-		addColors: addColors
-	};
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	function type(obj) {
-		return obj ? Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() : "undefined";
-	}
-	
-	function isNumber(v) {
-		if (typeof v === "number") {
-			return true;
-		}if (typeof v !== "string") {
-			return false;
-		}return /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/.test(v);
-	}
-	
-	function serialize(obj) {
-		var keys = Object.keys(obj);
-		if (!keys || !keys.length) {
-			return "";
-		}return "?" + keys.reduce(function (a, k) {
-			a.push(k + "=" + encodeURIComponent(obj[k]));
-			return a;
-		}, []).join("&");
-	}
-	
-	function varToRealType(v) {
-		if (isNumber(v)) {
-			var originalv = v;
-			v = parseFloat("" + v);
-			if ("" + v !== originalv) v = originalv;
-		} else if (v === "true") v = true;else if (v === "false") v = false;
-		if (v === "") v = undefined;
-		if (type(v) === "array") v = v.map(function (val) {
-			return varToRealType(val);
-		});
-		return v;
-	}
-	
-	function isObjectEmpty(x) {
-		if (!x || typeof x !== "object") {
-			return true;
-		}return Object.keys(x).length === 0;
-	}
-	
-	function rand(max) {
-		var min = arguments[1] === undefined ? 0 : arguments[1];
-	
-		return Math.floor(Math.random() * (max - min + 1) + min);
-	}
-	
-	function each(arr, cb, scope) {
-		if (!arr) {
-			return;
-		}if (type(arr) === "object") for (var key in arr) cb.call(scope || cb, arr[key], key);else for (var i = 0, item; item = arr[i]; i++) cb.call(scope || cb, item, i);
-	}
-	
-	function sanitize(v) {
-		var div = document.createElement("DIV");
-		div.innerHTML = v || "";
-		return div.textContent || div.innerText || "";
-	}
-	
-	function merge(target) {
-		for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			sources[_key - 1] = arguments[_key];
-		}
-	
-		if (!target) throw new TypeError("Cannot convert first argument to object");
-		var to = Object(target);
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-	
-		try {
-			for (var _iterator = sources[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var source = _step.value;
-	
-				var keys = Object.keys(Object(source));
-				var _iteratorNormalCompletion2 = true;
-				var _didIteratorError2 = false;
-				var _iteratorError2 = undefined;
-	
-				try {
-					for (var _iterator2 = keys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-						var key = _step2.value;
-	
-						var desc = Object.getOwnPropertyDescriptor(source, key);
-						if (desc !== undefined && desc.enumerable) to[key] = source[key];
-					}
-				} catch (err) {
-					_didIteratorError2 = true;
-					_iteratorError2 = err;
-				} finally {
-					try {
-						if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-							_iterator2["return"]();
-						}
-					} finally {
-						if (_didIteratorError2) {
-							throw _iteratorError2;
-						}
-					}
-				}
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	
-		return to;
-	}
-	
-	if (!Object.assign) Object.defineProperty(Object, "assign", { value: merge,
-		enumerable: false, configurable: true, writable: true
-	});
-	
-	function isNodeList(nodes) {
-		return typeof nodes === "object" && /^(htmlcollection|nodelist|object)$/.test(type(nodes)) && (nodes.length === 0 || typeof nodes[0] === "object" && nodes[0].nodeType > 0);
-	}
-	
-	module.exports = {
-		type: type,
-		rand: rand,
-		each: each,
-		isNumber: isNumber,
-		varToRealType: varToRealType,
-		isObjectEmpty: isObjectEmpty,
-		merge: merge,
-		sanitize: sanitize,
-		serialize: serialize,
-		isNodeList: isNodeList
-	};
-
-/***/ },
-/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5681,15 +4816,15 @@
 	
 	var Toaster = _interopRequire(__webpack_require__(29));
 	
-	var Data = _interopRequire(__webpack_require__(21));
+	var Data = _interopRequire(__webpack_require__(23));
 	
-	var Categories = _interopRequire(__webpack_require__(22));
+	var Categories = _interopRequire(__webpack_require__(26));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Moment = _interopRequire(__webpack_require__(9));
+	var Moment = _interopRequire(__webpack_require__(8));
 	
-	var tpl = __webpack_require__(27);
+	var tpl = __webpack_require__(28);
 	var _defaults = {
 		onAdd: function onAdd() {}
 	};
@@ -6022,14 +5157,150 @@
 	module.exports = Form;
 
 /***/ },
-/* 19 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var H = __webpack_require__(30);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var Chart = _interopRequire(__webpack_require__(32));
+	
+	var options = {
+		segmentShowStroke: false,
+		animateRotate: true,
+		animateScale: false,
+		tooltipTemplate: "<%=label%> €<%= value %>",
+		legendTemplate: "<%for(var i=0;i<segments.length;i++){%>" + "<li><span class=\"sq\" style=\"background-color:<%=segments[i].fillColor%>\"></span>" + "<%=segments[i].label%>" + "<span class=\"val\">€<%=segments[i].value%></span></li><%}%>>"
+	},
+	    isReady = false,
+	    isInitialised = false,
+	    ctx,
+	    chart,
+	    legend;
+	
+	function init() {
+		if (isInitialised) {
+			return;
+		}var el = $(".chart0");
+		legend = el.find(".legend");
+		ctx = el.find(".chart-container")[0].getContext("2d");
+		isInitialised = true;
+	}
+	
+	function addLegendEvents(legendNode, index) {
+		$(legendNode).on("mouseover", function () {
+			var activeSegment = chart.segments[index];
+			activeSegment.save();
+			activeSegment.fillColor = activeSegment.highlightColor;
+			chart.showTooltip([activeSegment]);
+			activeSegment.restore();
+		});
+		$(legendNode).on("mouseout", function () {
+			chart.draw();
+		});
+	}
+	
+	module.exports = function (data) {
+		if (!isInitialised) init();
+	
+		var _data = $.addColors(data);
+		if (!isReady) {
+			chart = new Chart(ctx).Pie(_data, options);
+			legend.html(chart.generateLegend());
+			$.each(legend.find("li"), addLegendEvents);
+			isReady = true;
+		} else {
+			if (!_data.length && chart.segments.length) {
+				chart.destroy();
+				legend.html("<span class=\"no-data\">No data</span>");
+				isReady = false;
+			} else {
+				chart.update(_data);
+				legend.html(chart.generateLegend());
+			}
+		}
+	};
 
 /***/ },
-/* 20 */
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var Chart = _interopRequire(__webpack_require__(32));
+	
+	var isReady = false,
+	    isInitialised = false,
+	    ctx,
+	    chart,
+	    options = {
+		bezierCurve: false,
+		scaleFontColor: "#bbb",
+		scaleLineColor: "rgba(255,255,255,.1)",
+		scaleGridLineColor: "rgba(255,255,255,.05)",
+		scaleLabel: "<%=value>0?\"€\"+parseFloat(value)/1000+\"k\":\"0\"%>",
+		multiTooltipTemplate: "<%=datasetLabel%>: €<%= value %>"
+	},
+	    chartData = {
+		labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+		datasets: [{
+			label: "Income",
+			fillColor: "rgba(220,220,220,0.4)",
+			strokeColor: "rgba(220,220,220,1)",
+			pointColor: "rgba(220,220,220,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(220,220,220,1)",
+			data: []
+		}, {
+			label: "Expenses",
+			fillColor: "rgba(151,187,205,0.4)",
+			strokeColor: "rgba(151,187,205,1)",
+			pointColor: "rgba(151,187,205,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(151,187,205,1)",
+			data: []
+		}]
+	};
+	
+	function init() {
+		if (isInitialised) {
+			return;
+		}var el = $(".chart1");
+		ctx = el.find(".chart-container")[0].getContext("2d");
+		isInitialised = true;
+	}
+	
+	module.exports = function () {
+		var data = arguments[0] === undefined ? {} : arguments[0];
+	
+		if (!isInitialised) init();
+	
+		chartData.datasets[0].data = data.income || [];
+		chartData.datasets[1].data = data.expenses || [];
+	
+		if (!isReady) {
+			chart = new Chart(ctx).Line(chartData, options);
+			isReady = true;
+		} else {
+			if (!data.datasets.length && chart) {
+				chart.destroy();
+				chart = null;
+				isReady = false;
+			} else chart.update(data);
+		}
+	};
+
+/***/ },
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6044,11 +5315,11 @@
 	
 	var Toaster = _interopRequire(__webpack_require__(29));
 	
-	var Data = _interopRequire(__webpack_require__(23));
+	var Data = _interopRequire(__webpack_require__(25));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Moment = _interopRequire(__webpack_require__(9));
+	var Moment = _interopRequire(__webpack_require__(8));
 	
 	var _defaults = {
 		onAdd: function onAdd() {}
@@ -6275,31 +5546,699 @@
 	module.exports = Form;
 
 /***/ },
-/* 21 */
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var H = __webpack_require__(31);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
+
+/***/ },
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var $ = _interopRequire(__webpack_require__(3));
+	var util = _interopRequire(__webpack_require__(22));
 	
-	var _url = "entries";
+	function sizzle(mixed, context) {
+		if (!mixed) {
+			return [];
+		}var el;
+		if (typeof mixed !== "string") el = mixed;else if (/<[a-z][\s\S]*>/i.test(mixed)) {
+			el = new DOMParser().parseFromString(mixed, "text/html").body.firstChild;
+		} else el = (context || document).querySelectorAll(mixed);
+	
+		if (el.nodeType) el = [el];else if (util.isNodeList(el)) el = Array.prototype.slice.call(el);
+	
+		return Object.assign(el || [], sizzle.fn);
+	}
+	
+	sizzle.fn = {};
+	sizzle.fn.find = function (selector) {
+		return sizzle(selector, this[0]);
+	};
+	sizzle.fn.filter = function (selector) {
+		var elems = Array.prototype.filter.call(this, function (el) {
+			return el.matches(selector);
+		});
+		return sizzle(elems);
+	};
+	
+	sizzle.fn.first = function () {
+		return sizzle(this[0]);
+	};
+	sizzle.fn.last = function () {
+		return sizzle(this[this.length - 1]);
+	};
+	sizzle.fn.eq = function (idx) {
+		return sizzle(this[idx || 0]);
+	};
+	
+	sizzle.fn.appendTo = function (parent) {
+		if (!this || !this.length) return this;
+		if (typeof parent === "string") parent = sizzle(parent);
+		parent[0].appendChild(this[0]);
+		return this;
+	};
+	
+	sizzle.fn.append = function (child) {
+		if (!this || !this.length) return this;
+		if (typeof child === "string") child = sizzle(child);
+		this[0].appendChild(child[0]);
+		return this;
+	};
+	
+	sizzle.fn.on = function (eventName, cb) {
+		if (!this || !this.length) return this;
+		this.forEach(function (el) {
+			el.addEventListener(eventName, cb);
+		});
+		return this;
+	};
+	
+	sizzle.fn.off = function (eventName, cb) {
+		if (!this || !this.length) return this;
+		this.forEach(function (el) {
+			el.removeEventListener(eventName, cb);
+		});
+		return this;
+	};
+	
+	sizzle.fn.closest = function (cls) {
+		if (!this || !this.length) return false;
+		var has = false,
+		    el = this[0];
+		while (!has && el) {
+			has = el.matches(cls);
+			if (has) return sizzle(el);
+			el = el.parentNode;
+			if (el.tagName === "HTML") return null;
+		}
+		return null;
+	};
+	
+	sizzle.fn.is = function (selector) {
+		if (!this || !this.length) return false;
+		return this[0].matches(selector);
+	};
+	
+	sizzle.fn.isIn = function () {
+		for (var _len = arguments.length, classes = Array(_len), _key = 0; _key < _len; _key++) {
+			classes[_key] = arguments[_key];
+		}
+	
+		var target = this && this.length ? this : null;
+		if (target) {
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+	
+			try {
+				for (var _iterator = classes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var cls = _step.value;
+					if (target.closest(cls)) return true;
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator["return"]) {
+						_iterator["return"]();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+		}
+		return false;
+	};
+	
+	function modElCls(el, action, cls, cond) {
+		if (!el || !el.length) {
+			return el;
+		}cls = cls.split(" ");
+		if (typeof cond === "boolean") {
+			el.forEach(function (el) {
+				cls.forEach(function (c) {
+					el.classList[action](c, cond);
+				});
+			});
+		} else {
+			el.forEach(function (el) {
+				cls.forEach(function (c) {
+					el.classList[action](c);
+				});
+			});
+		}
+		return el;
+	}
+	
+	sizzle.fn.addClass = function (cls) {
+		return modElCls(this, "add", cls);
+	};
+	sizzle.fn.removeClass = function (cls) {
+		return modElCls(this, "remove", cls);
+	};
+	sizzle.fn.toggleClass = function (cls, cond) {
+		return modElCls(this, "toggle", cls, cond);
+	};
+	sizzle.fn.hasClass = function (cls) {
+		if (!this || !this.length) return false;
+		return this[0].classList.contains(cls);
+	};
+	
+	sizzle.fn.html = function (html) {
+		if (!this || !this.length) return this;
+		this.forEach(function (el) {
+			el.innerHTML = html;
+		});
+		return this;
+	};
+	
+	sizzle.fn.remove = function () {
+		if (!this || !this.length) return this;
+		this.forEach(function (el) {
+			el.remove();
+		});
+		return this;
+	};
+	
+	sizzle.fn.data = function (key) {
+		if (!this || !this.length) return this;
+		if (!this[0].dataset) return null;
+		if (key) return this[0].dataset[key];
+		return this[0].dataset;
+	};
+	
+	module.exports = sizzle;
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var util = _interopRequire(__webpack_require__(22));
+	
+	var base_url = "api/";
+	
+	function ajax(options) {
+		if (typeof options === "string") options = { url: options };
+	
+		var req = new XMLHttpRequest(),
+		    resp,
+		    data = options.data || "";
+		options.url = base_url + options.url;
+		options.method = options.method || "GET";
+		options.type = options.type || "json";
+	
+		if (data) {
+			if (options.method.toLowerCase() === "get") options.url += util.serialize(data);else if (options.type === "json") data = JSON.stringify(data);
+		}
+		return new Promise(function (resolve, reject) {
+			req.open(options.method, options.url, true);
+			req.onload = function () {
+				if (req.status >= 200 && req.status < 400) {
+					resp = req.responseText;
+					try {
+						resp = JSON.parse(resp);
+					} catch (e) {}
+					resolve(resp);
+				} else reject(req.statusText);
+			};
+			req.onerror = function () {
+				reject(req.statusText);
+			};
+			req.setRequestHeader("Content-Type", "application/" + options.type + "; charset=UTF-8");
+			req.send(data);
+		});
+	}
 	
 	module.exports = {
-		get: function (params) {
-			var id = typeof params === "number" ? params : null;
-			return $.get(_url + (id ? "/" + id : ""), params || {});
+		ajax: ajax,
+		get: function (url, data) {
+			return ajax({ url: url, data: data || {} });
 		},
-	
-		save: function (params) {
-			if (params.length === 1 && params[0].id) params = params[0];
-			return $.post(_url + (params.id ? "/" + params.id : ""), params);
+		post: function (url, data) {
+			return ajax({ url: url, data: data || {}, method: "POST" });
 		},
+		put: function (url, data) {
+			return ajax({ url: url, data: data || {}, method: "PUT" });
+		},
+		del: function (url, data) {
+			return ajax({ url: url, data: data || {}, method: "DELETE" });
+		} };
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 	
-		del: function (id) {
-			return $.del(_url + "/" + id);
+	var keyBreaker = /[^\[\]]+/g;
+	var numberMatcher = /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/;
+	
+	function _isNumber(value) {
+		if (typeof value === "number") {
+			return true;
+		}if (typeof value !== "string") {
+			return false;
+		}return value.match(numberMatcher);
+	}
+	
+	function _decodeEntities(str) {
+		var d = document.createElement("div");
+		d.innerHTML = str;
+		return d.innerText || d.textContent;
+	}
+	
+	function _getInputs(form) {
+		var inputs = form.querySelectorAll("[name]");
+		return Array.prototype.slice.call(inputs) || [];
+	}
+	
+	function Form(el) {
+		if (!el) {
+			return null;
+		}if (!(this instanceof Form)) {
+			return new Form(el);
+		}this.form = el;
+		if (el.elements) this.inputs = el.elements;
+	}
+	
+	Form.prototype.set = function (params, clear) {
+		var inputs = _getInputs(this.form);
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = inputs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var input = _step.value;
+	
+				var name = input.name,
+				    value = typeof params[name] === "undefined" ? "" : params[name];
+	
+				if (name.indexOf("[") > -1) {
+					var v = params;
+					var names = name.replace(/[\[\]]/g, "|").split("|");
+					var _iteratorNormalCompletion2 = true;
+					var _didIteratorError2 = false;
+					var _iteratorError2 = undefined;
+	
+					try {
+						for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+							var n = _step2.value;
+	
+							if (v[n]) v = v[n];else {
+								v = undefined;if (_iterator2["return"]) _iterator2["return"]();
+								break;
+							}
+						}
+					} catch (err) {
+						_didIteratorError2 = true;
+						_iteratorError2 = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+								_iterator2["return"]();
+							}
+						} finally {
+							if (_didIteratorError2) {
+								throw _iteratorError2;
+							}
+						}
+					}
+	
+					value = v;
+				}
+	
+				if (clear !== true && value === undefined) return;
+	
+				if (value === null || value === undefined) value = "";
+	
+				if (typeof value === "string" && value.indexOf("&") > -1) value = _decodeEntities(value);
+	
+				if (input.type === "radio") input.checked = input.value.toString() === value.toString();else if (input.type === "checkbox") input.checked = value;else if (input.tagName === "SELECT") {
+					if (value === "" || value === undefined) input.selectedIndex = 0;else input.value = value;
+				} else input.value = value;
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
 		}
+	
+		return this;
+	};
+	
+	Form.prototype.get = function () {
+		var convert = arguments[0] === undefined ? false : arguments[0];
+	
+		var inputs = _getInputs(this.form),
+		    data = {},
+		    current;
+	
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = inputs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var input = _step.value;
+	
+				var type = input.type && input.type.toLowerCase(),
+				    value = undefined,
+				    parts = undefined,
+				    lastPart = undefined,
+				    last = undefined;
+	
+				if (type === "submit" || !input.name || input.disabled) return;
+	
+				value = input.value;
+				parts = input.name.match(keyBreaker);
+	
+				if (type === "radio" && !input.checked) return;
+	
+				if (type === "checkbox") value = input.checked;
+	
+				if (convert) {
+					if (_isNumber(value)) {
+						var tv = parseFloat(value);
+						var cmp = tv + "";
+	
+						if (value.indexOf(".") > 0) cmp = tv.toFixed(value.split(".")[1].length);
+						if (cmp === value) value = tv;
+					} else if (value === "true") value = true;else if (value === "false") value = false;
+					if (value === "") value = null;
+				}
+	
+				current = data;
+	
+				for (var i = 0; i < parts.length - 1; i++) {
+					current[parts[i]] = current[parts[i]] || {};
+					current = current[parts[i]];
+				}
+				lastPart = parts[parts.length - 1];
+	
+				last = current[lastPart];
+				if (last) {
+					if (!Array.isArray(last)) current[lastPart] = last === undefined ? [] : [last];
+					current[lastPart].push(value);
+				} else current[lastPart] = value;
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		return data;
+	};
+	
+	Form.prototype.reset = function () {
+		this.set({});
+	};
+	
+	Form.prototype.clear = function () {
+		this.set({}, true);
+	};
+	
+	Form.prototype.update = function () {
+		if (!this.observeCb) return;
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = this.form.elements[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var field = _step.value;
+	
+				var fname = field.name.replace(/[\[\]]/g, "_") + "val",
+				    ov = this.form.dataset[fname],
+				    v = field.value;
+				if (fname === "val") continue;
+				if (field.type === "checkbox") {
+					v = field.checked;
+					ov = ov === "true";
+				} else if (field.type === "radio" && !field.checked) continue;
+				if (typeof ov === "undefined" && typeof v !== "undefined") {
+					if (field.type === "radio") this.observeCb(v, ov, field);
+					ov = this.form.dataset[fname] = v;
+				} else if (ov !== v) {
+					this.form.dataset[fname] = v;
+					this.observeCb(v, ov, field);
+				}
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		requestAnimationFrame(this.update.bind(this));
+	};
+	Form.prototype.observe = function (cb) {
+		this.update(this.observeCb = cb);
+	};
+	Form.prototype.observeStop = function () {
+		this.observeCb = null;
+	};
+	
+	module.exports = Form;
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
+	
+	var _cache = {};
+	
+	function trigger(topic) {
+		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			args[_key - 1] = arguments[_key];
+		}
+	
+		if (!_cache[topic]) {
+			return;
+		}_cache[topic].forEach(function (cb) {
+			return cb.apply(cb, args);
+		});
+	}
+	
+	function on(topic, callback) {
+		if (!_cache[topic]) _cache[topic] = [];
+		_cache[topic].push(callback);
+		return [topic, callback];
+	}
+	
+	function off(handle) {
+		var _handle = _slicedToArray(handle, 2);
+	
+		var topic = _handle[0];
+		var cb = _handle[1];var ca = _cache[topic];
+		cb = cb.toString();
+		if (ca) ca.forEach(function (fn, i) {
+			if (fn.toString() === cb) ca.splice(i, 1);
+		});
+	}
+	
+	module.exports = { on: on, off: off, trigger: trigger };
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var keys = {
+		BCKSPC: 8,
+		BACKSPACE: 8,
+		TAB: 9,
+		ENTER: 13,
+		ESC: 27,
+		SPACE: 32,
+		PGUP: 33,
+		PGDOWN: 34,
+		END: 35,
+		HOME: 36,
+		LEFT: 37,
+		UP: 38,
+		RIGHT: 39,
+		DOWN: 40,
+		INS: 45,
+		DEL: 46,
+		A: 65,
+		X: 88,
+		C: 67,
+		V: 86,
+		Z: 90,
+		F1: 112,
+		F2: 113,
+		F5: 116,
+		MINUS: 173,
+		PLUS: 61,
+		DOT: 190,
+		SLASH: 191,
+	
+		NUMSTAR: 106,
+		NUMMINUS: 109,
+		NUMPLUS: 107,
+		NUMDOT: 110,
+		NUMSLASH: 111 },
+	    digits = {
+		48: 1,
+		49: 1,
+		50: 1,
+		51: 1,
+		52: 1,
+		53: 1,
+		54: 1,
+		55: 1,
+		56: 1,
+		57: 1,
+		96: 1,
+		97: 1,
+		98: 1,
+		99: 1,
+		100: 1,
+		101: 1,
+		102: 1,
+		103: 1,
+		104: 1,
+		105: 1 },
+	    allowedChars = {
+		8: 1,
+		9: 1,
+		46: 1,
+		35: 1,
+		36: 1,
+		37: 1,
+		39: 1 };
+	
+	function isMath(e) {
+		var k = e.keyCode;
+		if (k === keys.SPACE) {
+			return true;
+		}if (k === keys.NUMDOT || k === keys.DOT && !e.shiftKey) {
+			return true;
+		}if (k === keys.NUMMINUS || k === keys.MINUS && !e.shiftKey) {
+			return true;
+		}if (k === keys.NUMPLUS || k === keys.PLUS && e.shiftKey) {
+			return true;
+		}if (k === keys.NUMSLASH || k === keys.SLASH && !e.shiftKey) {
+			return true;
+		}if (e.shiftKey) {
+			if (k === 56 || k === 57 || k === 48) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	function isAllowed(e) {
+		var k = e.keyCode,
+		    allowed = allowedChars[k] === 1,
+		    isCtrlXCV = e && e.ctrlKey === true && (k === keys.X || k === keys.C || k === keys.V),
+		    math = isMath(e);
+		return isDigit(e) || allowed || isCtrlXCV || math;
+	}
+	
+	function isDigit(e) {
+		return digits[e.keyCode] === 1 && !e.shiftKey;
+	}
+	
+	function isAlpha(e) {
+		return e.keyCode >= 65 && e.keyCode <= 90 && !e.ctrlKey;
+	}
+	
+	function isAlphaNumeric(e) {
+		return isAlpha(e) || isDigit(e);
+	}
+	
+	module.exports = {
+		keys: keys,
+		isAllowed: isAllowed,
+		isDigit: isDigit,
+		isAlpha: isAlpha,
+		isAlphaNumeric: isAlphaNumeric
+	};
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var colors = ["#3498db", "#d35400", "#9b59b6", "#bdc3c7", "#e74c3c", "#1abc9c", "#ecf0f1", "#27ae60", "#8e44ad", "#e67e22", "#2980b9", "#f1c40f", "#16a085", "#95a5a6", "#f39c12", "#2ecc71", "#c0392b", "#7f8c8d", "#2f7ed8", "#0d233a", "#8bbc21", "#910000", "#1aadce", "#492970", "#f28f43", "#77a1e5", "#c42525", "#a6c96a"];
+	
+	function lighter(hex) {
+		var lum = arguments[1] === undefined ? 0.2 : arguments[1];
+	
+		hex = String(hex).replace(/[^0-9a-f]/gi, "");
+		if (hex.length < 6) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+		lum = lum || 0;
+	
+		var rgb = "#",
+		    c,
+		    i;
+		for (i = 0; i < 3; i++) {
+			c = parseInt(hex.substr(i * 2, 2), 16);
+			c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);
+			rgb += ("00" + c).substr(c.length);
+		}
+		return rgb;
+	}
+	
+	function addColors(items) {
+		return items.map(function (item, i) {
+			item.color = colors[i];
+			item.highlight = lighter(colors[i]);
+			return item;
+		});
+	}
+	
+	module.exports = {
+		colors: colors,
+		lighter: lighter,
+		addColors: addColors
 	};
 
 /***/ },
@@ -6308,26 +6247,144 @@
 
 	"use strict";
 	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	function type(obj) {
+		return obj ? Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() : "undefined";
+	}
 	
-	var $ = _interopRequire(__webpack_require__(3));
+	function isNumber(v) {
+		if (typeof v === "number") {
+			return true;
+		}if (typeof v !== "string") {
+			return false;
+		}return /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/.test(v);
+	}
 	
-	var _url = "categories";
+	function serialize(obj) {
+		var keys = Object.keys(obj);
+		if (!keys || !keys.length) {
+			return "";
+		}return "?" + keys.reduce(function (a, k) {
+			a.push(k + "=" + encodeURIComponent(obj[k]));
+			return a;
+		}, []).join("&");
+	}
+	
+	function varToRealType(v) {
+		if (isNumber(v)) {
+			var originalv = v;
+			v = parseFloat("" + v);
+			if ("" + v !== originalv) v = originalv;
+		} else if (v === "true") v = true;else if (v === "false") v = false;
+		if (v === "") v = undefined;
+		if (type(v) === "array") v = v.map(function (val) {
+			return varToRealType(val);
+		});
+		return v;
+	}
+	
+	function isObjectEmpty(x) {
+		if (!x || typeof x !== "object") {
+			return true;
+		}return Object.keys(x).length === 0;
+	}
+	
+	function rand(max) {
+		var min = arguments[1] === undefined ? 0 : arguments[1];
+	
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	}
+	
+	function each(arr, cb, scope) {
+		if (!arr) {
+			return;
+		}if (type(arr) === "object") for (var key in arr) cb.call(scope || cb, arr[key], key);else for (var i = 0, item; item = arr[i]; i++) cb.call(scope || cb, item, i);
+	}
+	
+	function sanitize(v) {
+		var div = document.createElement("DIV");
+		div.innerHTML = v || "";
+		return div.textContent || div.innerText || "";
+	}
+	
+	function merge(target) {
+		for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			sources[_key - 1] = arguments[_key];
+		}
+	
+		if (!target) throw new TypeError("Cannot convert first argument to object");
+		var to = Object(target);
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = sources[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var source = _step.value;
+	
+				var keys = Object.keys(Object(source));
+				var _iteratorNormalCompletion2 = true;
+				var _didIteratorError2 = false;
+				var _iteratorError2 = undefined;
+	
+				try {
+					for (var _iterator2 = keys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+						var key = _step2.value;
+	
+						var desc = Object.getOwnPropertyDescriptor(source, key);
+						if (desc !== undefined && desc.enumerable) to[key] = source[key];
+					}
+				} catch (err) {
+					_didIteratorError2 = true;
+					_iteratorError2 = err;
+				} finally {
+					try {
+						if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+							_iterator2["return"]();
+						}
+					} finally {
+						if (_didIteratorError2) {
+							throw _iteratorError2;
+						}
+					}
+				}
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		return to;
+	}
+	
+	if (!Object.assign) Object.defineProperty(Object, "assign", { value: merge,
+		enumerable: false, configurable: true, writable: true
+	});
+	
+	function isNodeList(nodes) {
+		return typeof nodes === "object" && /^(htmlcollection|nodelist|object)$/.test(type(nodes)) && (nodes.length === 0 || typeof nodes[0] === "object" && nodes[0].nodeType > 0);
+	}
 	
 	module.exports = {
-		get: function () {
-			return $.get(_url);
-		},
-		getTree: function () {
-			return $.get("categorytree");
-		},
-		save: function (params) {
-			if (!params.id) delete params.id;
-			return $.post(_url + (params.id ? "/" + params.id : ""), params);
-		},
-		del: function (params) {
-			return $.del(_url + "/" + params.id);
-		}
+		type: type,
+		rand: rand,
+		each: each,
+		isNumber: isNumber,
+		varToRealType: varToRealType,
+		isObjectEmpty: isObjectEmpty,
+		merge: merge,
+		sanitize: sanitize,
+		serialize: serialize,
+		isNodeList: isNodeList
 	};
 
 /***/ },
@@ -6340,7 +6397,7 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var _url = "incomes";
+	var _url = "entries";
 	
 	module.exports = {
 		get: function (params) {
@@ -6371,12 +6428,72 @@
 	module.exports = {
 		spendingByCategory: function (params) {
 			return $.get("spendingByCategory", params || {});
+		},
+	
+		incomeVsExpenses: function (params) {
+			return $.get("incomeVsExpenses", params || {});
 		}
 	
 	};
 
 /***/ },
 /* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var _url = "incomes";
+	
+	module.exports = {
+		get: function (params) {
+			var id = typeof params === "number" ? params : null;
+			return $.get(_url + (id ? "/" + id : ""), params || {});
+		},
+	
+		save: function (params) {
+			if (params.length === 1 && params[0].id) params = params[0];
+			return $.post(_url + (params.id ? "/" + params.id : ""), params);
+		},
+	
+		del: function (id) {
+			return $.del(_url + "/" + id);
+		}
+	};
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var _url = "categories";
+	
+	module.exports = {
+		get: function () {
+			return $.get(_url);
+		},
+		getTree: function () {
+			return $.get("categorytree");
+		},
+		save: function (params) {
+			if (!params.id) delete params.id;
+			return $.post(_url + (params.id ? "/" + params.id : ""), params);
+		},
+		del: function (params) {
+			return $.del(_url + "/" + params.id);
+		}
+	};
+
+/***/ },
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function webpackUniversalModuleDefinition(root, factory) {
@@ -7864,7 +7981,87 @@
 	;
 
 /***/ },
-/* 26 */
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var H = __webpack_require__(31);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"form-row\">\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]id\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]date\">\r");t.b("\n" + i);t.b("	<select name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]category_id\" class=\"category\">\r");t.b("\n" + i);if(t.s(t.f("categories",c,p,1),c,p,0,202,317,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("		<optgroup label=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("			");if(t.s(t.f("items",c,p,1),c,p,0,248,288,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<option value=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</option>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("		</optgroup>\r");t.b("\n" + i);});c.pop();}t.b("	</select>\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]amount\" class=\"amount\" placeholder=\"0.00\">\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]description\" class=\"description\" placeholder=\"description\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("first",c,p,1),c,p,0,518,590,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-angle-double-down\"></a>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	");if(!t.s(t.f("first",c,p,1),c,p,1,0,0,"")){t.b("<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>");};t.b("\r");t.b("\n" + i);t.b("</div>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"form-row\">\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]id\">\r\n\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]date\">\r\n\t<select name=\"items[{{idx}}]category_id\" class=\"category\">\r\n\t\t{{#categories}}\r\n\t\t<optgroup label=\"{{name}}\">\r\n\t\t\t{{#items}}<option value=\"{{id}}\">{{name}}</option>{{/items}}\r\n\t\t</optgroup>\r\n\t\t{{/categories}}\r\n\t</select>\r\n\t<input name=\"items[{{idx}}]amount\" class=\"amount\" placeholder=\"0.00\">\r\n\t<input name=\"items[{{idx}}]description\" class=\"description\" placeholder=\"description\">\r\n\t{{#first}}<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-angle-double-down\"></a>{{/first}}\r\n\t{{^first}}<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>{{/first}}\r\n</div>\r\n", H);return T.render.apply(T, arguments); };
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	function Toaster(msg) {
+		console.log(msg);
+	}
+	
+	Toaster.error = function (msg) {
+		console.error(msg);
+		return false;
+	};
+	
+	Toaster.warning = function (msg) {
+		console.warn(msg);
+		return false;
+	};
+	
+	Toaster.info = function (msg) {
+		console.info(msg);
+	};
+	
+	Toaster.success = function (msg) {
+		console.log(msg);
+	};
+	
+	module.exports = Toaster;
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 *  Copyright 2011 Twitter, Inc.
+	 *  Licensed under the Apache License, Version 2.0 (the "License");
+	 *  you may not use this file except in compliance with the License.
+	 *  You may obtain a copy of the License at
+	 *
+	 *  http://www.apache.org/licenses/LICENSE-2.0
+	 *
+	 *  Unless required by applicable law or agreed to in writing, software
+	 *  distributed under the License is distributed on an "AS IS" BASIS,
+	 *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	 *  See the License for the specific language governing permissions and
+	 *  limitations under the License.
+	 */
+	
+	// This file is for use with Node.js. See dist/ for browser files.
+	
+	var Hogan = __webpack_require__(33);
+	Hogan.Template = __webpack_require__(34).Template;
+	Hogan.template = Hogan.Template;
+	module.exports = Hogan;
+
+
+/***/ },
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -8171,7 +8368,7 @@
 				//Method for warning of errors
 				if (window.console && typeof window.console.warn == "function") console.warn(str);
 			},
-			amd = helpers.amd = ("function" == 'function' && __webpack_require__(31)),
+			amd = helpers.amd = ("function" == 'function' && __webpack_require__(35)),
 			//-- Math methods
 			isNumber = helpers.isNumber = function(n){
 				return !isNaN(parseFloat(n)) && isFinite(n);
@@ -11346,95 +11543,7 @@
 	}).call(this);
 
 /***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var H = __webpack_require__(30);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"form-row\">\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]id\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]date\">\r");t.b("\n" + i);t.b("	<select name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]category_id\" class=\"category\">\r");t.b("\n" + i);if(t.s(t.f("categories",c,p,1),c,p,0,202,317,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("		<optgroup label=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("			");if(t.s(t.f("items",c,p,1),c,p,0,248,288,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<option value=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</option>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("		</optgroup>\r");t.b("\n" + i);});c.pop();}t.b("	</select>\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]amount\" class=\"amount\" placeholder=\"0.00\">\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]description\" class=\"description\" placeholder=\"description\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("first",c,p,1),c,p,0,518,590,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-angle-double-down\"></a>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	");if(!t.s(t.f("first",c,p,1),c,p,1,0,0,"")){t.b("<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>");};t.b("\r");t.b("\n" + i);t.b("</div>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"form-row\">\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]id\">\r\n\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]date\">\r\n\t<select name=\"items[{{idx}}]category_id\" class=\"category\">\r\n\t\t{{#categories}}\r\n\t\t<optgroup label=\"{{name}}\">\r\n\t\t\t{{#items}}<option value=\"{{id}}\">{{name}}</option>{{/items}}\r\n\t\t</optgroup>\r\n\t\t{{/categories}}\r\n\t</select>\r\n\t<input name=\"items[{{idx}}]amount\" class=\"amount\" placeholder=\"0.00\">\r\n\t<input name=\"items[{{idx}}]description\" class=\"description\" placeholder=\"description\">\r\n\t{{#first}}<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-angle-double-down\"></a>{{/first}}\r\n\t{{^first}}<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>{{/first}}\r\n</div>\r\n", H);return T.render.apply(T, arguments); };
-
-/***/ },
-/* 28 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
-
-/***/ },
-/* 29 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	function Toaster(msg) {
-		console.log(msg);
-	}
-	
-	Toaster.error = function (msg) {
-		console.error(msg);
-		return false;
-	};
-	
-	Toaster.warning = function (msg) {
-		console.warn(msg);
-		return false;
-	};
-	
-	Toaster.info = function (msg) {
-		console.info(msg);
-	};
-	
-	Toaster.success = function (msg) {
-		console.log(msg);
-	};
-	
-	module.exports = Toaster;
-
-/***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 *  Copyright 2011 Twitter, Inc.
-	 *  Licensed under the Apache License, Version 2.0 (the "License");
-	 *  you may not use this file except in compliance with the License.
-	 *  You may obtain a copy of the License at
-	 *
-	 *  http://www.apache.org/licenses/LICENSE-2.0
-	 *
-	 *  Unless required by applicable law or agreed to in writing, software
-	 *  distributed under the License is distributed on an "AS IS" BASIS,
-	 *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	 *  See the License for the specific language governing permissions and
-	 *  limitations under the License.
-	 */
-	
-	// This file is for use with Node.js. See dist/ for browser files.
-	
-	var Hogan = __webpack_require__(32);
-	Hogan.Template = __webpack_require__(33).Template;
-	Hogan.template = Hogan.Template;
-	module.exports = Hogan;
-
-
-/***/ },
-/* 31 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, {}))
-
-/***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -11863,7 +11972,7 @@
 
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -12208,6 +12317,14 @@
 	
 	})(true ? exports : Hogan);
 
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }
 /******/ ]);
