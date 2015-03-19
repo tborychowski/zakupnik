@@ -202,19 +202,19 @@
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var sizzle = _interopRequire(__webpack_require__(16));
+	var sizzle = _interopRequire(__webpack_require__(17));
 	
-	var ajax = _interopRequire(__webpack_require__(17));
+	var ajax = _interopRequire(__webpack_require__(18));
 	
-	var form = _interopRequire(__webpack_require__(18));
+	var form = _interopRequire(__webpack_require__(19));
 	
-	var pubsub = _interopRequire(__webpack_require__(19));
+	var pubsub = _interopRequire(__webpack_require__(20));
 	
-	var keys = _interopRequire(__webpack_require__(20));
+	var keys = _interopRequire(__webpack_require__(21));
 	
-	var colors = _interopRequire(__webpack_require__(21));
+	var colors = _interopRequire(__webpack_require__(22));
 	
-	var util = _interopRequire(__webpack_require__(22));
+	var util = _interopRequire(__webpack_require__(23));
 	
 	var all = { ajax: ajax, form: form };
 	Object.assign(all, ajax, pubsub, keys, colors, util);
@@ -232,13 +232,13 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(23));
+	var Data = _interopRequire(__webpack_require__(25));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Grid = _interopRequire(__webpack_require__(27));
+	var Grid = _interopRequire(__webpack_require__(28));
 	
-	var Form = _interopRequire(__webpack_require__(11));
+	var Form = _interopRequire(__webpack_require__(12));
 	
 	var el,
 	    grid,
@@ -384,13 +384,13 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(25));
+	var Data = _interopRequire(__webpack_require__(24));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Grid = _interopRequire(__webpack_require__(27));
+	var Grid = _interopRequire(__webpack_require__(28));
 	
-	var Form = _interopRequire(__webpack_require__(14));
+	var Form = _interopRequire(__webpack_require__(11));
 	
 	var el,
 	    grid,
@@ -537,11 +537,13 @@
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Data = _interopRequire(__webpack_require__(24));
+	var Data = _interopRequire(__webpack_require__(26));
 	
-	var chart0 = _interopRequire(__webpack_require__(12));
+	var chart0 = _interopRequire(__webpack_require__(13));
 	
-	var chart1 = _interopRequire(__webpack_require__(13));
+	var chart1 = _interopRequire(__webpack_require__(14));
+	
+	var chart3 = _interopRequire(__webpack_require__(15));
 	
 	var lastLoadDate;
 	
@@ -552,6 +554,8 @@
 			lastLoadDate = date;
 			Data.spendingByCategory({ date: date }).then(chart0);
 			Data.incomeVsExpenses({ year: Calendar.get("YYYY") }).then(chart1);
+	
+			Data.spendingByCategory({ date: date }).then(chart3);
 		}
 	}
 	
@@ -574,7 +578,7 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(26));
+	var Data = _interopRequire(__webpack_require__(27));
 	
 	var el,
 	    treeContainer,
@@ -582,7 +586,7 @@
 	    form,
 	    btn = {},
 	    catSel;
-	var tpl = __webpack_require__(15);
+	var tpl = __webpack_require__(16);
 	
 	function updateCatSelect(data) {
 		var options = ["<option value=\"0\"></option>"];
@@ -3756,7 +3760,7 @@
 	    }
 	}).call(this);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(30)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(31)(module)))
 
 /***/ },
 /* 9 */
@@ -4797,7 +4801,7 @@
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var H = __webpack_require__(31);
+	var H = __webpack_require__(32);
 	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<input type=\"text\" class=\"date\">\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>");return t.fl(); },partials: {}, subs: {  }}, "<input type=\"text\" class=\"date\">\r\n<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r\n<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r\n<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>", H);return T.render.apply(T, arguments); };
 
 /***/ },
@@ -4814,17 +4818,263 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Toaster = _interopRequire(__webpack_require__(29));
+	var Toaster = _interopRequire(__webpack_require__(30));
 	
-	var Data = _interopRequire(__webpack_require__(23));
-	
-	var Categories = _interopRequire(__webpack_require__(26));
+	var Data = _interopRequire(__webpack_require__(24));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
 	var Moment = _interopRequire(__webpack_require__(8));
 	
-	var tpl = __webpack_require__(28);
+	var _defaults = {
+		onAdd: function onAdd() {}
+	};
+	
+	function cloneItem(item) {
+		var addMonths = arguments[1] === undefined ? 1 : arguments[1];
+	
+		var newItem = JSON.parse(JSON.stringify(item));
+		newItem.date = Moment(newItem.date).add(addMonths, "months").format("YYYY-MM-DD");
+		return newItem;
+	}
+	
+	function repeatItems(items, times) {
+		if (!items || !items.length) {
+			return [];
+		}var newItems = [];
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var item = _step.value;
+	
+				for (var i = 1; i < times; i++) {
+					newItems.push(cloneItem(item, i));
+				}
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		items = items.concat(newItems);
+		items.sort(function (a, b) {
+			return a.date.localeCompare(b.date);
+		});
+		return items;
+	}
+	
+	var Form = (function () {
+		function Form(config) {
+			_classCallCheck(this, Form);
+	
+			this.cfg = Object.assign(_defaults, config);
+			this.el = this.cfg.target;
+			this.form = $.form(this.el[0]);
+			this.subforms = this.cfg.target.find(".subforms");
+	
+			this.categories = [];
+			this.catMap = {};
+	
+			this.el.on("submit", this.onSubmit.bind(this));
+	
+			if (typeof this.cfg.onChange === "function") {
+				this.form.observe((function (nv, ov, f) {
+					this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
+				}).bind(this));
+			}
+	
+			var subform = this.subforms.find(".form-row");
+			subform.find("input")[0].focus();
+			this.addInputEvents(subform);
+	
+			return this.reset();
+		}
+	
+		_prototypeProperties(Form, null, {
+			reset: {
+				value: function reset() {
+					this.form.reset();
+					var rep = this.el.find(".repeat-in");
+					if (rep) rep[0].value = 1;
+					return this;
+				},
+				writable: true,
+				configurable: true
+			},
+			set: {
+				value: function set(data) {
+					this.reset();
+					this.form.set(data);
+					return this;
+				},
+				writable: true,
+				configurable: true
+			},
+			setDate: {
+				value: function setDate(date) {
+					var dates = this.subforms.find("input[name$=\"date\"]");
+					$.each(dates, function (f) {
+						f.value = date;
+					});
+				},
+				writable: true,
+				configurable: true
+			},
+			getData: {
+				value: function getData() {
+					var clean = arguments[0] === undefined ? false : arguments[0];
+	
+					var date = Calendar.get(true),
+					    format = function (n) {
+						return n.toLocaleString("en-GB", { minimumFractionDigits: 2 });
+					},
+					    item = this.form.get(true),
+					    repeat = item.repeat,
+					    errors = [];
+	
+					delete item.repeat;
+					if (!item.date) item.date = date;
+					if (!item.amount) errors.push("Please enter amount!");else {
+						item.amount = this.parseAmount(item.amount);
+						if (!clean) item.amount_str = format(item.amount);
+					}
+					if (errors.length && clean) {
+						return Toaster.error(errors[0]);
+					}if (!errors.length) {
+						return { items: repeatItems([item], repeat) };
+					}return {};
+				},
+				writable: true,
+				configurable: true
+			},
+			parseAmount: {
+				value: function parseAmount(amount) {
+					amount = ("" + amount).replace(/\s/g, "");
+					if (!/^[\+\-\\*\/\(\)\d\.]+$/i.test(amount)) {
+						return 0;
+					}if (/[\+\-\\*\/\.]+/i.test(amount)) {
+						try {
+							amount = eval(amount);
+						} catch (e) {
+							amount = 0;
+						}
+					}
+					return parseFloat(amount);
+				},
+				writable: true,
+				configurable: true
+			},
+			validate: {
+				value: function validate(data) {
+					if (!data || !data.length) {
+						return false;
+					}var _iteratorNormalCompletion = true;
+					var _didIteratorError = false;
+					var _iteratorError = undefined;
+	
+					try {
+						for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+							var d = _step.value;
+	
+							if (d.amount <= 0) return Toaster.error("Amount cannot be negative");
+						}
+					} catch (err) {
+						_didIteratorError = true;
+						_iteratorError = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion && _iterator["return"]) {
+								_iterator["return"]();
+							}
+						} finally {
+							if (_didIteratorError) {
+								throw _iteratorError;
+							}
+						}
+					}
+	
+					return true;
+				},
+				writable: true,
+				configurable: true
+			},
+			addInputEvents: {
+				value: function addInputEvents(subform) {
+					var inputs = subform.find(".amount");
+					inputs.on("keydown", this.onKeyDown.bind(this));
+				},
+				writable: true,
+				configurable: true
+			},
+			onKeyDown: {
+				value: function onKeyDown(e) {
+					if ($.isAllowed(e)) {
+						return true;
+					}e.preventDefault();
+				},
+				writable: true,
+				configurable: true
+			},
+			onSubmit: {
+				value: function onSubmit(e) {
+					var _this = this;
+	
+					e.preventDefault();
+					var data = this.getData(true);
+					if (!this.validate(data.items)) {
+						return;
+					}if (data.items) Data.save(data.items).then(function (resp) {
+						if (resp.result === "success") _this.reset();return resp;
+					}).then(this.cfg.onAdd);
+				},
+				writable: true,
+				configurable: true
+			}
+		});
+	
+		return Form;
+	})();
+	
+	module.exports = Form;
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+	
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var Toaster = _interopRequire(__webpack_require__(30));
+	
+	var Data = _interopRequire(__webpack_require__(25));
+	
+	var Categories = _interopRequire(__webpack_require__(27));
+	
+	var Calendar = _interopRequire(__webpack_require__(1));
+	
+	var Moment = _interopRequire(__webpack_require__(8));
+	
+	var tpl = __webpack_require__(29);
 	var _defaults = {
 		onAdd: function onAdd() {}
 	};
@@ -5157,7 +5407,7 @@
 	module.exports = Form;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5166,7 +5416,7 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Chart = _interopRequire(__webpack_require__(32));
+	var Chart = _interopRequire(__webpack_require__(33));
 	
 	var options = {
 		segmentShowStroke: false,
@@ -5225,7 +5475,7 @@
 	};
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5234,7 +5484,7 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Chart = _interopRequire(__webpack_require__(32));
+	var Chart = _interopRequire(__webpack_require__(33));
 	
 	var isReady = false,
 	    isInitialised = false,
@@ -5300,267 +5550,73 @@
 	};
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
-	
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Toaster = _interopRequire(__webpack_require__(29));
+	var isReady = false,
+	    chart,
+	    options = {
+		chart: { renderTo: "chart2", type: "pie", backgroundColor: null },
+		title: { align: "left", style: { color: "#eee" },
+			text: "Spending by time (day-by-day, current month), for [categories dropdown]"
+		},
+		colors: $.colors,
+		credits: { enabled: false },
 	
-	var Data = _interopRequire(__webpack_require__(25));
-	
-	var Calendar = _interopRequire(__webpack_require__(1));
-	
-	var Moment = _interopRequire(__webpack_require__(8));
-	
-	var _defaults = {
-		onAdd: function onAdd() {}
+		tooltip: { borderRadius: 0, hideDelay: 0,
+			backgroundColor: "rgba(0, 0, 0, 0.9)", style: { color: "#F0F0F0" }
+		},
+		legend: {
+			align: "left",
+			verticalAlign: "top",
+			layout: "vertical",
+			x: 0,
+			y: 30,
+			itemStyle: { color: "#ccc" },
+			itemHoverStyle: { color: "#fff" },
+			itemHiddenStyle: { color: "#888" }
+		},
+		plotOptions: {
+			pie: { borderWidth: 0, showInLegend: true, allowPointSelect: false,
+				dataLabels: { enabled: false }
+			}
+		}
 	};
 	
-	function cloneItem(item) {
-		var addMonths = arguments[1] === undefined ? 1 : arguments[1];
-	
-		var newItem = JSON.parse(JSON.stringify(item));
-		newItem.date = Moment(newItem.date).add(addMonths, "months").format("YYYY-MM-DD");
-		return newItem;
-	}
-	
-	function repeatItems(items, times) {
-		if (!items || !items.length) {
-			return [];
-		}var newItems = [];
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-	
-		try {
-			for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var item = _step.value;
-	
-				for (var i = 1; i < times; i++) {
-					newItems.push(cloneItem(item, i));
-				}
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	
-		items = items.concat(newItems);
-		items.sort(function (a, b) {
-			return a.date.localeCompare(b.date);
-		});
-		return items;
-	}
-	
-	var Form = (function () {
-		function Form(config) {
-			_classCallCheck(this, Form);
-	
-			this.cfg = Object.assign(_defaults, config);
-			this.el = this.cfg.target;
-			this.form = $.form(this.el[0]);
-			this.subforms = this.cfg.target.find(".subforms");
-	
-			this.categories = [];
-			this.catMap = {};
-	
-			this.el.on("submit", this.onSubmit.bind(this));
-	
-			if (typeof this.cfg.onChange === "function") {
-				this.form.observe((function (nv, ov, f) {
-					this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
-				}).bind(this));
-			}
-	
-			var subform = this.subforms.find(".form-row");
-			subform.find("input")[0].focus();
-			this.addInputEvents(subform);
-	
-			return this.reset();
-		}
-	
-		_prototypeProperties(Form, null, {
-			reset: {
-				value: function reset() {
-					this.form.reset();
-					var rep = this.el.find(".repeat-in");
-					if (rep) rep[0].value = 1;
-					return this;
-				},
-				writable: true,
-				configurable: true
-			},
-			set: {
-				value: function set(data) {
-					this.reset();
-					this.form.set(data);
-					return this;
-				},
-				writable: true,
-				configurable: true
-			},
-			setDate: {
-				value: function setDate(date) {
-					var dates = this.subforms.find("input[name$=\"date\"]");
-					$.each(dates, function (f) {
-						f.value = date;
-					});
-				},
-				writable: true,
-				configurable: true
-			},
-			getData: {
-				value: function getData() {
-					var clean = arguments[0] === undefined ? false : arguments[0];
-	
-					var date = Calendar.get(true),
-					    format = function (n) {
-						return n.toLocaleString("en-GB", { minimumFractionDigits: 2 });
-					},
-					    item = this.form.get(true),
-					    repeat = item.repeat,
-					    errors = [];
-	
-					delete item.repeat;
-					if (!item.date) item.date = date;
-					if (!item.amount) errors.push("Please enter amount!");else {
-						item.amount = this.parseAmount(item.amount);
-						if (!clean) item.amount_str = format(item.amount);
-					}
-					if (errors.length && clean) {
-						return Toaster.error(errors[0]);
-					}if (!errors.length) {
-						return { items: repeatItems([item], repeat) };
-					}return {};
-				},
-				writable: true,
-				configurable: true
-			},
-			parseAmount: {
-				value: function parseAmount(amount) {
-					amount = ("" + amount).replace(/\s/g, "");
-					if (!/^[\+\-\\*\/\(\)\d\.]+$/i.test(amount)) {
-						return 0;
-					}if (/[\+\-\\*\/\.]+/i.test(amount)) {
-						try {
-							amount = eval(amount);
-						} catch (e) {
-							amount = 0;
-						}
-					}
-					return parseFloat(amount);
-				},
-				writable: true,
-				configurable: true
-			},
-			validate: {
-				value: function validate(data) {
-					if (!data || !data.length) {
-						return false;
-					}var _iteratorNormalCompletion = true;
-					var _didIteratorError = false;
-					var _iteratorError = undefined;
-	
-					try {
-						for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-							var d = _step.value;
-	
-							if (d.amount <= 0) return Toaster.error("Amount cannot be negative");
-						}
-					} catch (err) {
-						_didIteratorError = true;
-						_iteratorError = err;
-					} finally {
-						try {
-							if (!_iteratorNormalCompletion && _iterator["return"]) {
-								_iterator["return"]();
-							}
-						} finally {
-							if (_didIteratorError) {
-								throw _iteratorError;
-							}
-						}
-					}
-	
-					return true;
-				},
-				writable: true,
-				configurable: true
-			},
-			addInputEvents: {
-				value: function addInputEvents(subform) {
-					var inputs = subform.find(".amount");
-					inputs.on("keydown", this.onKeyDown.bind(this));
-				},
-				writable: true,
-				configurable: true
-			},
-			onKeyDown: {
-				value: function onKeyDown(e) {
-					if ($.isAllowed(e)) {
-						return true;
-					}e.preventDefault();
-				},
-				writable: true,
-				configurable: true
-			},
-			onSubmit: {
-				value: function onSubmit(e) {
-					var _this = this;
-	
-					e.preventDefault();
-					var data = this.getData(true);
-					if (!this.validate(data.items)) {
-						return;
-					}if (data.items) Data.save(data.items).then(function (resp) {
-						if (resp.result === "success") _this.reset();return resp;
-					}).then(this.cfg.onAdd);
-				},
-				writable: true,
-				configurable: true
-			}
+	module.exports = function (data) {
+		data = data.map(function (item) {
+			return [item.label, item.value];
 		});
 	
-		return Form;
-	})();
-	
-	module.exports = Form;
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var H = __webpack_require__(31);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
+		if (!isReady) {
+			options.series = [{ data: data }];
+			chart = new window.Highcharts.Chart(options);
+			isReady = true;
+		} else chart.series[0].setData(data);
+	};
 
 /***/ },
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var H = __webpack_require__(32);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var util = _interopRequire(__webpack_require__(22));
+	var util = _interopRequire(__webpack_require__(23));
 	
 	function sizzle(mixed, context) {
 		if (!mixed) {
@@ -5738,14 +5794,14 @@
 	module.exports = sizzle;
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var util = _interopRequire(__webpack_require__(22));
+	var util = _interopRequire(__webpack_require__(23));
 	
 	var base_url = "api/";
 	
@@ -5797,7 +5853,7 @@
 		} };
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6042,7 +6098,7 @@
 	module.exports = Form;
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6083,7 +6139,7 @@
 	module.exports = { on: on, off: off, trigger: trigger };
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6202,7 +6258,7 @@
 	};
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6242,7 +6298,7 @@
 	};
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6388,56 +6444,7 @@
 	};
 
 /***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	var _url = "entries";
-	
-	module.exports = {
-		get: function (params) {
-			var id = typeof params === "number" ? params : null;
-			return $.get(_url + (id ? "/" + id : ""), params || {});
-		},
-	
-		save: function (params) {
-			if (params.length === 1 && params[0].id) params = params[0];
-			return $.post(_url + (params.id ? "/" + params.id : ""), params);
-		},
-	
-		del: function (id) {
-			return $.del(_url + "/" + id);
-		}
-	};
-
-/***/ },
 /* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	module.exports = {
-		spendingByCategory: function (params) {
-			return $.get("spendingByCategory", params || {});
-		},
-	
-		incomeVsExpenses: function (params) {
-			return $.get("incomeVsExpenses", params || {});
-		}
-	
-	};
-
-/***/ },
-/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6465,7 +6472,56 @@
 	};
 
 /***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var _url = "entries";
+	
+	module.exports = {
+		get: function (params) {
+			var id = typeof params === "number" ? params : null;
+			return $.get(_url + (id ? "/" + id : ""), params || {});
+		},
+	
+		save: function (params) {
+			if (params.length === 1 && params[0].id) params = params[0];
+			return $.post(_url + (params.id ? "/" + params.id : ""), params);
+		},
+	
+		del: function (id) {
+			return $.del(_url + "/" + id);
+		}
+	};
+
+/***/ },
 /* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	module.exports = {
+		spendingByCategory: function (params) {
+			return $.get("spendingByCategory", params || {});
+		},
+	
+		incomeVsExpenses: function (params) {
+			return $.get("incomeVsExpenses", params || {});
+		}
+	
+	};
+
+/***/ },
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6493,7 +6549,7 @@
 	};
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function webpackUniversalModuleDefinition(root, factory) {
@@ -7981,14 +8037,14 @@
 	;
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var H = __webpack_require__(31);
+	var H = __webpack_require__(32);
 	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"form-row\">\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]id\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]date\">\r");t.b("\n" + i);t.b("	<select name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]category_id\" class=\"category\">\r");t.b("\n" + i);if(t.s(t.f("categories",c,p,1),c,p,0,202,317,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("		<optgroup label=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("			");if(t.s(t.f("items",c,p,1),c,p,0,248,288,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<option value=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</option>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("		</optgroup>\r");t.b("\n" + i);});c.pop();}t.b("	</select>\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]amount\" class=\"amount\" placeholder=\"0.00\">\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]description\" class=\"description\" placeholder=\"description\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("first",c,p,1),c,p,0,518,590,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-angle-double-down\"></a>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	");if(!t.s(t.f("first",c,p,1),c,p,1,0,0,"")){t.b("<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>");};t.b("\r");t.b("\n" + i);t.b("</div>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"form-row\">\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]id\">\r\n\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]date\">\r\n\t<select name=\"items[{{idx}}]category_id\" class=\"category\">\r\n\t\t{{#categories}}\r\n\t\t<optgroup label=\"{{name}}\">\r\n\t\t\t{{#items}}<option value=\"{{id}}\">{{name}}</option>{{/items}}\r\n\t\t</optgroup>\r\n\t\t{{/categories}}\r\n\t</select>\r\n\t<input name=\"items[{{idx}}]amount\" class=\"amount\" placeholder=\"0.00\">\r\n\t<input name=\"items[{{idx}}]description\" class=\"description\" placeholder=\"description\">\r\n\t{{#first}}<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-angle-double-down\"></a>{{/first}}\r\n\t{{^first}}<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>{{/first}}\r\n</div>\r\n", H);return T.render.apply(T, arguments); };
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8018,7 +8074,7 @@
 	module.exports = Toaster;
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(module) {
@@ -8034,7 +8090,7 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -8054,14 +8110,14 @@
 	
 	// This file is for use with Node.js. See dist/ for browser files.
 	
-	var Hogan = __webpack_require__(33);
-	Hogan.Template = __webpack_require__(34).Template;
+	var Hogan = __webpack_require__(34);
+	Hogan.Template = __webpack_require__(35).Template;
 	Hogan.template = Hogan.Template;
 	module.exports = Hogan;
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -8368,7 +8424,7 @@
 				//Method for warning of errors
 				if (window.console && typeof window.console.warn == "function") console.warn(str);
 			},
-			amd = helpers.amd = ("function" == 'function' && __webpack_require__(35)),
+			amd = helpers.amd = ("function" == 'function' && __webpack_require__(36)),
 			//-- Math methods
 			isNumber = helpers.isNumber = function(n){
 				return !isNaN(parseFloat(n)) && isFinite(n);
@@ -11543,7 +11599,7 @@
 	}).call(this);
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -11972,7 +12028,7 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -12319,7 +12375,7 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
