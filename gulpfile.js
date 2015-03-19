@@ -10,18 +10,12 @@ var gulp = require('gulp'),
     live   = require('gulp-livereload'),
     notify = require('gulp-notify'),
     plumber = require('gulp-plumber'),
-	del = require('del'),
 	wpCfg = require('./gulpfile-webpack.conf.js'),
 	wpErr = function (err, stats) {
 		if (err) notify.onError('Error: ' + err);
 		err = stats.compilation.errors;
 		if (err.length) notify.onError('Error: ' + err[0].message);
 	};
-
-
-gulp.task('clean', function (cb) {
-	del(['assets/**/*.{css,js,map}' ], cb);
-});
 
 
 gulp.task('js', function () {
@@ -57,7 +51,6 @@ gulp.task('watch', ['js', 'styl'], function () {
 });
 
 gulp.task('default', [
-	'clean',
 	'jshint',
 	'js',
 	'styl',

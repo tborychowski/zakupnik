@@ -5,6 +5,7 @@ class Stats extends DB {
 
 
 	public function spendingByCategory ($p) {
+		$data = [];
 		$where = '';
 		if (!empty($p['date'])) $where = 'WHERE entries.date LIKE \'' . $p['date'] . '%\' ';
 
@@ -14,10 +15,11 @@ class Stats extends DB {
 
 		$query = $this->db->query($q);
 		if ($query) {
-			$this->output = $query->fetchAll(PDO::FETCH_FUNC, function ($cat, $amount) {
-				return ['label' => $cat, 'value' => round($amount) ];
+			$data = $query->fetchAll(PDO::FETCH_FUNC, function ($cat, $amount) {
+				return [$cat, round($amount) ];
 			});
 		}
+		$this->output = [ 'data' => $data ];
 		return $this;
 	}
 
@@ -32,12 +34,17 @@ class Stats extends DB {
 
 	public function incomeVsExpenses ($p) {
 		$y = isset($p['year']) ? $p['year'] : date('Y');
-		$this->output = [ 'income' => [], 'expenses' => [] ];
+		$income = [];
+		$expenses = [];
 		for ($m = 1; $m <= 12; $m++) {
 			$month = $y . '-' . substr('0' . $m, -2);
-			array_push($this->output['income'], $this->getIncomeForMonth($month));
-			array_push($this->output['expenses'], $this->getExpensesSumForMonth($month));
+			array_push($income, $this->getIncomeForMonth($month));
+			array_push($expenses, $this->getExpensesSumForMonth($month));
 		}
+		$this->output = [
+			[ 'name' => 'income', 'data' => $income ],
+			[ 'name' => 'expenses', 'data' => $expenses ]
+		];
 
 		return $this;
 	}
