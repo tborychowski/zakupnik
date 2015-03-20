@@ -7,6 +7,10 @@ export default {
 
 	incomeVsExpenses: (params) => {
 		return $.get('incomeVsExpenses', params || {});
+	},
+
+	spendingByDay: (params) => {
+		return $.get('spendingByDay', params || {});
 	}
 
 };

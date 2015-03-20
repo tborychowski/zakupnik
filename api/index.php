@@ -55,6 +55,11 @@ Router::get('/incomeVsExpenses', function ($params) {
 	$db = new Stats();
 	echo $db->incomeVsExpenses($params)->to_json();
 });
+
+Router::get('/spendingByDay', function ($params) {
+	$db = new Stats();
+	echo $db->spendingByDay($params)->to_json();
+});
 /*** STATS ****************************************************************************************/
 
 

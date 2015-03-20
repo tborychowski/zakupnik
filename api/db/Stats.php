@@ -24,6 +24,8 @@ class Stats extends DB {
 	}
 
 
+
+
 	private function getIncomeForMonth($m) {
 		return $this->db->sum('incomes', 'amount', [ 'date[~]' => $m . '%' ]);
 	}
@@ -50,6 +52,26 @@ class Stats extends DB {
 	}
 
 
+
+
+	public function spendingByDay ($p) {
+		$data = [];
+		$where = '';
+		// if (!empty($p['date'])) $where = 'WHERE entries.date LIKE \'' . $p['date'] . '%\' ';
+
+		$q = 'SELECT UNIX_TIMESTAMP(STR_TO_DATE(date, \'%Y-%m-%d\')) as date, ' .
+			'SUM(amount) as amount FROM entries ' . $where .
+			'GROUP BY date ORDER BY date ASC';
+
+		$query = $this->db->query($q);
+		if ($query) {
+			$data = $query->fetchAll(PDO::FETCH_FUNC, function ($ut, $amount) {
+				return [$ut * 1000, floatval($amount) ];
+			});
+		}
+		$this->output = [ 'name' => 'Expenses', 'data' => $data ];
+		return $this;
+	}
 
 
 
