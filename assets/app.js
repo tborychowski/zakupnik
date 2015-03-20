@@ -68,9 +68,9 @@
 	
 	var Pikaday = _interopRequire(__webpack_require__(8));
 	
-	var Moment = _interopRequire(__webpack_require__(9));
+	var Moment = _interopRequire(__webpack_require__(10));
 	
-	var tpl = __webpack_require__(10);
+	var tpl = __webpack_require__(9);
 	var el,
 	    picker,
 	    isReady = false,
@@ -202,19 +202,19 @@
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var sizzle = _interopRequire(__webpack_require__(16));
+	var sizzle = _interopRequire(__webpack_require__(17));
 	
-	var ajax = _interopRequire(__webpack_require__(17));
+	var ajax = _interopRequire(__webpack_require__(18));
 	
-	var form = _interopRequire(__webpack_require__(18));
+	var form = _interopRequire(__webpack_require__(19));
 	
-	var pubsub = _interopRequire(__webpack_require__(19));
+	var pubsub = _interopRequire(__webpack_require__(20));
 	
-	var keys = _interopRequire(__webpack_require__(20));
+	var keys = _interopRequire(__webpack_require__(21));
 	
-	var colors = _interopRequire(__webpack_require__(21));
+	var colors = _interopRequire(__webpack_require__(22));
 	
-	var util = _interopRequire(__webpack_require__(22));
+	var util = _interopRequire(__webpack_require__(23));
 	
 	var all = { ajax: ajax, form: form };
 	Object.assign(all, ajax, pubsub, keys, colors, util);
@@ -384,13 +384,13 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(26));
+	var Data = _interopRequire(__webpack_require__(25));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
 	var Grid = _interopRequire(__webpack_require__(28));
 	
-	var Form = _interopRequire(__webpack_require__(15));
+	var Form = _interopRequire(__webpack_require__(12));
 	
 	var el,
 	    grid,
@@ -537,13 +537,13 @@
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Data = _interopRequire(__webpack_require__(25));
+	var Data = _interopRequire(__webpack_require__(26));
 	
-	var chart0 = _interopRequire(__webpack_require__(12));
+	var chart0 = _interopRequire(__webpack_require__(13));
 	
-	var chart1 = _interopRequire(__webpack_require__(13));
+	var chart1 = _interopRequire(__webpack_require__(14));
 	
-	var chart2 = _interopRequire(__webpack_require__(14));
+	var chart2 = _interopRequire(__webpack_require__(15));
 	
 	var lastLoadDate;
 	
@@ -585,7 +585,7 @@
 	    form,
 	    btn = {},
 	    catSel;
-	var tpl = __webpack_require__(23);
+	var tpl = __webpack_require__(16);
 	
 	function updateCatSelect(data) {
 		var options = ["<option value=\"0\"></option>"];
@@ -729,7 +729,7 @@
 	    if (true) {
 	        // CommonJS module
 	        // Load moment.js as an optional dependency
-	        try { moment = __webpack_require__(9); } catch (e) {}
+	        try { moment = __webpack_require__(10); } catch (e) {}
 	        module.exports = factory(moment);
 	    } else if (typeof define === 'function' && define.amd) {
 	        // AMD. Register as an anonymous module.
@@ -1748,6 +1748,13 @@
 
 /***/ },
 /* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var H = __webpack_require__(32);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<input type=\"text\" class=\"date\">\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>");return t.fl(); },partials: {}, subs: {  }}, "<input type=\"text\" class=\"date\">\r\n<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r\n<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r\n<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>", H);return T.render.apply(T, arguments); };
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {//! moment.js
@@ -4797,13 +4804,6 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(31)(module)))
 
 /***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var H = __webpack_require__(32);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<input type=\"text\" class=\"date\">\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>");return t.fl(); },partials: {}, subs: {  }}, "<input type=\"text\" class=\"date\">\r\n<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r\n<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r\n<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>", H);return T.render.apply(T, arguments); };
-
-/***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -4825,7 +4825,7 @@
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Moment = _interopRequire(__webpack_require__(9));
+	var Moment = _interopRequire(__webpack_require__(10));
 	
 	var tpl = __webpack_require__(29);
 	var _defaults = {
@@ -5167,173 +5167,6 @@
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	var isReady = false,
-	    chart,
-	    options = {
-		chart: { renderTo: "chart0", type: "pie", backgroundColor: null },
-		title: { align: "left", style: { color: "#eee" },
-			text: "Spending by category (this month)"
-		},
-		colors: $.colors,
-		credits: { enabled: false },
-	
-		tooltip: { borderRadius: 0, hideDelay: 0,
-			backgroundColor: "rgba(0, 0, 0, 0.9)", style: { color: "#F0F0F0" }
-		},
-		legend: {
-			align: "left",
-			verticalAlign: "top",
-			layout: "vertical",
-			x: 0,
-			y: 30,
-			itemStyle: { color: "#ccc" },
-			itemHoverStyle: { color: "#fff" },
-			itemHiddenStyle: { color: "#888" }
-		},
-		plotOptions: {
-			pie: { borderWidth: 0, showInLegend: true, allowPointSelect: false,
-				dataLabels: { enabled: false }
-			}
-		}
-	};
-	
-	module.exports = function (data) {
-		if (!isReady) {
-			options.series = [data];
-			chart = new window.Highcharts.Chart(options);
-			isReady = true;
-		} else chart.series[0] = data;
-	};
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	var isReady = false,
-	    chart,
-	    options = {
-		chart: { renderTo: "chart1", type: "line", backgroundColor: null },
-		title: { align: "left", style: { color: "#eee" },
-			text: "Income vs Expenses (this year)"
-		},
-		colors: $.colors,
-		credits: { enabled: false },
-		yAxis: {
-			title: { text: null },
-			labels: { style: { color: "#ccc" } },
-			showFirstLabel: false,
-			min: 0,
-			gridLineColor: "#444"
-		},
-		xAxis: {
-			labels: { style: { color: "#ccc" } },
-			categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-		},
-		tooltip: {
-			backgroundColor: "rgba(0, 0, 0, 0.9)",
-			style: { color: "#F0F0F0" },
-			crosshairs: true,
-			shared: true,
-			hideDelay: 0,
-			valuePrefix: "€"
-		},
-		legend: {
-			align: "right",
-			verticalAlign: "top",
-			x: 0,
-			y: 30,
-			itemStyle: { color: "#ccc" },
-			itemHoverStyle: { color: "#fff" },
-			itemHiddenStyle: { color: "#888" }
-		}
-	};
-	
-	module.exports = function (data) {
-		if (!isReady) {
-			options.series = data;
-			chart = new window.Highcharts.Chart(options);
-			isReady = true;
-		} else chart.setSeries(data);
-	};
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	var isReady = false,
-	    chart,
-	    options = {
-		chart: { renderTo: "chart2", backgroundColor: null },
-		title: { align: "left", style: { color: "#eee" },
-			text: "Spending by time (day-by-day, current month), for [categories dropdown]"
-		},
-		colors: $.colors,
-		credits: { enabled: false },
-		rangeSelector: { enabled: false },
-		yAxis: {
-			title: { text: null },
-			labels: {
-				style: { color: "#ccc" },
-				formatter: function formatter() {
-					return "€" + this.value;
-				}
-			},
-			showFirstLabel: false,
-			min: 0,
-			tickPixelInterval: 50,
-			gridLineColor: "#444"
-		},
-		xAxis: {
-			labels: { style: { color: "#ccc" } }
-		},
-		tooltip: {
-			hideDelay: 0,
-			backgroundColor: "rgba(0, 0, 0, 0.9)",
-			style: { color: "#F0F0F0" },
-			valuePrefix: "€"
-		},
-		legend: {
-			align: "left",
-			verticalAlign: "top",
-			layout: "vertical",
-			x: 0,
-			y: 30,
-			itemStyle: { color: "#ccc" },
-			itemHoverStyle: { color: "#fff" },
-			itemHiddenStyle: { color: "#888" }
-		}
-	};
-	
-	module.exports = function (data) {
-		if (!isReady) {
-			options.series = [data];
-			chart = new window.Highcharts.StockChart(options);
-			isReady = true;
-		} else chart.series[0].setData(data);
-	};
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
 	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
 	
 	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
@@ -5342,11 +5175,11 @@
 	
 	var Toaster = _interopRequire(__webpack_require__(30));
 	
-	var Data = _interopRequire(__webpack_require__(26));
+	var Data = _interopRequire(__webpack_require__(25));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Moment = _interopRequire(__webpack_require__(9));
+	var Moment = _interopRequire(__webpack_require__(10));
 	
 	var _defaults = {
 		onAdd: function onAdd() {}
@@ -5573,14 +5406,188 @@
 	module.exports = Form;
 
 /***/ },
-/* 16 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var util = _interopRequire(__webpack_require__(22));
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var isReady = false,
+	    chart,
+	    options = {
+		chart: { renderTo: "chart0", type: "pie", backgroundColor: null },
+		title: { align: "left", style: { color: "#eee" },
+			text: "Spending by category (this month)"
+		},
+		colors: $.colors,
+		credits: { enabled: false },
+	
+		tooltip: { borderRadius: 0, hideDelay: 0,
+			backgroundColor: "rgba(0, 0, 0, 0.9)", style: { color: "#F0F0F0" }
+		},
+		legend: {
+			align: "left",
+			verticalAlign: "top",
+			layout: "vertical",
+			x: 0,
+			y: 30,
+			itemStyle: { color: "#ccc" },
+			itemHoverStyle: { color: "#fff" },
+			itemHiddenStyle: { color: "#888" }
+		},
+		plotOptions: {
+			pie: { borderWidth: 0, showInLegend: true, allowPointSelect: false,
+				dataLabels: { enabled: false }
+			}
+		}
+	};
+	
+	module.exports = function (data) {
+		if (!isReady) {
+			options.series = [data];
+			chart = new window.Highcharts.Chart(options);
+			isReady = true;
+		} else chart.series[0] = data;
+	};
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var isReady = false,
+	    chart,
+	    options = {
+		chart: { renderTo: "chart1", type: "line", backgroundColor: null },
+		title: { align: "left", style: { color: "#eee" },
+			text: "Income vs Expenses (this year)"
+		},
+		colors: $.colors,
+		credits: { enabled: false },
+		yAxis: {
+			title: { text: null },
+			labels: { style: { color: "#ccc" } },
+			showFirstLabel: false,
+			min: 0,
+			gridLineColor: "#444"
+		},
+		xAxis: {
+			labels: { style: { color: "#ccc" } },
+			categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+		},
+		tooltip: {
+			backgroundColor: "rgba(0, 0, 0, 0.9)",
+			style: { color: "#F0F0F0" },
+			crosshairs: true,
+			shared: true,
+			hideDelay: 0,
+			valuePrefix: "€"
+		},
+		legend: {
+			align: "right",
+			verticalAlign: "top",
+			x: 0,
+			y: 30,
+			itemStyle: { color: "#ccc" },
+			itemHoverStyle: { color: "#fff" },
+			itemHiddenStyle: { color: "#888" }
+		}
+	};
+	
+	module.exports = function (data) {
+		if (!isReady) {
+			options.series = data;
+			chart = new window.Highcharts.Chart(options);
+			isReady = true;
+		} else chart.setSeries(data);
+	};
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var isReady = false,
+	    chart,
+	    options = {
+		chart: { renderTo: "chart2", backgroundColor: null },
+		title: { align: "left", style: { color: "#eee" },
+			text: "Spending by time (day-by-day, current month), for [categories dropdown]"
+		},
+		colors: $.colors,
+		credits: { enabled: false },
+		rangeSelector: { enabled: false },
+		yAxis: {
+			title: { text: null },
+			labels: {
+				style: { color: "#ccc" },
+				formatter: function formatter() {
+					return "€" + this.value;
+				}
+			},
+			showFirstLabel: false,
+			min: 0,
+			tickPixelInterval: 50,
+			gridLineColor: "#444"
+		},
+		xAxis: {
+			labels: { style: { color: "#ccc" } }
+		},
+		tooltip: {
+			hideDelay: 0,
+			backgroundColor: "rgba(0, 0, 0, 0.9)",
+			style: { color: "#F0F0F0" },
+			valuePrefix: "€"
+		},
+		legend: {
+			align: "left",
+			verticalAlign: "top",
+			layout: "vertical",
+			x: 0,
+			y: 30,
+			itemStyle: { color: "#ccc" },
+			itemHoverStyle: { color: "#fff" },
+			itemHiddenStyle: { color: "#888" }
+		}
+	};
+	
+	module.exports = function (data) {
+		if (!isReady) {
+			options.series = [data];
+			chart = new window.Highcharts.StockChart(options);
+			isReady = true;
+		} else chart.series[0].setData(data);
+	};
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var H = __webpack_require__(32);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var util = _interopRequire(__webpack_require__(23));
 	
 	function sizzle(mixed, context) {
 		if (!mixed) {
@@ -5758,14 +5765,14 @@
 	module.exports = sizzle;
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var util = _interopRequire(__webpack_require__(22));
+	var util = _interopRequire(__webpack_require__(23));
 	
 	var base_url = "api/";
 	
@@ -5817,7 +5824,7 @@
 		} };
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6062,7 +6069,7 @@
 	module.exports = Form;
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6103,7 +6110,7 @@
 	module.exports = { on: on, off: off, trigger: trigger };
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6222,7 +6229,7 @@
 	};
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6262,7 +6269,7 @@
 	};
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6408,13 +6415,6 @@
 	};
 
 /***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var H = __webpack_require__(32);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
-
-/***/ },
 /* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -6452,31 +6452,6 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	module.exports = {
-		spendingByCategory: function (params) {
-			return $.get("spendingByCategory", params || {});
-		},
-	
-		incomeVsExpenses: function (params) {
-			return $.get("incomeVsExpenses", params || {});
-		},
-	
-		spendingByDay: function (params) {
-			return $.get("spendingByDay", params || {});
-		}
-	
-	};
-
-/***/ },
-/* 26 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
 	var _url = "incomes";
 	
 	module.exports = {
@@ -6493,6 +6468,31 @@
 		del: function (id) {
 			return $.del(_url + "/" + id);
 		}
+	};
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	module.exports = {
+		spendingByCategory: function (params) {
+			return $.get("spendingByCategory", params || {});
+		},
+	
+		incomeVsExpenses: function (params) {
+			return $.get("incomeVsExpenses", params || {});
+		},
+	
+		spendingByDay: function (params) {
+			return $.get("spendingByDay", params || {});
+		}
+	
 	};
 
 /***/ },

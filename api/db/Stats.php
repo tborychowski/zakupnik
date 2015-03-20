@@ -60,16 +60,39 @@ class Stats extends DB {
 		// if (!empty($p['date'])) $where = 'WHERE entries.date LIKE \'' . $p['date'] . '%\' ';
 
 		$q = 'SELECT UNIX_TIMESTAMP(STR_TO_DATE(date, \'%Y-%m-%d\')) as date, ' .
+		// $q = 'SELECT date, ' .
 			'SUM(amount) as amount FROM entries ' . $where .
 			'GROUP BY date ORDER BY date ASC';
 
 		$query = $this->db->query($q);
 		if ($query) {
-			$data = $query->fetchAll(PDO::FETCH_FUNC, function ($ut, $amount) {
+			$newData = $query->fetchAll(PDO::FETCH_FUNC, function ($ut, $amount) {
 				return [$ut * 1000, floatval($amount) ];
 			});
+
+			// $newData = [];
+			// foreach ($data as $item) $newData[$item[0]] = $item[1];
+
+			// $first = strtotime($data[0][0]);
+			// $last = strtotime($data[count($data)-1][0]);
+			// $days = [];
+			// for ($i = $first; $i <= $last; $i += 86400) {
+			// 	$days[] = date('Y-m-d', $i);
+			// }
+
+			// $data = [];
+			// foreach ($days as $day) {
+			// 	if (isset($newData[$day])) $data[$day] = $newData[$day];
+			// 	else $data[$day] = 0;
+			// }
+
+			// $newData = [];
+			// foreach ($data as $d => $v) {
+			// 	$newData[] = [strtotime($d) * 1000, $v];
+			// }
 		}
-		$this->output = [ 'name' => 'Expenses', 'data' => $data ];
+
+		$this->output = [ 'name' => 'Expenses', 'data' => $newData ];
 		return $this;
 	}
 
