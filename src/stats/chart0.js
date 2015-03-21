@@ -10,8 +10,15 @@ var isReady = false,
 		colors: $.colors,
 		credits: { enabled: false },
 
-		tooltip: { borderRadius: 0, hideDelay: 0, //borderWidth: 0,
-			backgroundColor: 'rgba(0, 0, 0, 0.9)', style: { color: '#F0F0F0' }
+		tooltip: {
+			hideDelay: 0,
+			backgroundColor: 'rgba(0, 0, 0, 0.9)',
+			style: { color: '#F0F0F0' },
+			headerFormat: '<span style="font-size: 10px">Expenses</span><br/>',
+			pointFormatter: function () {
+				return '<span style="color: ' + this.color + '">●</span> ' +
+					this.name + ': €' + this.y;
+			}
 		},
 		legend: {
 			align: 'left',

@@ -68,9 +68,9 @@
 	
 	var Pikaday = _interopRequire(__webpack_require__(8));
 	
-	var Moment = _interopRequire(__webpack_require__(10));
+	var Moment = _interopRequire(__webpack_require__(9));
 	
-	var tpl = __webpack_require__(9);
+	var tpl = __webpack_require__(10);
 	var el,
 	    picker,
 	    isReady = false,
@@ -202,19 +202,19 @@
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 	
-	var sizzle = _interopRequire(__webpack_require__(17));
+	var sizzle = _interopRequire(__webpack_require__(11));
 	
-	var ajax = _interopRequire(__webpack_require__(18));
+	var ajax = _interopRequire(__webpack_require__(12));
 	
-	var form = _interopRequire(__webpack_require__(19));
+	var form = _interopRequire(__webpack_require__(13));
 	
-	var pubsub = _interopRequire(__webpack_require__(20));
+	var pubsub = _interopRequire(__webpack_require__(14));
 	
-	var keys = _interopRequire(__webpack_require__(21));
+	var keys = _interopRequire(__webpack_require__(15));
 	
-	var colors = _interopRequire(__webpack_require__(22));
+	var colors = _interopRequire(__webpack_require__(16));
 	
-	var util = _interopRequire(__webpack_require__(23));
+	var util = _interopRequire(__webpack_require__(17));
 	
 	var all = { ajax: ajax, form: form };
 	Object.assign(all, ajax, pubsub, keys, colors, util);
@@ -238,7 +238,7 @@
 	
 	var Grid = _interopRequire(__webpack_require__(28));
 	
-	var Form = _interopRequire(__webpack_require__(11));
+	var Form = _interopRequire(__webpack_require__(18));
 	
 	var el,
 	    grid,
@@ -390,7 +390,7 @@
 	
 	var Grid = _interopRequire(__webpack_require__(28));
 	
-	var Form = _interopRequire(__webpack_require__(12));
+	var Form = _interopRequire(__webpack_require__(19));
 	
 	var el,
 	    grid,
@@ -539,11 +539,11 @@
 	
 	var Data = _interopRequire(__webpack_require__(26));
 	
-	var chart0 = _interopRequire(__webpack_require__(13));
+	var chart0 = _interopRequire(__webpack_require__(20));
 	
-	var chart1 = _interopRequire(__webpack_require__(14));
+	var chart1 = _interopRequire(__webpack_require__(21));
 	
-	var chart2 = _interopRequire(__webpack_require__(15));
+	var chart2 = _interopRequire(__webpack_require__(22));
 	
 	var lastLoadDate;
 	
@@ -585,7 +585,7 @@
 	    form,
 	    btn = {},
 	    catSel;
-	var tpl = __webpack_require__(16);
+	var tpl = __webpack_require__(23);
 	
 	function updateCatSelect(data) {
 		var options = ["<option value=\"0\"></option>"];
@@ -729,7 +729,7 @@
 	    if (true) {
 	        // CommonJS module
 	        // Load moment.js as an optional dependency
-	        try { moment = __webpack_require__(10); } catch (e) {}
+	        try { moment = __webpack_require__(9); } catch (e) {}
 	        module.exports = factory(moment);
 	    } else if (typeof define === 'function' && define.amd) {
 	        // AMD. Register as an anonymous module.
@@ -1748,13 +1748,6 @@
 
 /***/ },
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var H = __webpack_require__(32);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<input type=\"text\" class=\"date\">\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>");return t.fl(); },partials: {}, subs: {  }}, "<input type=\"text\" class=\"date\">\r\n<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r\n<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r\n<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>", H);return T.render.apply(T, arguments); };
-
-/***/ },
-/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {//! moment.js
@@ -4801,10 +4794,852 @@
 	    }
 	}).call(this);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(31)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(30)(module)))
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var H = __webpack_require__(32);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<input type=\"text\" class=\"date\">\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>");return t.fl(); },partials: {}, subs: {  }}, "<input type=\"text\" class=\"date\">\r\n<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r\n<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r\n<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>", H);return T.render.apply(T, arguments); };
 
 /***/ },
 /* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var util = _interopRequire(__webpack_require__(17));
+	
+	function sizzle(mixed, context) {
+		if (!mixed) {
+			return [];
+		}var el;
+		if (typeof mixed !== "string") el = mixed;else if (/<[a-z][\s\S]*>/i.test(mixed)) {
+			el = new DOMParser().parseFromString(mixed, "text/html").body.firstChild;
+		} else el = (context || document).querySelectorAll(mixed);
+	
+		if (el.nodeType) el = [el];else if (util.isNodeList(el)) el = Array.prototype.slice.call(el);
+	
+		return Object.assign(el || [], sizzle.fn);
+	}
+	
+	sizzle.fn = {};
+	sizzle.fn.find = function (selector) {
+		return sizzle(selector, this[0]);
+	};
+	sizzle.fn.filter = function (selector) {
+		var elems = Array.prototype.filter.call(this, function (el) {
+			return el.matches(selector);
+		});
+		return sizzle(elems);
+	};
+	
+	sizzle.fn.first = function () {
+		return sizzle(this[0]);
+	};
+	sizzle.fn.last = function () {
+		return sizzle(this[this.length - 1]);
+	};
+	sizzle.fn.eq = function (idx) {
+		return sizzle(this[idx || 0]);
+	};
+	
+	sizzle.fn.appendTo = function (parent) {
+		if (!this || !this.length) return this;
+		if (typeof parent === "string") parent = sizzle(parent);
+		parent[0].appendChild(this[0]);
+		return this;
+	};
+	
+	sizzle.fn.append = function (child) {
+		if (!this || !this.length) return this;
+		if (typeof child === "string") child = sizzle(child);
+		this[0].appendChild(child[0]);
+		return this;
+	};
+	
+	sizzle.fn.on = function (eventName, cb) {
+		if (!this || !this.length) return this;
+		this.forEach(function (el) {
+			el.addEventListener(eventName, cb);
+		});
+		return this;
+	};
+	
+	sizzle.fn.off = function (eventName, cb) {
+		if (!this || !this.length) return this;
+		this.forEach(function (el) {
+			el.removeEventListener(eventName, cb);
+		});
+		return this;
+	};
+	
+	sizzle.fn.closest = function (cls) {
+		if (!this || !this.length) return false;
+		var has = false,
+		    el = this[0];
+		while (!has && el) {
+			has = el.matches(cls);
+			if (has) return sizzle(el);
+			el = el.parentNode;
+			if (el.tagName === "HTML") return null;
+		}
+		return null;
+	};
+	
+	sizzle.fn.is = function (selector) {
+		if (!this || !this.length) return false;
+		return this[0].matches(selector);
+	};
+	
+	sizzle.fn.isIn = function () {
+		for (var _len = arguments.length, classes = Array(_len), _key = 0; _key < _len; _key++) {
+			classes[_key] = arguments[_key];
+		}
+	
+		var target = this && this.length ? this : null;
+		if (target) {
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+	
+			try {
+				for (var _iterator = classes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var cls = _step.value;
+					if (target.closest(cls)) return true;
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator["return"]) {
+						_iterator["return"]();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+		}
+		return false;
+	};
+	
+	function modElCls(el, action, cls, cond) {
+		if (!el || !el.length) {
+			return el;
+		}cls = cls.split(" ");
+		if (typeof cond === "boolean") {
+			el.forEach(function (el) {
+				cls.forEach(function (c) {
+					el.classList[action](c, cond);
+				});
+			});
+		} else {
+			el.forEach(function (el) {
+				cls.forEach(function (c) {
+					el.classList[action](c);
+				});
+			});
+		}
+		return el;
+	}
+	
+	sizzle.fn.addClass = function (cls) {
+		return modElCls(this, "add", cls);
+	};
+	sizzle.fn.removeClass = function (cls) {
+		return modElCls(this, "remove", cls);
+	};
+	sizzle.fn.toggleClass = function (cls, cond) {
+		return modElCls(this, "toggle", cls, cond);
+	};
+	sizzle.fn.hasClass = function (cls) {
+		if (!this || !this.length) return false;
+		return this[0].classList.contains(cls);
+	};
+	
+	sizzle.fn.html = function (html) {
+		if (!this || !this.length) return this;
+		this.forEach(function (el) {
+			el.innerHTML = html;
+		});
+		return this;
+	};
+	
+	sizzle.fn.remove = function () {
+		if (!this || !this.length) return this;
+		this.forEach(function (el) {
+			el.remove();
+		});
+		return this;
+	};
+	
+	sizzle.fn.data = function (key) {
+		if (!this || !this.length) return this;
+		if (!this[0].dataset) return null;
+		if (key) return this[0].dataset[key];
+		return this[0].dataset;
+	};
+	
+	module.exports = sizzle;
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var util = _interopRequire(__webpack_require__(17));
+	
+	var base_url = "api/";
+	
+	function ajax(options) {
+		if (typeof options === "string") options = { url: options };
+	
+		var req = new XMLHttpRequest(),
+		    resp,
+		    data = options.data || "";
+		options.url = base_url + options.url;
+		options.method = options.method || "GET";
+		options.type = options.type || "json";
+	
+		if (data) {
+			if (options.method.toLowerCase() === "get") options.url += util.serialize(data);else if (options.type === "json") data = JSON.stringify(data);
+		}
+		return new Promise(function (resolve, reject) {
+			req.open(options.method, options.url, true);
+			req.onload = function () {
+				if (req.status >= 200 && req.status < 400) {
+					resp = req.responseText;
+					try {
+						resp = JSON.parse(resp);
+					} catch (e) {}
+					resolve(resp);
+				} else reject(req.statusText);
+			};
+			req.onerror = function () {
+				reject(req.statusText);
+			};
+			req.setRequestHeader("Content-Type", "application/" + options.type + "; charset=UTF-8");
+			req.send(data);
+		});
+	}
+	
+	module.exports = {
+		ajax: ajax,
+		get: function (url, data) {
+			return ajax({ url: url, data: data || {} });
+		},
+		post: function (url, data) {
+			return ajax({ url: url, data: data || {}, method: "POST" });
+		},
+		put: function (url, data) {
+			return ajax({ url: url, data: data || {}, method: "PUT" });
+		},
+		del: function (url, data) {
+			return ajax({ url: url, data: data || {}, method: "DELETE" });
+		} };
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var keyBreaker = /[^\[\]]+/g;
+	var numberMatcher = /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/;
+	
+	function _isNumber(value) {
+		if (typeof value === "number") {
+			return true;
+		}if (typeof value !== "string") {
+			return false;
+		}return value.match(numberMatcher);
+	}
+	
+	function _decodeEntities(str) {
+		var d = document.createElement("div");
+		d.innerHTML = str;
+		return d.innerText || d.textContent;
+	}
+	
+	function _getInputs(form) {
+		var inputs = form.querySelectorAll("[name]");
+		return Array.prototype.slice.call(inputs) || [];
+	}
+	
+	function Form(el) {
+		if (!el) {
+			return null;
+		}if (!(this instanceof Form)) {
+			return new Form(el);
+		}this.form = el;
+		if (el.elements) this.inputs = el.elements;
+	}
+	
+	Form.prototype.set = function (params, clear) {
+		var inputs = _getInputs(this.form);
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = inputs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var input = _step.value;
+	
+				var name = input.name,
+				    value = typeof params[name] === "undefined" ? "" : params[name];
+	
+				if (name.indexOf("[") > -1) {
+					var v = params;
+					var names = name.replace(/[\[\]]/g, "|").split("|");
+					var _iteratorNormalCompletion2 = true;
+					var _didIteratorError2 = false;
+					var _iteratorError2 = undefined;
+	
+					try {
+						for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+							var n = _step2.value;
+	
+							if (v[n]) v = v[n];else {
+								v = undefined;if (_iterator2["return"]) _iterator2["return"]();
+								break;
+							}
+						}
+					} catch (err) {
+						_didIteratorError2 = true;
+						_iteratorError2 = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+								_iterator2["return"]();
+							}
+						} finally {
+							if (_didIteratorError2) {
+								throw _iteratorError2;
+							}
+						}
+					}
+	
+					value = v;
+				}
+	
+				if (clear !== true && value === undefined) return;
+	
+				if (value === null || value === undefined) value = "";
+	
+				if (typeof value === "string" && value.indexOf("&") > -1) value = _decodeEntities(value);
+	
+				if (input.type === "radio") input.checked = input.value.toString() === value.toString();else if (input.type === "checkbox") input.checked = value;else if (input.tagName === "SELECT") {
+					if (value === "" || value === undefined) input.selectedIndex = 0;else input.value = value;
+				} else input.value = value;
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		return this;
+	};
+	
+	Form.prototype.get = function () {
+		var convert = arguments[0] === undefined ? false : arguments[0];
+	
+		var inputs = _getInputs(this.form),
+		    data = {},
+		    current;
+	
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = inputs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var input = _step.value;
+	
+				var type = input.type && input.type.toLowerCase(),
+				    value = undefined,
+				    parts = undefined,
+				    lastPart = undefined,
+				    last = undefined;
+	
+				if (type === "submit" || !input.name || input.disabled) return;
+	
+				value = input.value;
+				parts = input.name.match(keyBreaker);
+	
+				if (type === "radio" && !input.checked) return;
+	
+				if (type === "checkbox") value = input.checked;
+	
+				if (convert) {
+					if (_isNumber(value)) {
+						var tv = parseFloat(value);
+						var cmp = tv + "";
+	
+						if (value.indexOf(".") > 0) cmp = tv.toFixed(value.split(".")[1].length);
+						if (cmp === value) value = tv;
+					} else if (value === "true") value = true;else if (value === "false") value = false;
+					if (value === "") value = null;
+				}
+	
+				current = data;
+	
+				for (var i = 0; i < parts.length - 1; i++) {
+					current[parts[i]] = current[parts[i]] || {};
+					current = current[parts[i]];
+				}
+				lastPart = parts[parts.length - 1];
+	
+				last = current[lastPart];
+				if (last) {
+					if (!Array.isArray(last)) current[lastPart] = last === undefined ? [] : [last];
+					current[lastPart].push(value);
+				} else current[lastPart] = value;
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		return data;
+	};
+	
+	Form.prototype.reset = function () {
+		this.set({});
+	};
+	
+	Form.prototype.clear = function () {
+		this.set({}, true);
+	};
+	
+	Form.prototype.update = function () {
+		if (!this.observeCb) return;
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = this.form.elements[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var field = _step.value;
+	
+				var fname = field.name.replace(/[\[\]]/g, "_") + "val",
+				    ov = this.form.dataset[fname],
+				    v = field.value;
+				if (fname === "val") continue;
+				if (field.type === "checkbox") {
+					v = field.checked;
+					ov = ov === "true";
+				} else if (field.type === "radio" && !field.checked) continue;
+				if (typeof ov === "undefined" && typeof v !== "undefined") {
+					if (field.type === "radio") this.observeCb(v, ov, field);
+					ov = this.form.dataset[fname] = v;
+				} else if (ov !== v) {
+					this.form.dataset[fname] = v;
+					this.observeCb(v, ov, field);
+				}
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		requestAnimationFrame(this.update.bind(this));
+	};
+	Form.prototype.observe = function (cb) {
+		this.update(this.observeCb = cb);
+	};
+	Form.prototype.observeStop = function () {
+		this.observeCb = null;
+	};
+	
+	module.exports = Form;
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
+	
+	var _cache = {};
+	
+	function trigger(topic) {
+		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			args[_key - 1] = arguments[_key];
+		}
+	
+		if (!_cache[topic]) {
+			return;
+		}_cache[topic].forEach(function (cb) {
+			return cb.apply(cb, args);
+		});
+	}
+	
+	function on(topic, callback) {
+		if (!_cache[topic]) _cache[topic] = [];
+		_cache[topic].push(callback);
+		return [topic, callback];
+	}
+	
+	function off(handle) {
+		var _handle = _slicedToArray(handle, 2);
+	
+		var topic = _handle[0];
+		var cb = _handle[1];var ca = _cache[topic];
+		cb = cb.toString();
+		if (ca) ca.forEach(function (fn, i) {
+			if (fn.toString() === cb) ca.splice(i, 1);
+		});
+	}
+	
+	module.exports = { on: on, off: off, trigger: trigger };
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var keys = {
+		BCKSPC: 8,
+		BACKSPACE: 8,
+		TAB: 9,
+		ENTER: 13,
+		ESC: 27,
+		SPACE: 32,
+		PGUP: 33,
+		PGDOWN: 34,
+		END: 35,
+		HOME: 36,
+		LEFT: 37,
+		UP: 38,
+		RIGHT: 39,
+		DOWN: 40,
+		INS: 45,
+		DEL: 46,
+		A: 65,
+		X: 88,
+		C: 67,
+		V: 86,
+		Z: 90,
+		F1: 112,
+		F2: 113,
+		F5: 116,
+		MINUS: 173,
+		PLUS: 61,
+		DOT: 190,
+		SLASH: 191,
+	
+		NUMSTAR: 106,
+		NUMMINUS: 109,
+		NUMPLUS: 107,
+		NUMDOT: 110,
+		NUMSLASH: 111 },
+	    digits = {
+		48: 1,
+		49: 1,
+		50: 1,
+		51: 1,
+		52: 1,
+		53: 1,
+		54: 1,
+		55: 1,
+		56: 1,
+		57: 1,
+		96: 1,
+		97: 1,
+		98: 1,
+		99: 1,
+		100: 1,
+		101: 1,
+		102: 1,
+		103: 1,
+		104: 1,
+		105: 1 },
+	    allowedChars = {
+		8: 1,
+		9: 1,
+		46: 1,
+		35: 1,
+		36: 1,
+		37: 1,
+		39: 1 };
+	
+	function isMath(e) {
+		var k = e.keyCode;
+		if (k === keys.SPACE) {
+			return true;
+		}if (k === keys.NUMDOT || k === keys.DOT && !e.shiftKey) {
+			return true;
+		}if (k === keys.NUMMINUS || k === keys.MINUS && !e.shiftKey) {
+			return true;
+		}if (k === keys.NUMPLUS || k === keys.PLUS && e.shiftKey) {
+			return true;
+		}if (k === keys.NUMSLASH || k === keys.SLASH && !e.shiftKey) {
+			return true;
+		}if (e.shiftKey) {
+			if (k === 56 || k === 57 || k === 48) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	function isAllowed(e) {
+		var k = e.keyCode,
+		    allowed = allowedChars[k] === 1,
+		    isCtrlXCV = e && e.ctrlKey === true && (k === keys.X || k === keys.C || k === keys.V),
+		    math = isMath(e);
+		return isDigit(e) || allowed || isCtrlXCV || math;
+	}
+	
+	function isDigit(e) {
+		return digits[e.keyCode] === 1 && !e.shiftKey;
+	}
+	
+	function isAlpha(e) {
+		return e.keyCode >= 65 && e.keyCode <= 90 && !e.ctrlKey;
+	}
+	
+	function isAlphaNumeric(e) {
+		return isAlpha(e) || isDigit(e);
+	}
+	
+	module.exports = {
+		keys: keys,
+		isAllowed: isAllowed,
+		isDigit: isDigit,
+		isAlpha: isAlpha,
+		isAlphaNumeric: isAlphaNumeric
+	};
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var colors = ["#3498db", "#d35400", "#9b59b6", "#bdc3c7", "#e74c3c", "#1abc9c", "#ecf0f1", "#27ae60", "#8e44ad", "#e67e22", "#2980b9", "#f1c40f", "#16a085", "#95a5a6", "#f39c12", "#2ecc71", "#c0392b", "#7f8c8d", "#2f7ed8", "#0d233a", "#8bbc21", "#910000", "#1aadce", "#492970", "#f28f43", "#77a1e5", "#c42525", "#a6c96a"];
+	
+	function lighter(hex) {
+		var lum = arguments[1] === undefined ? 0.2 : arguments[1];
+	
+		hex = String(hex).replace(/[^0-9a-f]/gi, "");
+		if (hex.length < 6) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+		lum = lum || 0;
+	
+		var rgb = "#",
+		    c,
+		    i;
+		for (i = 0; i < 3; i++) {
+			c = parseInt(hex.substr(i * 2, 2), 16);
+			c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);
+			rgb += ("00" + c).substr(c.length);
+		}
+		return rgb;
+	}
+	
+	function addColors(items) {
+		return items.map(function (item, i) {
+			item.color = colors[i];
+			item.highlight = lighter(colors[i]);
+			return item;
+		});
+	}
+	
+	module.exports = {
+		colors: colors,
+		lighter: lighter,
+		addColors: addColors
+	};
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	function type(obj) {
+		return obj ? Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() : "undefined";
+	}
+	
+	function isNumber(v) {
+		if (typeof v === "number") {
+			return true;
+		}if (typeof v !== "string") {
+			return false;
+		}return /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/.test(v);
+	}
+	
+	function serialize(obj) {
+		var keys = Object.keys(obj);
+		if (!keys || !keys.length) {
+			return "";
+		}return "?" + keys.reduce(function (a, k) {
+			a.push(k + "=" + encodeURIComponent(obj[k]));
+			return a;
+		}, []).join("&");
+	}
+	
+	function varToRealType(v) {
+		if (isNumber(v)) {
+			var originalv = v;
+			v = parseFloat("" + v);
+			if ("" + v !== originalv) v = originalv;
+		} else if (v === "true") v = true;else if (v === "false") v = false;
+		if (v === "") v = undefined;
+		if (type(v) === "array") v = v.map(function (val) {
+			return varToRealType(val);
+		});
+		return v;
+	}
+	
+	function isObjectEmpty(x) {
+		if (!x || typeof x !== "object") {
+			return true;
+		}return Object.keys(x).length === 0;
+	}
+	
+	function rand(max) {
+		var min = arguments[1] === undefined ? 0 : arguments[1];
+	
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	}
+	
+	function each(arr, cb, scope) {
+		if (!arr) {
+			return;
+		}if (type(arr) === "object") for (var key in arr) cb.call(scope || cb, arr[key], key);else for (var i = 0, item; item = arr[i]; i++) cb.call(scope || cb, item, i);
+	}
+	
+	function sanitize(v) {
+		var div = document.createElement("DIV");
+		div.innerHTML = v || "";
+		return div.textContent || div.innerText || "";
+	}
+	
+	function merge(target) {
+		for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			sources[_key - 1] = arguments[_key];
+		}
+	
+		if (!target) throw new TypeError("Cannot convert first argument to object");
+		var to = Object(target);
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = sources[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var source = _step.value;
+	
+				var keys = Object.keys(Object(source));
+				var _iteratorNormalCompletion2 = true;
+				var _didIteratorError2 = false;
+				var _iteratorError2 = undefined;
+	
+				try {
+					for (var _iterator2 = keys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+						var key = _step2.value;
+	
+						var desc = Object.getOwnPropertyDescriptor(source, key);
+						if (desc !== undefined && desc.enumerable) to[key] = source[key];
+					}
+				} catch (err) {
+					_didIteratorError2 = true;
+					_iteratorError2 = err;
+				} finally {
+					try {
+						if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+							_iterator2["return"]();
+						}
+					} finally {
+						if (_didIteratorError2) {
+							throw _iteratorError2;
+						}
+					}
+				}
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		return to;
+	}
+	
+	if (!Object.assign) Object.defineProperty(Object, "assign", { value: merge,
+		enumerable: false, configurable: true, writable: true
+	});
+	
+	function isNodeList(nodes) {
+		return typeof nodes === "object" && /^(htmlcollection|nodelist|object)$/.test(type(nodes)) && (nodes.length === 0 || typeof nodes[0] === "object" && nodes[0].nodeType > 0);
+	}
+	
+	module.exports = {
+		type: type,
+		rand: rand,
+		each: each,
+		isNumber: isNumber,
+		varToRealType: varToRealType,
+		isObjectEmpty: isObjectEmpty,
+		merge: merge,
+		sanitize: sanitize,
+		serialize: serialize,
+		isNodeList: isNodeList
+	};
+
+/***/ },
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4817,7 +5652,7 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Toaster = _interopRequire(__webpack_require__(30));
+	var Toaster = _interopRequire(__webpack_require__(31));
 	
 	var Data = _interopRequire(__webpack_require__(24));
 	
@@ -4825,7 +5660,7 @@
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Moment = _interopRequire(__webpack_require__(10));
+	var Moment = _interopRequire(__webpack_require__(9));
 	
 	var tpl = __webpack_require__(29);
 	var _defaults = {
@@ -5160,7 +5995,7 @@
 	module.exports = Form;
 
 /***/ },
-/* 12 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5173,13 +6008,13 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Toaster = _interopRequire(__webpack_require__(30));
+	var Toaster = _interopRequire(__webpack_require__(31));
 	
 	var Data = _interopRequire(__webpack_require__(25));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Moment = _interopRequire(__webpack_require__(10));
+	var Moment = _interopRequire(__webpack_require__(9));
 	
 	var _defaults = {
 		onAdd: function onAdd() {}
@@ -5406,7 +6241,7 @@
 	module.exports = Form;
 
 /***/ },
-/* 13 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5425,8 +6260,14 @@
 		colors: $.colors,
 		credits: { enabled: false },
 	
-		tooltip: { borderRadius: 0, hideDelay: 0,
-			backgroundColor: "rgba(0, 0, 0, 0.9)", style: { color: "#F0F0F0" }
+		tooltip: {
+			hideDelay: 0,
+			backgroundColor: "rgba(0, 0, 0, 0.9)",
+			style: { color: "#F0F0F0" },
+			headerFormat: "<span style=\"font-size: 10px\">Expenses</span><br/>",
+			pointFormatter: function pointFormatter() {
+				return "<span style=\"color: " + this.color + "\">●</span> " + this.name + ": €" + this.y;
+			}
 		},
 		legend: {
 			align: "left",
@@ -5454,7 +6295,7 @@
 	};
 
 /***/ },
-/* 14 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5511,7 +6352,7 @@
 	};
 
 /***/ },
-/* 15 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5573,846 +6414,11 @@
 	};
 
 /***/ },
-/* 16 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var H = __webpack_require__(32);
 	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var util = _interopRequire(__webpack_require__(23));
-	
-	function sizzle(mixed, context) {
-		if (!mixed) {
-			return [];
-		}var el;
-		if (typeof mixed !== "string") el = mixed;else if (/<[a-z][\s\S]*>/i.test(mixed)) {
-			el = new DOMParser().parseFromString(mixed, "text/html").body.firstChild;
-		} else el = (context || document).querySelectorAll(mixed);
-	
-		if (el.nodeType) el = [el];else if (util.isNodeList(el)) el = Array.prototype.slice.call(el);
-	
-		return Object.assign(el || [], sizzle.fn);
-	}
-	
-	sizzle.fn = {};
-	sizzle.fn.find = function (selector) {
-		return sizzle(selector, this[0]);
-	};
-	sizzle.fn.filter = function (selector) {
-		var elems = Array.prototype.filter.call(this, function (el) {
-			return el.matches(selector);
-		});
-		return sizzle(elems);
-	};
-	
-	sizzle.fn.first = function () {
-		return sizzle(this[0]);
-	};
-	sizzle.fn.last = function () {
-		return sizzle(this[this.length - 1]);
-	};
-	sizzle.fn.eq = function (idx) {
-		return sizzle(this[idx || 0]);
-	};
-	
-	sizzle.fn.appendTo = function (parent) {
-		if (!this || !this.length) return this;
-		if (typeof parent === "string") parent = sizzle(parent);
-		parent[0].appendChild(this[0]);
-		return this;
-	};
-	
-	sizzle.fn.append = function (child) {
-		if (!this || !this.length) return this;
-		if (typeof child === "string") child = sizzle(child);
-		this[0].appendChild(child[0]);
-		return this;
-	};
-	
-	sizzle.fn.on = function (eventName, cb) {
-		if (!this || !this.length) return this;
-		this.forEach(function (el) {
-			el.addEventListener(eventName, cb);
-		});
-		return this;
-	};
-	
-	sizzle.fn.off = function (eventName, cb) {
-		if (!this || !this.length) return this;
-		this.forEach(function (el) {
-			el.removeEventListener(eventName, cb);
-		});
-		return this;
-	};
-	
-	sizzle.fn.closest = function (cls) {
-		if (!this || !this.length) return false;
-		var has = false,
-		    el = this[0];
-		while (!has && el) {
-			has = el.matches(cls);
-			if (has) return sizzle(el);
-			el = el.parentNode;
-			if (el.tagName === "HTML") return null;
-		}
-		return null;
-	};
-	
-	sizzle.fn.is = function (selector) {
-		if (!this || !this.length) return false;
-		return this[0].matches(selector);
-	};
-	
-	sizzle.fn.isIn = function () {
-		for (var _len = arguments.length, classes = Array(_len), _key = 0; _key < _len; _key++) {
-			classes[_key] = arguments[_key];
-		}
-	
-		var target = this && this.length ? this : null;
-		if (target) {
-			var _iteratorNormalCompletion = true;
-			var _didIteratorError = false;
-			var _iteratorError = undefined;
-	
-			try {
-				for (var _iterator = classes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-					var cls = _step.value;
-					if (target.closest(cls)) return true;
-				}
-			} catch (err) {
-				_didIteratorError = true;
-				_iteratorError = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion && _iterator["return"]) {
-						_iterator["return"]();
-					}
-				} finally {
-					if (_didIteratorError) {
-						throw _iteratorError;
-					}
-				}
-			}
-		}
-		return false;
-	};
-	
-	function modElCls(el, action, cls, cond) {
-		if (!el || !el.length) {
-			return el;
-		}cls = cls.split(" ");
-		if (typeof cond === "boolean") {
-			el.forEach(function (el) {
-				cls.forEach(function (c) {
-					el.classList[action](c, cond);
-				});
-			});
-		} else {
-			el.forEach(function (el) {
-				cls.forEach(function (c) {
-					el.classList[action](c);
-				});
-			});
-		}
-		return el;
-	}
-	
-	sizzle.fn.addClass = function (cls) {
-		return modElCls(this, "add", cls);
-	};
-	sizzle.fn.removeClass = function (cls) {
-		return modElCls(this, "remove", cls);
-	};
-	sizzle.fn.toggleClass = function (cls, cond) {
-		return modElCls(this, "toggle", cls, cond);
-	};
-	sizzle.fn.hasClass = function (cls) {
-		if (!this || !this.length) return false;
-		return this[0].classList.contains(cls);
-	};
-	
-	sizzle.fn.html = function (html) {
-		if (!this || !this.length) return this;
-		this.forEach(function (el) {
-			el.innerHTML = html;
-		});
-		return this;
-	};
-	
-	sizzle.fn.remove = function () {
-		if (!this || !this.length) return this;
-		this.forEach(function (el) {
-			el.remove();
-		});
-		return this;
-	};
-	
-	sizzle.fn.data = function (key) {
-		if (!this || !this.length) return this;
-		if (!this[0].dataset) return null;
-		if (key) return this[0].dataset[key];
-		return this[0].dataset;
-	};
-	
-	module.exports = sizzle;
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var util = _interopRequire(__webpack_require__(23));
-	
-	var base_url = "api/";
-	
-	function ajax(options) {
-		if (typeof options === "string") options = { url: options };
-	
-		var req = new XMLHttpRequest(),
-		    resp,
-		    data = options.data || "";
-		options.url = base_url + options.url;
-		options.method = options.method || "GET";
-		options.type = options.type || "json";
-	
-		if (data) {
-			if (options.method.toLowerCase() === "get") options.url += util.serialize(data);else if (options.type === "json") data = JSON.stringify(data);
-		}
-		return new Promise(function (resolve, reject) {
-			req.open(options.method, options.url, true);
-			req.onload = function () {
-				if (req.status >= 200 && req.status < 400) {
-					resp = req.responseText;
-					try {
-						resp = JSON.parse(resp);
-					} catch (e) {}
-					resolve(resp);
-				} else reject(req.statusText);
-			};
-			req.onerror = function () {
-				reject(req.statusText);
-			};
-			req.setRequestHeader("Content-Type", "application/" + options.type + "; charset=UTF-8");
-			req.send(data);
-		});
-	}
-	
-	module.exports = {
-		ajax: ajax,
-		get: function (url, data) {
-			return ajax({ url: url, data: data || {} });
-		},
-		post: function (url, data) {
-			return ajax({ url: url, data: data || {}, method: "POST" });
-		},
-		put: function (url, data) {
-			return ajax({ url: url, data: data || {}, method: "PUT" });
-		},
-		del: function (url, data) {
-			return ajax({ url: url, data: data || {}, method: "DELETE" });
-		} };
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var keyBreaker = /[^\[\]]+/g;
-	var numberMatcher = /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/;
-	
-	function _isNumber(value) {
-		if (typeof value === "number") {
-			return true;
-		}if (typeof value !== "string") {
-			return false;
-		}return value.match(numberMatcher);
-	}
-	
-	function _decodeEntities(str) {
-		var d = document.createElement("div");
-		d.innerHTML = str;
-		return d.innerText || d.textContent;
-	}
-	
-	function _getInputs(form) {
-		var inputs = form.querySelectorAll("[name]");
-		return Array.prototype.slice.call(inputs) || [];
-	}
-	
-	function Form(el) {
-		if (!el) {
-			return null;
-		}if (!(this instanceof Form)) {
-			return new Form(el);
-		}this.form = el;
-		if (el.elements) this.inputs = el.elements;
-	}
-	
-	Form.prototype.set = function (params, clear) {
-		var inputs = _getInputs(this.form);
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-	
-		try {
-			for (var _iterator = inputs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var input = _step.value;
-	
-				var name = input.name,
-				    value = typeof params[name] === "undefined" ? "" : params[name];
-	
-				if (name.indexOf("[") > -1) {
-					var v = params;
-					var names = name.replace(/[\[\]]/g, "|").split("|");
-					var _iteratorNormalCompletion2 = true;
-					var _didIteratorError2 = false;
-					var _iteratorError2 = undefined;
-	
-					try {
-						for (var _iterator2 = names[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-							var n = _step2.value;
-	
-							if (v[n]) v = v[n];else {
-								v = undefined;if (_iterator2["return"]) _iterator2["return"]();
-								break;
-							}
-						}
-					} catch (err) {
-						_didIteratorError2 = true;
-						_iteratorError2 = err;
-					} finally {
-						try {
-							if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-								_iterator2["return"]();
-							}
-						} finally {
-							if (_didIteratorError2) {
-								throw _iteratorError2;
-							}
-						}
-					}
-	
-					value = v;
-				}
-	
-				if (clear !== true && value === undefined) return;
-	
-				if (value === null || value === undefined) value = "";
-	
-				if (typeof value === "string" && value.indexOf("&") > -1) value = _decodeEntities(value);
-	
-				if (input.type === "radio") input.checked = input.value.toString() === value.toString();else if (input.type === "checkbox") input.checked = value;else if (input.tagName === "SELECT") {
-					if (value === "" || value === undefined) input.selectedIndex = 0;else input.value = value;
-				} else input.value = value;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	
-		return this;
-	};
-	
-	Form.prototype.get = function () {
-		var convert = arguments[0] === undefined ? false : arguments[0];
-	
-		var inputs = _getInputs(this.form),
-		    data = {},
-		    current;
-	
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-	
-		try {
-			for (var _iterator = inputs[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var input = _step.value;
-	
-				var type = input.type && input.type.toLowerCase(),
-				    value = undefined,
-				    parts = undefined,
-				    lastPart = undefined,
-				    last = undefined;
-	
-				if (type === "submit" || !input.name || input.disabled) return;
-	
-				value = input.value;
-				parts = input.name.match(keyBreaker);
-	
-				if (type === "radio" && !input.checked) return;
-	
-				if (type === "checkbox") value = input.checked;
-	
-				if (convert) {
-					if (_isNumber(value)) {
-						var tv = parseFloat(value);
-						var cmp = tv + "";
-	
-						if (value.indexOf(".") > 0) cmp = tv.toFixed(value.split(".")[1].length);
-						if (cmp === value) value = tv;
-					} else if (value === "true") value = true;else if (value === "false") value = false;
-					if (value === "") value = null;
-				}
-	
-				current = data;
-	
-				for (var i = 0; i < parts.length - 1; i++) {
-					current[parts[i]] = current[parts[i]] || {};
-					current = current[parts[i]];
-				}
-				lastPart = parts[parts.length - 1];
-	
-				last = current[lastPart];
-				if (last) {
-					if (!Array.isArray(last)) current[lastPart] = last === undefined ? [] : [last];
-					current[lastPart].push(value);
-				} else current[lastPart] = value;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	
-		return data;
-	};
-	
-	Form.prototype.reset = function () {
-		this.set({});
-	};
-	
-	Form.prototype.clear = function () {
-		this.set({}, true);
-	};
-	
-	Form.prototype.update = function () {
-		if (!this.observeCb) return;
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-	
-		try {
-			for (var _iterator = this.form.elements[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var field = _step.value;
-	
-				var fname = field.name.replace(/[\[\]]/g, "_") + "val",
-				    ov = this.form.dataset[fname],
-				    v = field.value;
-				if (fname === "val") continue;
-				if (field.type === "checkbox") {
-					v = field.checked;
-					ov = ov === "true";
-				} else if (field.type === "radio" && !field.checked) continue;
-				if (typeof ov === "undefined" && typeof v !== "undefined") {
-					if (field.type === "radio") this.observeCb(v, ov, field);
-					ov = this.form.dataset[fname] = v;
-				} else if (ov !== v) {
-					this.form.dataset[fname] = v;
-					this.observeCb(v, ov, field);
-				}
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	
-		requestAnimationFrame(this.update.bind(this));
-	};
-	Form.prototype.observe = function (cb) {
-		this.update(this.observeCb = cb);
-	};
-	Form.prototype.observeStop = function () {
-		this.observeCb = null;
-	};
-	
-	module.exports = Form;
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _slicedToArray = function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) { _arr.push(_step.value); if (i && _arr.length === i) break; } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } };
-	
-	var _cache = {};
-	
-	function trigger(topic) {
-		for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			args[_key - 1] = arguments[_key];
-		}
-	
-		if (!_cache[topic]) {
-			return;
-		}_cache[topic].forEach(function (cb) {
-			return cb.apply(cb, args);
-		});
-	}
-	
-	function on(topic, callback) {
-		if (!_cache[topic]) _cache[topic] = [];
-		_cache[topic].push(callback);
-		return [topic, callback];
-	}
-	
-	function off(handle) {
-		var _handle = _slicedToArray(handle, 2);
-	
-		var topic = _handle[0];
-		var cb = _handle[1];var ca = _cache[topic];
-		cb = cb.toString();
-		if (ca) ca.forEach(function (fn, i) {
-			if (fn.toString() === cb) ca.splice(i, 1);
-		});
-	}
-	
-	module.exports = { on: on, off: off, trigger: trigger };
-
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var keys = {
-		BCKSPC: 8,
-		BACKSPACE: 8,
-		TAB: 9,
-		ENTER: 13,
-		ESC: 27,
-		SPACE: 32,
-		PGUP: 33,
-		PGDOWN: 34,
-		END: 35,
-		HOME: 36,
-		LEFT: 37,
-		UP: 38,
-		RIGHT: 39,
-		DOWN: 40,
-		INS: 45,
-		DEL: 46,
-		A: 65,
-		X: 88,
-		C: 67,
-		V: 86,
-		Z: 90,
-		F1: 112,
-		F2: 113,
-		F5: 116,
-		MINUS: 173,
-		PLUS: 61,
-		DOT: 190,
-		SLASH: 191,
-	
-		NUMSTAR: 106,
-		NUMMINUS: 109,
-		NUMPLUS: 107,
-		NUMDOT: 110,
-		NUMSLASH: 111 },
-	    digits = {
-		48: 1,
-		49: 1,
-		50: 1,
-		51: 1,
-		52: 1,
-		53: 1,
-		54: 1,
-		55: 1,
-		56: 1,
-		57: 1,
-		96: 1,
-		97: 1,
-		98: 1,
-		99: 1,
-		100: 1,
-		101: 1,
-		102: 1,
-		103: 1,
-		104: 1,
-		105: 1 },
-	    allowedChars = {
-		8: 1,
-		9: 1,
-		46: 1,
-		35: 1,
-		36: 1,
-		37: 1,
-		39: 1 };
-	
-	function isMath(e) {
-		var k = e.keyCode;
-		if (k === keys.SPACE) {
-			return true;
-		}if (k === keys.NUMDOT || k === keys.DOT && !e.shiftKey) {
-			return true;
-		}if (k === keys.NUMMINUS || k === keys.MINUS && !e.shiftKey) {
-			return true;
-		}if (k === keys.NUMPLUS || k === keys.PLUS && e.shiftKey) {
-			return true;
-		}if (k === keys.NUMSLASH || k === keys.SLASH && !e.shiftKey) {
-			return true;
-		}if (e.shiftKey) {
-			if (k === 56 || k === 57 || k === 48) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	function isAllowed(e) {
-		var k = e.keyCode,
-		    allowed = allowedChars[k] === 1,
-		    isCtrlXCV = e && e.ctrlKey === true && (k === keys.X || k === keys.C || k === keys.V),
-		    math = isMath(e);
-		return isDigit(e) || allowed || isCtrlXCV || math;
-	}
-	
-	function isDigit(e) {
-		return digits[e.keyCode] === 1 && !e.shiftKey;
-	}
-	
-	function isAlpha(e) {
-		return e.keyCode >= 65 && e.keyCode <= 90 && !e.ctrlKey;
-	}
-	
-	function isAlphaNumeric(e) {
-		return isAlpha(e) || isDigit(e);
-	}
-	
-	module.exports = {
-		keys: keys,
-		isAllowed: isAllowed,
-		isDigit: isDigit,
-		isAlpha: isAlpha,
-		isAlphaNumeric: isAlphaNumeric
-	};
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var colors = ["#3498db", "#d35400", "#9b59b6", "#bdc3c7", "#e74c3c", "#1abc9c", "#ecf0f1", "#27ae60", "#8e44ad", "#e67e22", "#2980b9", "#f1c40f", "#16a085", "#95a5a6", "#f39c12", "#2ecc71", "#c0392b", "#7f8c8d", "#2f7ed8", "#0d233a", "#8bbc21", "#910000", "#1aadce", "#492970", "#f28f43", "#77a1e5", "#c42525", "#a6c96a"];
-	
-	function lighter(hex) {
-		var lum = arguments[1] === undefined ? 0.2 : arguments[1];
-	
-		hex = String(hex).replace(/[^0-9a-f]/gi, "");
-		if (hex.length < 6) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-		lum = lum || 0;
-	
-		var rgb = "#",
-		    c,
-		    i;
-		for (i = 0; i < 3; i++) {
-			c = parseInt(hex.substr(i * 2, 2), 16);
-			c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);
-			rgb += ("00" + c).substr(c.length);
-		}
-		return rgb;
-	}
-	
-	function addColors(items) {
-		return items.map(function (item, i) {
-			item.color = colors[i];
-			item.highlight = lighter(colors[i]);
-			return item;
-		});
-	}
-	
-	module.exports = {
-		colors: colors,
-		lighter: lighter,
-		addColors: addColors
-	};
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	function type(obj) {
-		return obj ? Object.prototype.toString.call(obj).slice(8, -1).toLowerCase() : "undefined";
-	}
-	
-	function isNumber(v) {
-		if (typeof v === "number") {
-			return true;
-		}if (typeof v !== "string") {
-			return false;
-		}return /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/.test(v);
-	}
-	
-	function serialize(obj) {
-		var keys = Object.keys(obj);
-		if (!keys || !keys.length) {
-			return "";
-		}return "?" + keys.reduce(function (a, k) {
-			a.push(k + "=" + encodeURIComponent(obj[k]));
-			return a;
-		}, []).join("&");
-	}
-	
-	function varToRealType(v) {
-		if (isNumber(v)) {
-			var originalv = v;
-			v = parseFloat("" + v);
-			if ("" + v !== originalv) v = originalv;
-		} else if (v === "true") v = true;else if (v === "false") v = false;
-		if (v === "") v = undefined;
-		if (type(v) === "array") v = v.map(function (val) {
-			return varToRealType(val);
-		});
-		return v;
-	}
-	
-	function isObjectEmpty(x) {
-		if (!x || typeof x !== "object") {
-			return true;
-		}return Object.keys(x).length === 0;
-	}
-	
-	function rand(max) {
-		var min = arguments[1] === undefined ? 0 : arguments[1];
-	
-		return Math.floor(Math.random() * (max - min + 1) + min);
-	}
-	
-	function each(arr, cb, scope) {
-		if (!arr) {
-			return;
-		}if (type(arr) === "object") for (var key in arr) cb.call(scope || cb, arr[key], key);else for (var i = 0, item; item = arr[i]; i++) cb.call(scope || cb, item, i);
-	}
-	
-	function sanitize(v) {
-		var div = document.createElement("DIV");
-		div.innerHTML = v || "";
-		return div.textContent || div.innerText || "";
-	}
-	
-	function merge(target) {
-		for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			sources[_key - 1] = arguments[_key];
-		}
-	
-		if (!target) throw new TypeError("Cannot convert first argument to object");
-		var to = Object(target);
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-	
-		try {
-			for (var _iterator = sources[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var source = _step.value;
-	
-				var keys = Object.keys(Object(source));
-				var _iteratorNormalCompletion2 = true;
-				var _didIteratorError2 = false;
-				var _iteratorError2 = undefined;
-	
-				try {
-					for (var _iterator2 = keys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-						var key = _step2.value;
-	
-						var desc = Object.getOwnPropertyDescriptor(source, key);
-						if (desc !== undefined && desc.enumerable) to[key] = source[key];
-					}
-				} catch (err) {
-					_didIteratorError2 = true;
-					_iteratorError2 = err;
-				} finally {
-					try {
-						if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-							_iterator2["return"]();
-						}
-					} finally {
-						if (_didIteratorError2) {
-							throw _iteratorError2;
-						}
-					}
-				}
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	
-		return to;
-	}
-	
-	if (!Object.assign) Object.defineProperty(Object, "assign", { value: merge,
-		enumerable: false, configurable: true, writable: true
-	});
-	
-	function isNodeList(nodes) {
-		return typeof nodes === "object" && /^(htmlcollection|nodelist|object)$/.test(type(nodes)) && (nodes.length === 0 || typeof nodes[0] === "object" && nodes[0].nodeType > 0);
-	}
-	
-	module.exports = {
-		type: type,
-		rand: rand,
-		each: each,
-		isNumber: isNumber,
-		varToRealType: varToRealType,
-		isObjectEmpty: isObjectEmpty,
-		merge: merge,
-		sanitize: sanitize,
-		serialize: serialize,
-		isNodeList: isNodeList
-	};
 
 /***/ },
 /* 24 */
@@ -8022,6 +8028,22 @@
 /* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = function(module) {
+		if(!module.webpackPolyfill) {
+			module.deprecate = function() {};
+			module.paths = [];
+			// module.parent = undefined by default
+			module.children = [];
+			module.webpackPolyfill = 1;
+		}
+		return module;
+	}
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	function Toaster(msg) {
@@ -8047,22 +8069,6 @@
 	};
 	
 	module.exports = Toaster;
-
-/***/ },
-/* 31 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(module) {
-		if(!module.webpackPolyfill) {
-			module.deprecate = function() {};
-			module.paths = [];
-			// module.parent = undefined by default
-			module.children = [];
-			module.webpackPolyfill = 1;
-		}
-		return module;
-	}
-
 
 /***/ },
 /* 32 */
