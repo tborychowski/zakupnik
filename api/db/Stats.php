@@ -55,41 +55,31 @@ class Stats extends DB {
 
 
 	public function spendingByDay ($p) {
-		$data = [];
-		$where = '';
-		// if (!empty($p['date'])) $where = 'WHERE entries.date LIKE \'' . $p['date'] . '%\' ';
-
-		$q = 'SELECT UNIX_TIMESTAMP(STR_TO_DATE(date, \'%Y-%m-%d\')) as date, ' .
-		// $q = 'SELECT date, ' .
-			'SUM(amount) as amount FROM entries ' . $where .
-			'GROUP BY date ORDER BY date ASC';
+		$q = 'SELECT date, SUM(amount) as amount FROM entries GROUP BY date ORDER BY date ASC';
 
 		$query = $this->db->query($q);
 		if ($query) {
-			$newData = $query->fetchAll(PDO::FETCH_FUNC, function ($ut, $amount) {
-				return [$ut * 1000, floatval($amount) ];
+			$data = $query->fetchAll(PDO::FETCH_FUNC, function ($date, $amount) {
+				return [$date, floatval($amount) ];
 			});
 
-			// $newData = [];
-			// foreach ($data as $item) $newData[$item[0]] = $item[1];
+			// convert ['2015-01-01', 123] => { '2015-01-01': 123 }
+			$newData = [];
+			foreach ($data as $item) $newData[$item[0]] = $item[1];
 
-			// $first = strtotime($data[0][0]);
-			// $last = strtotime($data[count($data)-1][0]);
-			// $days = [];
-			// for ($i = $first; $i <= $last; $i += 86400) {
-			// 	$days[] = date('Y-m-d', $i);
-			// }
+			// find all days between first & last and fill the gaps
+			$first = strtotime($data[0][0]);
+			$last = strtotime($data[count($data)-1][0]);
+			$data = [];
+			for ($i = $first; $i <= $last; $i += 86400) {
+				$day = date('Y-m-d', $i);
+				if (isset($newData[$day])) $data[$day] = $newData[$day];
+				else $data[$day] = 0;
+			}
 
-			// $data = [];
-			// foreach ($days as $day) {
-			// 	if (isset($newData[$day])) $data[$day] = $newData[$day];
-			// 	else $data[$day] = 0;
-			// }
-
-			// $newData = [];
-			// foreach ($data as $d => $v) {
-			// 	$newData[] = [strtotime($d) * 1000, $v];
-			// }
+			// convert { '2015-01-01': 123 } => [1425250800000, 123]
+			$newData = [];
+			foreach ($data as $d => $v) $newData[] = [strtotime($d . ' 01:00:00') * 1000, $v, $d];
 		}
 
 		$this->output = [ 'name' => 'Expenses', 'data' => $newData ];

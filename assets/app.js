@@ -66,9 +66,9 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Pikaday = _interopRequire(__webpack_require__(8));
+	var Pikaday = _interopRequire(__webpack_require__(9));
 	
-	var Moment = _interopRequire(__webpack_require__(9));
+	var Moment = _interopRequire(__webpack_require__(8));
 	
 	var tpl = __webpack_require__(10);
 	var el,
@@ -232,11 +232,11 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(24));
+	var Data = _interopRequire(__webpack_require__(22));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Grid = _interopRequire(__webpack_require__(28));
+	var Grid = _interopRequire(__webpack_require__(26));
 	
 	var Form = _interopRequire(__webpack_require__(18));
 	
@@ -388,9 +388,9 @@
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Grid = _interopRequire(__webpack_require__(28));
+	var Grid = _interopRequire(__webpack_require__(26));
 	
-	var Form = _interopRequire(__webpack_require__(19));
+	var Form = _interopRequire(__webpack_require__(21));
 	
 	var el,
 	    grid,
@@ -537,15 +537,23 @@
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Data = _interopRequire(__webpack_require__(26));
+	var Data = _interopRequire(__webpack_require__(24));
 	
-	var chart0 = _interopRequire(__webpack_require__(20));
+	var Chart = _interopRequire(__webpack_require__(20));
 	
-	var chart1 = _interopRequire(__webpack_require__(21));
+	var lastLoadDate, _chart0, _chart1, _chart2;
 	
-	var chart2 = _interopRequire(__webpack_require__(22));
+	function chart0(data) {
+		if (!_chart0) _chart0 = Chart("pie", "chart0", "Spending by category (this month)", data);else _chart0.setSeries(data);
+	}
 	
-	var lastLoadDate;
+	function chart1(data) {
+		if (!_chart1) _chart1 = Chart("line", "chart1", "Income vs Expenses (this year)", data);else _chart1.setSeries(data);
+	}
+	
+	function chart2(data) {
+		if (!_chart2) _chart2 = Chart("stock", "chart2", "Spending by time (day-by-day, current month), for [categories dropdown]", data);else _chart2.setSeries(data);
+	}
 	
 	function load(force) {
 		var date = Calendar.get("YYYY-MM");
@@ -577,7 +585,7 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Data = _interopRequire(__webpack_require__(27));
+	var Data = _interopRequire(__webpack_require__(23));
 	
 	var el,
 	    treeContainer,
@@ -585,7 +593,7 @@
 	    form,
 	    btn = {},
 	    catSel;
-	var tpl = __webpack_require__(23);
+	var tpl = __webpack_require__(19);
 	
 	function updateCatSelect(data) {
 		var options = ["<option value=\"0\"></option>"];
@@ -713,1041 +721,6 @@
 
 /***/ },
 /* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*!
-	 * Pikaday
-	 *
-	 * Copyright © 2014 David Bushell | BSD & MIT license | https://github.com/dbushell/Pikaday
-	 */
-	
-	(function (root, factory)
-	{
-	    'use strict';
-	
-	    var moment;
-	    if (true) {
-	        // CommonJS module
-	        // Load moment.js as an optional dependency
-	        try { moment = __webpack_require__(9); } catch (e) {}
-	        module.exports = factory(moment);
-	    } else if (typeof define === 'function' && define.amd) {
-	        // AMD. Register as an anonymous module.
-	        define(function (req)
-	        {
-	            // Load moment.js as an optional dependency
-	            var id = 'moment';
-	            try { moment = req(id); } catch (e) {}
-	            return factory(moment);
-	        });
-	    } else {
-	        root.Pikaday = factory(root.moment);
-	    }
-	}(this, function (moment)
-	{
-	    'use strict';
-	
-	    /**
-	     * feature detection and helper functions
-	     */
-	    var hasMoment = typeof moment === 'function',
-	
-	    hasEventListeners = !!window.addEventListener,
-	
-	    document = window.document,
-	
-	    sto = window.setTimeout,
-	
-	    addEvent = function(el, e, callback, capture)
-	    {
-	        if (hasEventListeners) {
-	            el.addEventListener(e, callback, !!capture);
-	        } else {
-	            el.attachEvent('on' + e, callback);
-	        }
-	    },
-	
-	    removeEvent = function(el, e, callback, capture)
-	    {
-	        if (hasEventListeners) {
-	            el.removeEventListener(e, callback, !!capture);
-	        } else {
-	            el.detachEvent('on' + e, callback);
-	        }
-	    },
-	
-	    fireEvent = function(el, eventName, data)
-	    {
-	        var ev;
-	
-	        if (document.createEvent) {
-	            ev = document.createEvent('HTMLEvents');
-	            ev.initEvent(eventName, true, false);
-	            ev = extend(ev, data);
-	            el.dispatchEvent(ev);
-	        } else if (document.createEventObject) {
-	            ev = document.createEventObject();
-	            ev = extend(ev, data);
-	            el.fireEvent('on' + eventName, ev);
-	        }
-	    },
-	
-	    trim = function(str)
-	    {
-	        return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g,'');
-	    },
-	
-	    hasClass = function(el, cn)
-	    {
-	        return (' ' + el.className + ' ').indexOf(' ' + cn + ' ') !== -1;
-	    },
-	
-	    addClass = function(el, cn)
-	    {
-	        if (!hasClass(el, cn)) {
-	            el.className = (el.className === '') ? cn : el.className + ' ' + cn;
-	        }
-	    },
-	
-	    removeClass = function(el, cn)
-	    {
-	        el.className = trim((' ' + el.className + ' ').replace(' ' + cn + ' ', ' '));
-	    },
-	
-	    isArray = function(obj)
-	    {
-	        return (/Array/).test(Object.prototype.toString.call(obj));
-	    },
-	
-	    isDate = function(obj)
-	    {
-	        return (/Date/).test(Object.prototype.toString.call(obj)) && !isNaN(obj.getTime());
-	    },
-	
-	    isWeekend = function(date)
-	    {
-	        var day = date.getDay();
-	        return day === 0 || day === 6;
-	    },
-	
-	    isLeapYear = function(year)
-	    {
-	        // solution by Matti Virkkunen: http://stackoverflow.com/a/4881951
-	        return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
-	    },
-	
-	    getDaysInMonth = function(year, month)
-	    {
-	        return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
-	    },
-	
-	    setToStartOfDay = function(date)
-	    {
-	        if (isDate(date)) date.setHours(0,0,0,0);
-	    },
-	
-	    compareDates = function(a,b)
-	    {
-	        // weak date comparison (use setToStartOfDay(date) to ensure correct result)
-	        return a.getTime() === b.getTime();
-	    },
-	
-	    extend = function(to, from, overwrite)
-	    {
-	        var prop, hasProp;
-	        for (prop in from) {
-	            hasProp = to[prop] !== undefined;
-	            if (hasProp && typeof from[prop] === 'object' && from[prop] !== null && from[prop].nodeName === undefined) {
-	                if (isDate(from[prop])) {
-	                    if (overwrite) {
-	                        to[prop] = new Date(from[prop].getTime());
-	                    }
-	                }
-	                else if (isArray(from[prop])) {
-	                    if (overwrite) {
-	                        to[prop] = from[prop].slice(0);
-	                    }
-	                } else {
-	                    to[prop] = extend({}, from[prop], overwrite);
-	                }
-	            } else if (overwrite || !hasProp) {
-	                to[prop] = from[prop];
-	            }
-	        }
-	        return to;
-	    },
-	
-	    adjustCalendar = function(calendar) {
-	        if (calendar.month < 0) {
-	            calendar.year -= Math.ceil(Math.abs(calendar.month)/12);
-	            calendar.month += 12;
-	        }
-	        if (calendar.month > 11) {
-	            calendar.year += Math.floor(Math.abs(calendar.month)/12);
-	            calendar.month -= 12;
-	        }
-	        return calendar;
-	    },
-	
-	    /**
-	     * defaults and localisation
-	     */
-	    defaults = {
-	
-	        // bind the picker to a form field
-	        field: null,
-	
-	        // automatically show/hide the picker on `field` focus (default `true` if `field` is set)
-	        bound: undefined,
-	
-	        // position of the datepicker, relative to the field (default to bottom & left)
-	        // ('bottom' & 'left' keywords are not used, 'top' & 'right' are modifier on the bottom/left position)
-	        position: 'bottom left',
-	
-	        // automatically fit in the viewport even if it means repositioning from the position option
-	        reposition: true,
-	
-	        // the default output format for `.toString()` and `field` value
-	        format: 'YYYY-MM-DD',
-	
-	        // the initial date to view when first opened
-	        defaultDate: null,
-	
-	        // make the `defaultDate` the initial selected value
-	        setDefaultDate: false,
-	
-	        // first day of week (0: Sunday, 1: Monday etc)
-	        firstDay: 0,
-	
-	        // the minimum/earliest date that can be selected
-	        minDate: null,
-	        // the maximum/latest date that can be selected
-	        maxDate: null,
-	
-	        // number of years either side, or array of upper/lower range
-	        yearRange: 10,
-	
-	        // show week numbers at head of row
-	        showWeekNumber: false,
-	
-	        // used internally (don't config outside)
-	        minYear: 0,
-	        maxYear: 9999,
-	        minMonth: undefined,
-	        maxMonth: undefined,
-	
-	        isRTL: false,
-	
-	        // Additional text to append to the year in the calendar title
-	        yearSuffix: '',
-	
-	        // Render the month after year in the calendar title
-	        showMonthAfterYear: false,
-	
-	        // how many months are visible
-	        numberOfMonths: 1,
-	
-	        // when numberOfMonths is used, this will help you to choose where the main calendar will be (default `left`, can be set to `right`)
-	        // only used for the first display or when a selected date is not visible
-	        mainCalendar: 'left',
-	
-	        // Specify a DOM element to render the calendar in
-	        container: undefined,
-	
-	        // internationalization
-	        i18n: {
-	            previousMonth : 'Previous Month',
-	            nextMonth     : 'Next Month',
-	            months        : ['January','February','March','April','May','June','July','August','September','October','November','December'],
-	            weekdays      : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-	            weekdaysShort : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
-	        },
-	
-	        // callback function
-	        onSelect: null,
-	        onOpen: null,
-	        onClose: null,
-	        onDraw: null
-	    },
-	
-	
-	    /**
-	     * templating functions to abstract HTML rendering
-	     */
-	    renderDayName = function(opts, day, abbr)
-	    {
-	        day += opts.firstDay;
-	        while (day >= 7) {
-	            day -= 7;
-	        }
-	        return abbr ? opts.i18n.weekdaysShort[day] : opts.i18n.weekdays[day];
-	    },
-	
-	    renderDay = function(d, m, y, isSelected, isToday, isDisabled, isEmpty)
-	    {
-	        if (isEmpty) {
-	            return '<td class="is-empty"></td>';
-	        }
-	        var arr = [];
-	        if (isDisabled) {
-	            arr.push('is-disabled');
-	        }
-	        if (isToday) {
-	            arr.push('is-today');
-	        }
-	        if (isSelected) {
-	            arr.push('is-selected');
-	        }
-	        return '<td data-day="' + d + '" class="' + arr.join(' ') + '">' +
-	                 '<button class="pika-button pika-day" type="button" ' +
-	                    'data-pika-year="' + y + '" data-pika-month="' + m + '" data-pika-day="' + d + '">' +
-	                        d +
-	                 '</button>' +
-	               '</td>';
-	    },
-	
-	    renderWeek = function (d, m, y) {
-	        // Lifted from http://javascript.about.com/library/blweekyear.htm, lightly modified.
-	        var onejan = new Date(y, 0, 1),
-	            weekNum = Math.ceil((((new Date(y, m, d) - onejan) / 86400000) + onejan.getDay()+1)/7);
-	        return '<td class="pika-week">' + weekNum + '</td>';
-	    },
-	
-	    renderRow = function(days, isRTL)
-	    {
-	        return '<tr>' + (isRTL ? days.reverse() : days).join('') + '</tr>';
-	    },
-	
-	    renderBody = function(rows)
-	    {
-	        return '<tbody>' + rows.join('') + '</tbody>';
-	    },
-	
-	    renderHead = function(opts)
-	    {
-	        var i, arr = [];
-	        if (opts.showWeekNumber) {
-	            arr.push('<th></th>');
-	        }
-	        for (i = 0; i < 7; i++) {
-	            arr.push('<th scope="col"><abbr title="' + renderDayName(opts, i) + '">' + renderDayName(opts, i, true) + '</abbr></th>');
-	        }
-	        return '<thead>' + (opts.isRTL ? arr.reverse() : arr).join('') + '</thead>';
-	    },
-	
-	    renderTitle = function(instance, c, year, month, refYear)
-	    {
-	        var i, j, arr,
-	            opts = instance._o,
-	            isMinYear = year === opts.minYear,
-	            isMaxYear = year === opts.maxYear,
-	            html = '<div class="pika-title">',
-	            monthHtml,
-	            yearHtml,
-	            prev = true,
-	            next = true;
-	
-	        for (arr = [], i = 0; i < 12; i++) {
-	            arr.push('<option value="' + (year === refYear ? i - c : 12 + i - c) + '"' +
-	                (i === month ? ' selected': '') +
-	                ((isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth) ? 'disabled' : '') + '>' +
-	                opts.i18n.months[i] + '</option>');
-	        }
-	        monthHtml = '<div class="pika-label">' + opts.i18n.months[month] + '<select class="pika-select pika-select-month">' + arr.join('') + '</select></div>';
-	
-	        if (isArray(opts.yearRange)) {
-	            i = opts.yearRange[0];
-	            j = opts.yearRange[1] + 1;
-	        } else {
-	            i = year - opts.yearRange;
-	            j = 1 + year + opts.yearRange;
-	        }
-	
-	        for (arr = []; i < j && i <= opts.maxYear; i++) {
-	            if (i >= opts.minYear) {
-	                arr.push('<option value="' + i + '"' + (i === year ? ' selected': '') + '>' + (i) + '</option>');
-	            }
-	        }
-	        yearHtml = '<div class="pika-label">' + year + opts.yearSuffix + '<select class="pika-select pika-select-year">' + arr.join('') + '</select></div>';
-	
-	        if (opts.showMonthAfterYear) {
-	            html += yearHtml + monthHtml;
-	        } else {
-	            html += monthHtml + yearHtml;
-	        }
-	
-	        if (isMinYear && (month === 0 || opts.minMonth >= month)) {
-	            prev = false;
-	        }
-	
-	        if (isMaxYear && (month === 11 || opts.maxMonth <= month)) {
-	            next = false;
-	        }
-	
-	        if (c === 0) {
-	            html += '<button class="pika-prev' + (prev ? '' : ' is-disabled') + '" type="button">' + opts.i18n.previousMonth + '</button>';
-	        }
-	        if (c === (instance._o.numberOfMonths - 1) ) {
-	            html += '<button class="pika-next' + (next ? '' : ' is-disabled') + '" type="button">' + opts.i18n.nextMonth + '</button>';
-	        }
-	
-	        return html += '</div>';
-	    },
-	
-	    renderTable = function(opts, data)
-	    {
-	        return '<table cellpadding="0" cellspacing="0" class="pika-table">' + renderHead(opts) + renderBody(data) + '</table>';
-	    },
-	
-	
-	    /**
-	     * Pikaday constructor
-	     */
-	    Pikaday = function(options)
-	    {
-	        var self = this,
-	            opts = self.config(options);
-	
-	        self._onMouseDown = function(e)
-	        {
-	            if (!self._v) {
-	                return;
-	            }
-	            e = e || window.event;
-	            var target = e.target || e.srcElement;
-	            if (!target) {
-	                return;
-	            }
-	
-	            if (!hasClass(target, 'is-disabled')) {
-	                if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty')) {
-	                    self.setDate(new Date(target.getAttribute('data-pika-year'), target.getAttribute('data-pika-month'), target.getAttribute('data-pika-day')));
-	                    if (opts.bound) {
-	                        sto(function() {
-	                            self.hide();
-	                            if (opts.field) {
-	                                opts.field.blur();
-	                            }
-	                        }, 100);
-	                    }
-	                    return;
-	                }
-	                else if (hasClass(target, 'pika-prev')) {
-	                    self.prevMonth();
-	                }
-	                else if (hasClass(target, 'pika-next')) {
-	                    self.nextMonth();
-	                }
-	            }
-	            if (!hasClass(target, 'pika-select')) {
-	                if (e.preventDefault) {
-	                    e.preventDefault();
-	                } else {
-	                    e.returnValue = false;
-	                    return false;
-	                }
-	            } else {
-	                self._c = true;
-	            }
-	        };
-	
-	        self._onChange = function(e)
-	        {
-	            e = e || window.event;
-	            var target = e.target || e.srcElement;
-	            if (!target) {
-	                return;
-	            }
-	            if (hasClass(target, 'pika-select-month')) {
-	                self.gotoMonth(target.value);
-	            }
-	            else if (hasClass(target, 'pika-select-year')) {
-	                self.gotoYear(target.value);
-	            }
-	        };
-	
-	        self._onInputChange = function(e)
-	        {
-	            var date;
-	
-	            if (e.firedBy === self) {
-	                return;
-	            }
-	            if (hasMoment) {
-	                date = moment(opts.field.value, opts.format);
-	                date = (date && date.isValid()) ? date.toDate() : null;
-	            }
-	            else {
-	                date = new Date(Date.parse(opts.field.value));
-	            }
-	            self.setDate(isDate(date) ? date : null);
-	            if (!self._v) {
-	                self.show();
-	            }
-	        };
-	
-	        self._onInputFocus = function()
-	        {
-	            self.show();
-	        };
-	
-	        self._onInputClick = function()
-	        {
-	            self.show();
-	        };
-	
-	        self._onInputBlur = function()
-	        {
-	            // IE allows pika div to gain focus; catch blur the input field
-	            var pEl = document.activeElement;
-	            do {
-	                if (hasClass(pEl, 'pika-single')) {
-	                    return;
-	                }
-	            }
-	            while ((pEl = pEl.parentNode));
-	            
-	            if (!self._c) {
-	                self._b = sto(function() {
-	                    self.hide();
-	                }, 50);
-	            }
-	            self._c = false;
-	        };
-	
-	        self._onClick = function(e)
-	        {
-	            e = e || window.event;
-	            var target = e.target || e.srcElement,
-	                pEl = target;
-	            if (!target) {
-	                return;
-	            }
-	            if (!hasEventListeners && hasClass(target, 'pika-select')) {
-	                if (!target.onchange) {
-	                    target.setAttribute('onchange', 'return;');
-	                    addEvent(target, 'change', self._onChange);
-	                }
-	            }
-	            do {
-	                if (hasClass(pEl, 'pika-single') || pEl === opts.trigger) {
-	                    return;
-	                }
-	            }
-	            while ((pEl = pEl.parentNode));
-	            if (self._v && target !== opts.trigger && pEl !== opts.trigger) {
-	                self.hide();
-	            }
-	        };
-	
-	        self.el = document.createElement('div');
-	        self.el.className = 'pika-single' + (opts.isRTL ? ' is-rtl' : '');
-	
-	        addEvent(self.el, 'mousedown', self._onMouseDown, true);
-	        addEvent(self.el, 'change', self._onChange);
-	
-	        if (opts.field) {
-	            if (opts.container) {
-	                opts.container.appendChild(self.el);
-	            } else if (opts.bound) {
-	                document.body.appendChild(self.el);
-	            } else {
-	                opts.field.parentNode.insertBefore(self.el, opts.field.nextSibling);
-	            }
-	            addEvent(opts.field, 'change', self._onInputChange);
-	
-	            if (!opts.defaultDate) {
-	                if (hasMoment && opts.field.value) {
-	                    opts.defaultDate = moment(opts.field.value, opts.format).toDate();
-	                } else {
-	                    opts.defaultDate = new Date(Date.parse(opts.field.value));
-	                }
-	                opts.setDefaultDate = true;
-	            }
-	        }
-	
-	        var defDate = opts.defaultDate;
-	
-	        if (isDate(defDate)) {
-	            if (opts.setDefaultDate) {
-	                self.setDate(defDate, true);
-	            } else {
-	                self.gotoDate(defDate);
-	            }
-	        } else {
-	            self.gotoDate(new Date());
-	        }
-	
-	        if (opts.bound) {
-	            this.hide();
-	            self.el.className += ' is-bound';
-	            addEvent(opts.trigger, 'click', self._onInputClick);
-	            addEvent(opts.trigger, 'focus', self._onInputFocus);
-	            addEvent(opts.trigger, 'blur', self._onInputBlur);
-	        } else {
-	            this.show();
-	        }
-	    };
-	
-	
-	    /**
-	     * public Pikaday API
-	     */
-	    Pikaday.prototype = {
-	
-	
-	        /**
-	         * configure functionality
-	         */
-	        config: function(options)
-	        {
-	            if (!this._o) {
-	                this._o = extend({}, defaults, true);
-	            }
-	
-	            var opts = extend(this._o, options, true);
-	
-	            opts.isRTL = !!opts.isRTL;
-	
-	            opts.field = (opts.field && opts.field.nodeName) ? opts.field : null;
-	
-	            opts.bound = !!(opts.bound !== undefined ? opts.field && opts.bound : opts.field);
-	
-	            opts.trigger = (opts.trigger && opts.trigger.nodeName) ? opts.trigger : opts.field;
-	
-	            opts.disableWeekends = !!opts.disableWeekends;
-	
-	            opts.disableDayFn = (typeof opts.disableDayFn) == "function" ? opts.disableDayFn : null;
-	
-	            var nom = parseInt(opts.numberOfMonths, 10) || 1;
-	            opts.numberOfMonths = nom > 4 ? 4 : nom;
-	
-	            if (!isDate(opts.minDate)) {
-	                opts.minDate = false;
-	            }
-	            if (!isDate(opts.maxDate)) {
-	                opts.maxDate = false;
-	            }
-	            if ((opts.minDate && opts.maxDate) && opts.maxDate < opts.minDate) {
-	                opts.maxDate = opts.minDate = false;
-	            }
-	            if (opts.minDate) {
-	                setToStartOfDay(opts.minDate);
-	                opts.minYear  = opts.minDate.getFullYear();
-	                opts.minMonth = opts.minDate.getMonth();
-	            }
-	            if (opts.maxDate) {
-	                setToStartOfDay(opts.maxDate);
-	                opts.maxYear  = opts.maxDate.getFullYear();
-	                opts.maxMonth = opts.maxDate.getMonth();
-	            }
-	
-	            if (isArray(opts.yearRange)) {
-	                var fallback = new Date().getFullYear() - 10;
-	                opts.yearRange[0] = parseInt(opts.yearRange[0], 10) || fallback;
-	                opts.yearRange[1] = parseInt(opts.yearRange[1], 10) || fallback;
-	            } else {
-	                opts.yearRange = Math.abs(parseInt(opts.yearRange, 10)) || defaults.yearRange;
-	                if (opts.yearRange > 100) {
-	                    opts.yearRange = 100;
-	                }
-	            }
-	
-	            return opts;
-	        },
-	
-	        /**
-	         * return a formatted string of the current selection (using Moment.js if available)
-	         */
-	        toString: function(format)
-	        {
-	            return !isDate(this._d) ? '' : hasMoment ? moment(this._d).format(format || this._o.format) : this._d.toDateString();
-	        },
-	
-	        /**
-	         * return a Moment.js object of the current selection (if available)
-	         */
-	        getMoment: function()
-	        {
-	            return hasMoment ? moment(this._d) : null;
-	        },
-	
-	        /**
-	         * set the current selection from a Moment.js object (if available)
-	         */
-	        setMoment: function(date, preventOnSelect)
-	        {
-	            if (hasMoment && moment.isMoment(date)) {
-	                this.setDate(date.toDate(), preventOnSelect);
-	            }
-	        },
-	
-	        /**
-	         * return a Date object of the current selection
-	         */
-	        getDate: function()
-	        {
-	            return isDate(this._d) ? new Date(this._d.getTime()) : null;
-	        },
-	
-	        /**
-	         * set the current selection
-	         */
-	        setDate: function(date, preventOnSelect)
-	        {
-	            if (!date) {
-	                this._d = null;
-	
-	                if (this._o.field) {
-	                    this._o.field.value = '';
-	                    fireEvent(this._o.field, 'change', { firedBy: this });
-	                }
-	
-	                return this.draw();
-	            }
-	            if (typeof date === 'string') {
-	                date = new Date(Date.parse(date));
-	            }
-	            if (!isDate(date)) {
-	                return;
-	            }
-	
-	            var min = this._o.minDate,
-	                max = this._o.maxDate;
-	
-	            if (isDate(min) && date < min) {
-	                date = min;
-	            } else if (isDate(max) && date > max) {
-	                date = max;
-	            }
-	
-	            this._d = new Date(date.getTime());
-	            setToStartOfDay(this._d);
-	            this.gotoDate(this._d);
-	
-	            if (this._o.field) {
-	                this._o.field.value = this.toString();
-	                fireEvent(this._o.field, 'change', { firedBy: this });
-	            }
-	            if (!preventOnSelect && typeof this._o.onSelect === 'function') {
-	                this._o.onSelect.call(this, this.getDate());
-	            }
-	        },
-	
-	        /**
-	         * change view to a specific date
-	         */
-	        gotoDate: function(date)
-	        {
-	            var newCalendar = true;
-	
-	            if (!isDate(date)) {
-	                return;
-	            }
-	
-	            if (this.calendars) {
-	                var firstVisibleDate = new Date(this.calendars[0].year, this.calendars[0].month, 1),
-	                    lastVisibleDate = new Date(this.calendars[this.calendars.length-1].year, this.calendars[this.calendars.length-1].month, 1),
-	                    visibleDate = date.getTime();
-	                // get the end of the month
-	                lastVisibleDate.setMonth(lastVisibleDate.getMonth()+1);
-	                lastVisibleDate.setDate(lastVisibleDate.getDate()-1);
-	                newCalendar = (visibleDate < firstVisibleDate.getTime() || lastVisibleDate.getTime() < visibleDate);
-	            }
-	
-	            if (newCalendar) {
-	                this.calendars = [{
-	                    month: date.getMonth(),
-	                    year: date.getFullYear()
-	                }];
-	                if (this._o.mainCalendar === 'right') {
-	                    this.calendars[0].month += 1 - this._o.numberOfMonths;
-	                }
-	            }
-	
-	            this.adjustCalendars();
-	        },
-	
-	        adjustCalendars: function() {
-	            this.calendars[0] = adjustCalendar(this.calendars[0]);
-	            for (var c = 1; c < this._o.numberOfMonths; c++) {
-	                this.calendars[c] = adjustCalendar({
-	                    month: this.calendars[0].month + c,
-	                    year: this.calendars[0].year
-	                });
-	            }
-	            this.draw();
-	        },
-	
-	        gotoToday: function()
-	        {
-	            this.gotoDate(new Date());
-	        },
-	
-	        /**
-	         * change view to a specific month (zero-index, e.g. 0: January)
-	         */
-	        gotoMonth: function(month)
-	        {
-	            if (!isNaN(month)) {
-	                this.calendars[0].month = parseInt(month, 10);
-	                this.adjustCalendars();
-	            }
-	        },
-	
-	        nextMonth: function()
-	        {
-	            this.calendars[0].month++;
-	            this.adjustCalendars();
-	        },
-	
-	        prevMonth: function()
-	        {
-	            this.calendars[0].month--;
-	            this.adjustCalendars();
-	        },
-	
-	        /**
-	         * change view to a specific full year (e.g. "2012")
-	         */
-	        gotoYear: function(year)
-	        {
-	            if (!isNaN(year)) {
-	                this.calendars[0].year = parseInt(year, 10);
-	                this.adjustCalendars();
-	            }
-	        },
-	
-	        /**
-	         * change the minDate
-	         */
-	        setMinDate: function(value)
-	        {
-	            this._o.minDate = value;
-	        },
-	
-	        /**
-	         * change the maxDate
-	         */
-	        setMaxDate: function(value)
-	        {
-	            this._o.maxDate = value;
-	        },
-	
-	        /**
-	         * refresh the HTML
-	         */
-	        draw: function(force)
-	        {
-	            if (!this._v && !force) {
-	                return;
-	            }
-	            var opts = this._o,
-	                minYear = opts.minYear,
-	                maxYear = opts.maxYear,
-	                minMonth = opts.minMonth,
-	                maxMonth = opts.maxMonth,
-	                html = '';
-	
-	            if (this._y <= minYear) {
-	                this._y = minYear;
-	                if (!isNaN(minMonth) && this._m < minMonth) {
-	                    this._m = minMonth;
-	                }
-	            }
-	            if (this._y >= maxYear) {
-	                this._y = maxYear;
-	                if (!isNaN(maxMonth) && this._m > maxMonth) {
-	                    this._m = maxMonth;
-	                }
-	            }
-	
-	            for (var c = 0; c < opts.numberOfMonths; c++) {
-	                html += '<div class="pika-lendar">' + renderTitle(this, c, this.calendars[c].year, this.calendars[c].month, this.calendars[0].year) + this.render(this.calendars[c].year, this.calendars[c].month) + '</div>';
-	            }
-	
-	            this.el.innerHTML = html;
-	
-	            if (opts.bound) {
-	                if(opts.field.type !== 'hidden') {
-	                    sto(function() {
-	                        opts.trigger.focus();
-	                    }, 1);
-	                }
-	            }
-	
-	            if (typeof this._o.onDraw === 'function') {
-	                var self = this;
-	                sto(function() {
-	                    self._o.onDraw.call(self);
-	                }, 0);
-	            }
-	        },
-	
-	        adjustPosition: function()
-	        {
-	            if (this._o.container) return;
-	            var field = this._o.trigger, pEl = field,
-	            width = this.el.offsetWidth, height = this.el.offsetHeight,
-	            viewportWidth = window.innerWidth || document.documentElement.clientWidth,
-	            viewportHeight = window.innerHeight || document.documentElement.clientHeight,
-	            scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop,
-	            left, top, clientRect;
-	
-	            if (typeof field.getBoundingClientRect === 'function') {
-	                clientRect = field.getBoundingClientRect();
-	                left = clientRect.left + window.pageXOffset;
-	                top = clientRect.bottom + window.pageYOffset;
-	            } else {
-	                left = pEl.offsetLeft;
-	                top  = pEl.offsetTop + pEl.offsetHeight;
-	                while((pEl = pEl.offsetParent)) {
-	                    left += pEl.offsetLeft;
-	                    top  += pEl.offsetTop;
-	                }
-	            }
-	
-	            // default position is bottom & left
-	            if ((this._o.reposition && left + width > viewportWidth) ||
-	                (
-	                    this._o.position.indexOf('right') > -1 &&
-	                    left - width + field.offsetWidth > 0
-	                )
-	            ) {
-	                left = left - width + field.offsetWidth;
-	            }
-	            if ((this._o.reposition && top + height > viewportHeight + scrollTop) ||
-	                (
-	                    this._o.position.indexOf('top') > -1 &&
-	                    top - height - field.offsetHeight > 0
-	                )
-	            ) {
-	                top = top - height - field.offsetHeight;
-	            }
-	
-	            this.el.style.cssText = [
-	                'position: absolute',
-	                'left: ' + left + 'px',
-	                'top: ' + top + 'px'
-	            ].join(';');
-	        },
-	
-	        /**
-	         * render HTML for a particular month
-	         */
-	        render: function(year, month)
-	        {
-	            var opts   = this._o,
-	                now    = new Date(),
-	                days   = getDaysInMonth(year, month),
-	                before = new Date(year, month, 1).getDay(),
-	                data   = [],
-	                row    = [];
-	            setToStartOfDay(now);
-	            if (opts.firstDay > 0) {
-	                before -= opts.firstDay;
-	                if (before < 0) {
-	                    before += 7;
-	                }
-	            }
-	            var cells = days + before,
-	                after = cells;
-	            while(after > 7) {
-	                after -= 7;
-	            }
-	            cells += 7 - after;
-	            for (var i = 0, r = 0; i < cells; i++)
-	            {
-	                var day = new Date(year, month, 1 + (i - before)),
-	                    isSelected = isDate(this._d) ? compareDates(day, this._d) : false,
-	                    isToday = compareDates(day, now),
-	                    isEmpty = i < before || i >= (days + before),
-	                    isDisabled = (opts.minDate && day < opts.minDate) ||
-	                                 (opts.maxDate && day > opts.maxDate) ||
-	                                 (opts.disableWeekends && isWeekend(day)) ||
-	                                 (opts.disableDayFn && opts.disableDayFn(day));
-	
-	                row.push(renderDay(1 + (i - before), month, year, isSelected, isToday, isDisabled, isEmpty));
-	
-	                if (++r === 7) {
-	                    if (opts.showWeekNumber) {
-	                        row.unshift(renderWeek(i - before, month, year));
-	                    }
-	                    data.push(renderRow(row, opts.isRTL));
-	                    row = [];
-	                    r = 0;
-	                }
-	            }
-	            return renderTable(opts, data);
-	        },
-	
-	        isVisible: function()
-	        {
-	            return this._v;
-	        },
-	
-	        show: function()
-	        {
-	            if (!this._v) {
-	                removeClass(this.el, 'is-hidden');
-	                this._v = true;
-	                this.draw();
-	                if (this._o.bound) {
-	                    addEvent(document, 'click', this._onClick);
-	                    this.adjustPosition();
-	                }
-	                if (typeof this._o.onOpen === 'function') {
-	                    this._o.onOpen.call(this);
-	                }
-	            }
-	        },
-	
-	        hide: function()
-	        {
-	            var v = this._v;
-	            if (v !== false) {
-	                if (this._o.bound) {
-	                    removeEvent(document, 'click', this._onClick);
-	                }
-	                this.el.style.cssText = '';
-	                addClass(this.el, 'is-hidden');
-	                this._v = false;
-	                if (v !== undefined && typeof this._o.onClose === 'function') {
-	                    this._o.onClose.call(this);
-	                }
-	            }
-	        },
-	
-	        /**
-	         * GAME OVER
-	         */
-	        destroy: function()
-	        {
-	            this.hide();
-	            removeEvent(this.el, 'mousedown', this._onMouseDown, true);
-	            removeEvent(this.el, 'change', this._onChange);
-	            if (this._o.field) {
-	                removeEvent(this._o.field, 'change', this._onInputChange);
-	                if (this._o.bound) {
-	                    removeEvent(this._o.trigger, 'click', this._onInputClick);
-	                    removeEvent(this._o.trigger, 'focus', this._onInputFocus);
-	                    removeEvent(this._o.trigger, 'blur', this._onInputBlur);
-	                }
-	            }
-	            if (this.el.parentNode) {
-	                this.el.parentNode.removeChild(this.el);
-	            }
-	        }
-	
-	    };
-	
-	    return Pikaday;
-	
-	}));
-
-
-/***/ },
-/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {//! moment.js
@@ -4794,13 +3767,1048 @@
 	    }
 	}).call(this);
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(30)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(28)(module)))
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*!
+	 * Pikaday
+	 *
+	 * Copyright © 2014 David Bushell | BSD & MIT license | https://github.com/dbushell/Pikaday
+	 */
+	
+	(function (root, factory)
+	{
+	    'use strict';
+	
+	    var moment;
+	    if (true) {
+	        // CommonJS module
+	        // Load moment.js as an optional dependency
+	        try { moment = __webpack_require__(8); } catch (e) {}
+	        module.exports = factory(moment);
+	    } else if (typeof define === 'function' && define.amd) {
+	        // AMD. Register as an anonymous module.
+	        define(function (req)
+	        {
+	            // Load moment.js as an optional dependency
+	            var id = 'moment';
+	            try { moment = req(id); } catch (e) {}
+	            return factory(moment);
+	        });
+	    } else {
+	        root.Pikaday = factory(root.moment);
+	    }
+	}(this, function (moment)
+	{
+	    'use strict';
+	
+	    /**
+	     * feature detection and helper functions
+	     */
+	    var hasMoment = typeof moment === 'function',
+	
+	    hasEventListeners = !!window.addEventListener,
+	
+	    document = window.document,
+	
+	    sto = window.setTimeout,
+	
+	    addEvent = function(el, e, callback, capture)
+	    {
+	        if (hasEventListeners) {
+	            el.addEventListener(e, callback, !!capture);
+	        } else {
+	            el.attachEvent('on' + e, callback);
+	        }
+	    },
+	
+	    removeEvent = function(el, e, callback, capture)
+	    {
+	        if (hasEventListeners) {
+	            el.removeEventListener(e, callback, !!capture);
+	        } else {
+	            el.detachEvent('on' + e, callback);
+	        }
+	    },
+	
+	    fireEvent = function(el, eventName, data)
+	    {
+	        var ev;
+	
+	        if (document.createEvent) {
+	            ev = document.createEvent('HTMLEvents');
+	            ev.initEvent(eventName, true, false);
+	            ev = extend(ev, data);
+	            el.dispatchEvent(ev);
+	        } else if (document.createEventObject) {
+	            ev = document.createEventObject();
+	            ev = extend(ev, data);
+	            el.fireEvent('on' + eventName, ev);
+	        }
+	    },
+	
+	    trim = function(str)
+	    {
+	        return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g,'');
+	    },
+	
+	    hasClass = function(el, cn)
+	    {
+	        return (' ' + el.className + ' ').indexOf(' ' + cn + ' ') !== -1;
+	    },
+	
+	    addClass = function(el, cn)
+	    {
+	        if (!hasClass(el, cn)) {
+	            el.className = (el.className === '') ? cn : el.className + ' ' + cn;
+	        }
+	    },
+	
+	    removeClass = function(el, cn)
+	    {
+	        el.className = trim((' ' + el.className + ' ').replace(' ' + cn + ' ', ' '));
+	    },
+	
+	    isArray = function(obj)
+	    {
+	        return (/Array/).test(Object.prototype.toString.call(obj));
+	    },
+	
+	    isDate = function(obj)
+	    {
+	        return (/Date/).test(Object.prototype.toString.call(obj)) && !isNaN(obj.getTime());
+	    },
+	
+	    isWeekend = function(date)
+	    {
+	        var day = date.getDay();
+	        return day === 0 || day === 6;
+	    },
+	
+	    isLeapYear = function(year)
+	    {
+	        // solution by Matti Virkkunen: http://stackoverflow.com/a/4881951
+	        return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
+	    },
+	
+	    getDaysInMonth = function(year, month)
+	    {
+	        return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+	    },
+	
+	    setToStartOfDay = function(date)
+	    {
+	        if (isDate(date)) date.setHours(0,0,0,0);
+	    },
+	
+	    compareDates = function(a,b)
+	    {
+	        // weak date comparison (use setToStartOfDay(date) to ensure correct result)
+	        return a.getTime() === b.getTime();
+	    },
+	
+	    extend = function(to, from, overwrite)
+	    {
+	        var prop, hasProp;
+	        for (prop in from) {
+	            hasProp = to[prop] !== undefined;
+	            if (hasProp && typeof from[prop] === 'object' && from[prop] !== null && from[prop].nodeName === undefined) {
+	                if (isDate(from[prop])) {
+	                    if (overwrite) {
+	                        to[prop] = new Date(from[prop].getTime());
+	                    }
+	                }
+	                else if (isArray(from[prop])) {
+	                    if (overwrite) {
+	                        to[prop] = from[prop].slice(0);
+	                    }
+	                } else {
+	                    to[prop] = extend({}, from[prop], overwrite);
+	                }
+	            } else if (overwrite || !hasProp) {
+	                to[prop] = from[prop];
+	            }
+	        }
+	        return to;
+	    },
+	
+	    adjustCalendar = function(calendar) {
+	        if (calendar.month < 0) {
+	            calendar.year -= Math.ceil(Math.abs(calendar.month)/12);
+	            calendar.month += 12;
+	        }
+	        if (calendar.month > 11) {
+	            calendar.year += Math.floor(Math.abs(calendar.month)/12);
+	            calendar.month -= 12;
+	        }
+	        return calendar;
+	    },
+	
+	    /**
+	     * defaults and localisation
+	     */
+	    defaults = {
+	
+	        // bind the picker to a form field
+	        field: null,
+	
+	        // automatically show/hide the picker on `field` focus (default `true` if `field` is set)
+	        bound: undefined,
+	
+	        // position of the datepicker, relative to the field (default to bottom & left)
+	        // ('bottom' & 'left' keywords are not used, 'top' & 'right' are modifier on the bottom/left position)
+	        position: 'bottom left',
+	
+	        // automatically fit in the viewport even if it means repositioning from the position option
+	        reposition: true,
+	
+	        // the default output format for `.toString()` and `field` value
+	        format: 'YYYY-MM-DD',
+	
+	        // the initial date to view when first opened
+	        defaultDate: null,
+	
+	        // make the `defaultDate` the initial selected value
+	        setDefaultDate: false,
+	
+	        // first day of week (0: Sunday, 1: Monday etc)
+	        firstDay: 0,
+	
+	        // the minimum/earliest date that can be selected
+	        minDate: null,
+	        // the maximum/latest date that can be selected
+	        maxDate: null,
+	
+	        // number of years either side, or array of upper/lower range
+	        yearRange: 10,
+	
+	        // show week numbers at head of row
+	        showWeekNumber: false,
+	
+	        // used internally (don't config outside)
+	        minYear: 0,
+	        maxYear: 9999,
+	        minMonth: undefined,
+	        maxMonth: undefined,
+	
+	        isRTL: false,
+	
+	        // Additional text to append to the year in the calendar title
+	        yearSuffix: '',
+	
+	        // Render the month after year in the calendar title
+	        showMonthAfterYear: false,
+	
+	        // how many months are visible
+	        numberOfMonths: 1,
+	
+	        // when numberOfMonths is used, this will help you to choose where the main calendar will be (default `left`, can be set to `right`)
+	        // only used for the first display or when a selected date is not visible
+	        mainCalendar: 'left',
+	
+	        // Specify a DOM element to render the calendar in
+	        container: undefined,
+	
+	        // internationalization
+	        i18n: {
+	            previousMonth : 'Previous Month',
+	            nextMonth     : 'Next Month',
+	            months        : ['January','February','March','April','May','June','July','August','September','October','November','December'],
+	            weekdays      : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+	            weekdaysShort : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+	        },
+	
+	        // callback function
+	        onSelect: null,
+	        onOpen: null,
+	        onClose: null,
+	        onDraw: null
+	    },
+	
+	
+	    /**
+	     * templating functions to abstract HTML rendering
+	     */
+	    renderDayName = function(opts, day, abbr)
+	    {
+	        day += opts.firstDay;
+	        while (day >= 7) {
+	            day -= 7;
+	        }
+	        return abbr ? opts.i18n.weekdaysShort[day] : opts.i18n.weekdays[day];
+	    },
+	
+	    renderDay = function(d, m, y, isSelected, isToday, isDisabled, isEmpty)
+	    {
+	        if (isEmpty) {
+	            return '<td class="is-empty"></td>';
+	        }
+	        var arr = [];
+	        if (isDisabled) {
+	            arr.push('is-disabled');
+	        }
+	        if (isToday) {
+	            arr.push('is-today');
+	        }
+	        if (isSelected) {
+	            arr.push('is-selected');
+	        }
+	        return '<td data-day="' + d + '" class="' + arr.join(' ') + '">' +
+	                 '<button class="pika-button pika-day" type="button" ' +
+	                    'data-pika-year="' + y + '" data-pika-month="' + m + '" data-pika-day="' + d + '">' +
+	                        d +
+	                 '</button>' +
+	               '</td>';
+	    },
+	
+	    renderWeek = function (d, m, y) {
+	        // Lifted from http://javascript.about.com/library/blweekyear.htm, lightly modified.
+	        var onejan = new Date(y, 0, 1),
+	            weekNum = Math.ceil((((new Date(y, m, d) - onejan) / 86400000) + onejan.getDay()+1)/7);
+	        return '<td class="pika-week">' + weekNum + '</td>';
+	    },
+	
+	    renderRow = function(days, isRTL)
+	    {
+	        return '<tr>' + (isRTL ? days.reverse() : days).join('') + '</tr>';
+	    },
+	
+	    renderBody = function(rows)
+	    {
+	        return '<tbody>' + rows.join('') + '</tbody>';
+	    },
+	
+	    renderHead = function(opts)
+	    {
+	        var i, arr = [];
+	        if (opts.showWeekNumber) {
+	            arr.push('<th></th>');
+	        }
+	        for (i = 0; i < 7; i++) {
+	            arr.push('<th scope="col"><abbr title="' + renderDayName(opts, i) + '">' + renderDayName(opts, i, true) + '</abbr></th>');
+	        }
+	        return '<thead>' + (opts.isRTL ? arr.reverse() : arr).join('') + '</thead>';
+	    },
+	
+	    renderTitle = function(instance, c, year, month, refYear)
+	    {
+	        var i, j, arr,
+	            opts = instance._o,
+	            isMinYear = year === opts.minYear,
+	            isMaxYear = year === opts.maxYear,
+	            html = '<div class="pika-title">',
+	            monthHtml,
+	            yearHtml,
+	            prev = true,
+	            next = true;
+	
+	        for (arr = [], i = 0; i < 12; i++) {
+	            arr.push('<option value="' + (year === refYear ? i - c : 12 + i - c) + '"' +
+	                (i === month ? ' selected': '') +
+	                ((isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth) ? 'disabled' : '') + '>' +
+	                opts.i18n.months[i] + '</option>');
+	        }
+	        monthHtml = '<div class="pika-label">' + opts.i18n.months[month] + '<select class="pika-select pika-select-month">' + arr.join('') + '</select></div>';
+	
+	        if (isArray(opts.yearRange)) {
+	            i = opts.yearRange[0];
+	            j = opts.yearRange[1] + 1;
+	        } else {
+	            i = year - opts.yearRange;
+	            j = 1 + year + opts.yearRange;
+	        }
+	
+	        for (arr = []; i < j && i <= opts.maxYear; i++) {
+	            if (i >= opts.minYear) {
+	                arr.push('<option value="' + i + '"' + (i === year ? ' selected': '') + '>' + (i) + '</option>');
+	            }
+	        }
+	        yearHtml = '<div class="pika-label">' + year + opts.yearSuffix + '<select class="pika-select pika-select-year">' + arr.join('') + '</select></div>';
+	
+	        if (opts.showMonthAfterYear) {
+	            html += yearHtml + monthHtml;
+	        } else {
+	            html += monthHtml + yearHtml;
+	        }
+	
+	        if (isMinYear && (month === 0 || opts.minMonth >= month)) {
+	            prev = false;
+	        }
+	
+	        if (isMaxYear && (month === 11 || opts.maxMonth <= month)) {
+	            next = false;
+	        }
+	
+	        if (c === 0) {
+	            html += '<button class="pika-prev' + (prev ? '' : ' is-disabled') + '" type="button">' + opts.i18n.previousMonth + '</button>';
+	        }
+	        if (c === (instance._o.numberOfMonths - 1) ) {
+	            html += '<button class="pika-next' + (next ? '' : ' is-disabled') + '" type="button">' + opts.i18n.nextMonth + '</button>';
+	        }
+	
+	        return html += '</div>';
+	    },
+	
+	    renderTable = function(opts, data)
+	    {
+	        return '<table cellpadding="0" cellspacing="0" class="pika-table">' + renderHead(opts) + renderBody(data) + '</table>';
+	    },
+	
+	
+	    /**
+	     * Pikaday constructor
+	     */
+	    Pikaday = function(options)
+	    {
+	        var self = this,
+	            opts = self.config(options);
+	
+	        self._onMouseDown = function(e)
+	        {
+	            if (!self._v) {
+	                return;
+	            }
+	            e = e || window.event;
+	            var target = e.target || e.srcElement;
+	            if (!target) {
+	                return;
+	            }
+	
+	            if (!hasClass(target, 'is-disabled')) {
+	                if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty')) {
+	                    self.setDate(new Date(target.getAttribute('data-pika-year'), target.getAttribute('data-pika-month'), target.getAttribute('data-pika-day')));
+	                    if (opts.bound) {
+	                        sto(function() {
+	                            self.hide();
+	                            if (opts.field) {
+	                                opts.field.blur();
+	                            }
+	                        }, 100);
+	                    }
+	                    return;
+	                }
+	                else if (hasClass(target, 'pika-prev')) {
+	                    self.prevMonth();
+	                }
+	                else if (hasClass(target, 'pika-next')) {
+	                    self.nextMonth();
+	                }
+	            }
+	            if (!hasClass(target, 'pika-select')) {
+	                if (e.preventDefault) {
+	                    e.preventDefault();
+	                } else {
+	                    e.returnValue = false;
+	                    return false;
+	                }
+	            } else {
+	                self._c = true;
+	            }
+	        };
+	
+	        self._onChange = function(e)
+	        {
+	            e = e || window.event;
+	            var target = e.target || e.srcElement;
+	            if (!target) {
+	                return;
+	            }
+	            if (hasClass(target, 'pika-select-month')) {
+	                self.gotoMonth(target.value);
+	            }
+	            else if (hasClass(target, 'pika-select-year')) {
+	                self.gotoYear(target.value);
+	            }
+	        };
+	
+	        self._onInputChange = function(e)
+	        {
+	            var date;
+	
+	            if (e.firedBy === self) {
+	                return;
+	            }
+	            if (hasMoment) {
+	                date = moment(opts.field.value, opts.format);
+	                date = (date && date.isValid()) ? date.toDate() : null;
+	            }
+	            else {
+	                date = new Date(Date.parse(opts.field.value));
+	            }
+	            self.setDate(isDate(date) ? date : null);
+	            if (!self._v) {
+	                self.show();
+	            }
+	        };
+	
+	        self._onInputFocus = function()
+	        {
+	            self.show();
+	        };
+	
+	        self._onInputClick = function()
+	        {
+	            self.show();
+	        };
+	
+	        self._onInputBlur = function()
+	        {
+	            // IE allows pika div to gain focus; catch blur the input field
+	            var pEl = document.activeElement;
+	            do {
+	                if (hasClass(pEl, 'pika-single')) {
+	                    return;
+	                }
+	            }
+	            while ((pEl = pEl.parentNode));
+	            
+	            if (!self._c) {
+	                self._b = sto(function() {
+	                    self.hide();
+	                }, 50);
+	            }
+	            self._c = false;
+	        };
+	
+	        self._onClick = function(e)
+	        {
+	            e = e || window.event;
+	            var target = e.target || e.srcElement,
+	                pEl = target;
+	            if (!target) {
+	                return;
+	            }
+	            if (!hasEventListeners && hasClass(target, 'pika-select')) {
+	                if (!target.onchange) {
+	                    target.setAttribute('onchange', 'return;');
+	                    addEvent(target, 'change', self._onChange);
+	                }
+	            }
+	            do {
+	                if (hasClass(pEl, 'pika-single') || pEl === opts.trigger) {
+	                    return;
+	                }
+	            }
+	            while ((pEl = pEl.parentNode));
+	            if (self._v && target !== opts.trigger && pEl !== opts.trigger) {
+	                self.hide();
+	            }
+	        };
+	
+	        self.el = document.createElement('div');
+	        self.el.className = 'pika-single' + (opts.isRTL ? ' is-rtl' : '');
+	
+	        addEvent(self.el, 'mousedown', self._onMouseDown, true);
+	        addEvent(self.el, 'change', self._onChange);
+	
+	        if (opts.field) {
+	            if (opts.container) {
+	                opts.container.appendChild(self.el);
+	            } else if (opts.bound) {
+	                document.body.appendChild(self.el);
+	            } else {
+	                opts.field.parentNode.insertBefore(self.el, opts.field.nextSibling);
+	            }
+	            addEvent(opts.field, 'change', self._onInputChange);
+	
+	            if (!opts.defaultDate) {
+	                if (hasMoment && opts.field.value) {
+	                    opts.defaultDate = moment(opts.field.value, opts.format).toDate();
+	                } else {
+	                    opts.defaultDate = new Date(Date.parse(opts.field.value));
+	                }
+	                opts.setDefaultDate = true;
+	            }
+	        }
+	
+	        var defDate = opts.defaultDate;
+	
+	        if (isDate(defDate)) {
+	            if (opts.setDefaultDate) {
+	                self.setDate(defDate, true);
+	            } else {
+	                self.gotoDate(defDate);
+	            }
+	        } else {
+	            self.gotoDate(new Date());
+	        }
+	
+	        if (opts.bound) {
+	            this.hide();
+	            self.el.className += ' is-bound';
+	            addEvent(opts.trigger, 'click', self._onInputClick);
+	            addEvent(opts.trigger, 'focus', self._onInputFocus);
+	            addEvent(opts.trigger, 'blur', self._onInputBlur);
+	        } else {
+	            this.show();
+	        }
+	    };
+	
+	
+	    /**
+	     * public Pikaday API
+	     */
+	    Pikaday.prototype = {
+	
+	
+	        /**
+	         * configure functionality
+	         */
+	        config: function(options)
+	        {
+	            if (!this._o) {
+	                this._o = extend({}, defaults, true);
+	            }
+	
+	            var opts = extend(this._o, options, true);
+	
+	            opts.isRTL = !!opts.isRTL;
+	
+	            opts.field = (opts.field && opts.field.nodeName) ? opts.field : null;
+	
+	            opts.bound = !!(opts.bound !== undefined ? opts.field && opts.bound : opts.field);
+	
+	            opts.trigger = (opts.trigger && opts.trigger.nodeName) ? opts.trigger : opts.field;
+	
+	            opts.disableWeekends = !!opts.disableWeekends;
+	
+	            opts.disableDayFn = (typeof opts.disableDayFn) == "function" ? opts.disableDayFn : null;
+	
+	            var nom = parseInt(opts.numberOfMonths, 10) || 1;
+	            opts.numberOfMonths = nom > 4 ? 4 : nom;
+	
+	            if (!isDate(opts.minDate)) {
+	                opts.minDate = false;
+	            }
+	            if (!isDate(opts.maxDate)) {
+	                opts.maxDate = false;
+	            }
+	            if ((opts.minDate && opts.maxDate) && opts.maxDate < opts.minDate) {
+	                opts.maxDate = opts.minDate = false;
+	            }
+	            if (opts.minDate) {
+	                setToStartOfDay(opts.minDate);
+	                opts.minYear  = opts.minDate.getFullYear();
+	                opts.minMonth = opts.minDate.getMonth();
+	            }
+	            if (opts.maxDate) {
+	                setToStartOfDay(opts.maxDate);
+	                opts.maxYear  = opts.maxDate.getFullYear();
+	                opts.maxMonth = opts.maxDate.getMonth();
+	            }
+	
+	            if (isArray(opts.yearRange)) {
+	                var fallback = new Date().getFullYear() - 10;
+	                opts.yearRange[0] = parseInt(opts.yearRange[0], 10) || fallback;
+	                opts.yearRange[1] = parseInt(opts.yearRange[1], 10) || fallback;
+	            } else {
+	                opts.yearRange = Math.abs(parseInt(opts.yearRange, 10)) || defaults.yearRange;
+	                if (opts.yearRange > 100) {
+	                    opts.yearRange = 100;
+	                }
+	            }
+	
+	            return opts;
+	        },
+	
+	        /**
+	         * return a formatted string of the current selection (using Moment.js if available)
+	         */
+	        toString: function(format)
+	        {
+	            return !isDate(this._d) ? '' : hasMoment ? moment(this._d).format(format || this._o.format) : this._d.toDateString();
+	        },
+	
+	        /**
+	         * return a Moment.js object of the current selection (if available)
+	         */
+	        getMoment: function()
+	        {
+	            return hasMoment ? moment(this._d) : null;
+	        },
+	
+	        /**
+	         * set the current selection from a Moment.js object (if available)
+	         */
+	        setMoment: function(date, preventOnSelect)
+	        {
+	            if (hasMoment && moment.isMoment(date)) {
+	                this.setDate(date.toDate(), preventOnSelect);
+	            }
+	        },
+	
+	        /**
+	         * return a Date object of the current selection
+	         */
+	        getDate: function()
+	        {
+	            return isDate(this._d) ? new Date(this._d.getTime()) : null;
+	        },
+	
+	        /**
+	         * set the current selection
+	         */
+	        setDate: function(date, preventOnSelect)
+	        {
+	            if (!date) {
+	                this._d = null;
+	
+	                if (this._o.field) {
+	                    this._o.field.value = '';
+	                    fireEvent(this._o.field, 'change', { firedBy: this });
+	                }
+	
+	                return this.draw();
+	            }
+	            if (typeof date === 'string') {
+	                date = new Date(Date.parse(date));
+	            }
+	            if (!isDate(date)) {
+	                return;
+	            }
+	
+	            var min = this._o.minDate,
+	                max = this._o.maxDate;
+	
+	            if (isDate(min) && date < min) {
+	                date = min;
+	            } else if (isDate(max) && date > max) {
+	                date = max;
+	            }
+	
+	            this._d = new Date(date.getTime());
+	            setToStartOfDay(this._d);
+	            this.gotoDate(this._d);
+	
+	            if (this._o.field) {
+	                this._o.field.value = this.toString();
+	                fireEvent(this._o.field, 'change', { firedBy: this });
+	            }
+	            if (!preventOnSelect && typeof this._o.onSelect === 'function') {
+	                this._o.onSelect.call(this, this.getDate());
+	            }
+	        },
+	
+	        /**
+	         * change view to a specific date
+	         */
+	        gotoDate: function(date)
+	        {
+	            var newCalendar = true;
+	
+	            if (!isDate(date)) {
+	                return;
+	            }
+	
+	            if (this.calendars) {
+	                var firstVisibleDate = new Date(this.calendars[0].year, this.calendars[0].month, 1),
+	                    lastVisibleDate = new Date(this.calendars[this.calendars.length-1].year, this.calendars[this.calendars.length-1].month, 1),
+	                    visibleDate = date.getTime();
+	                // get the end of the month
+	                lastVisibleDate.setMonth(lastVisibleDate.getMonth()+1);
+	                lastVisibleDate.setDate(lastVisibleDate.getDate()-1);
+	                newCalendar = (visibleDate < firstVisibleDate.getTime() || lastVisibleDate.getTime() < visibleDate);
+	            }
+	
+	            if (newCalendar) {
+	                this.calendars = [{
+	                    month: date.getMonth(),
+	                    year: date.getFullYear()
+	                }];
+	                if (this._o.mainCalendar === 'right') {
+	                    this.calendars[0].month += 1 - this._o.numberOfMonths;
+	                }
+	            }
+	
+	            this.adjustCalendars();
+	        },
+	
+	        adjustCalendars: function() {
+	            this.calendars[0] = adjustCalendar(this.calendars[0]);
+	            for (var c = 1; c < this._o.numberOfMonths; c++) {
+	                this.calendars[c] = adjustCalendar({
+	                    month: this.calendars[0].month + c,
+	                    year: this.calendars[0].year
+	                });
+	            }
+	            this.draw();
+	        },
+	
+	        gotoToday: function()
+	        {
+	            this.gotoDate(new Date());
+	        },
+	
+	        /**
+	         * change view to a specific month (zero-index, e.g. 0: January)
+	         */
+	        gotoMonth: function(month)
+	        {
+	            if (!isNaN(month)) {
+	                this.calendars[0].month = parseInt(month, 10);
+	                this.adjustCalendars();
+	            }
+	        },
+	
+	        nextMonth: function()
+	        {
+	            this.calendars[0].month++;
+	            this.adjustCalendars();
+	        },
+	
+	        prevMonth: function()
+	        {
+	            this.calendars[0].month--;
+	            this.adjustCalendars();
+	        },
+	
+	        /**
+	         * change view to a specific full year (e.g. "2012")
+	         */
+	        gotoYear: function(year)
+	        {
+	            if (!isNaN(year)) {
+	                this.calendars[0].year = parseInt(year, 10);
+	                this.adjustCalendars();
+	            }
+	        },
+	
+	        /**
+	         * change the minDate
+	         */
+	        setMinDate: function(value)
+	        {
+	            this._o.minDate = value;
+	        },
+	
+	        /**
+	         * change the maxDate
+	         */
+	        setMaxDate: function(value)
+	        {
+	            this._o.maxDate = value;
+	        },
+	
+	        /**
+	         * refresh the HTML
+	         */
+	        draw: function(force)
+	        {
+	            if (!this._v && !force) {
+	                return;
+	            }
+	            var opts = this._o,
+	                minYear = opts.minYear,
+	                maxYear = opts.maxYear,
+	                minMonth = opts.minMonth,
+	                maxMonth = opts.maxMonth,
+	                html = '';
+	
+	            if (this._y <= minYear) {
+	                this._y = minYear;
+	                if (!isNaN(minMonth) && this._m < minMonth) {
+	                    this._m = minMonth;
+	                }
+	            }
+	            if (this._y >= maxYear) {
+	                this._y = maxYear;
+	                if (!isNaN(maxMonth) && this._m > maxMonth) {
+	                    this._m = maxMonth;
+	                }
+	            }
+	
+	            for (var c = 0; c < opts.numberOfMonths; c++) {
+	                html += '<div class="pika-lendar">' + renderTitle(this, c, this.calendars[c].year, this.calendars[c].month, this.calendars[0].year) + this.render(this.calendars[c].year, this.calendars[c].month) + '</div>';
+	            }
+	
+	            this.el.innerHTML = html;
+	
+	            if (opts.bound) {
+	                if(opts.field.type !== 'hidden') {
+	                    sto(function() {
+	                        opts.trigger.focus();
+	                    }, 1);
+	                }
+	            }
+	
+	            if (typeof this._o.onDraw === 'function') {
+	                var self = this;
+	                sto(function() {
+	                    self._o.onDraw.call(self);
+	                }, 0);
+	            }
+	        },
+	
+	        adjustPosition: function()
+	        {
+	            if (this._o.container) return;
+	            var field = this._o.trigger, pEl = field,
+	            width = this.el.offsetWidth, height = this.el.offsetHeight,
+	            viewportWidth = window.innerWidth || document.documentElement.clientWidth,
+	            viewportHeight = window.innerHeight || document.documentElement.clientHeight,
+	            scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop,
+	            left, top, clientRect;
+	
+	            if (typeof field.getBoundingClientRect === 'function') {
+	                clientRect = field.getBoundingClientRect();
+	                left = clientRect.left + window.pageXOffset;
+	                top = clientRect.bottom + window.pageYOffset;
+	            } else {
+	                left = pEl.offsetLeft;
+	                top  = pEl.offsetTop + pEl.offsetHeight;
+	                while((pEl = pEl.offsetParent)) {
+	                    left += pEl.offsetLeft;
+	                    top  += pEl.offsetTop;
+	                }
+	            }
+	
+	            // default position is bottom & left
+	            if ((this._o.reposition && left + width > viewportWidth) ||
+	                (
+	                    this._o.position.indexOf('right') > -1 &&
+	                    left - width + field.offsetWidth > 0
+	                )
+	            ) {
+	                left = left - width + field.offsetWidth;
+	            }
+	            if ((this._o.reposition && top + height > viewportHeight + scrollTop) ||
+	                (
+	                    this._o.position.indexOf('top') > -1 &&
+	                    top - height - field.offsetHeight > 0
+	                )
+	            ) {
+	                top = top - height - field.offsetHeight;
+	            }
+	
+	            this.el.style.cssText = [
+	                'position: absolute',
+	                'left: ' + left + 'px',
+	                'top: ' + top + 'px'
+	            ].join(';');
+	        },
+	
+	        /**
+	         * render HTML for a particular month
+	         */
+	        render: function(year, month)
+	        {
+	            var opts   = this._o,
+	                now    = new Date(),
+	                days   = getDaysInMonth(year, month),
+	                before = new Date(year, month, 1).getDay(),
+	                data   = [],
+	                row    = [];
+	            setToStartOfDay(now);
+	            if (opts.firstDay > 0) {
+	                before -= opts.firstDay;
+	                if (before < 0) {
+	                    before += 7;
+	                }
+	            }
+	            var cells = days + before,
+	                after = cells;
+	            while(after > 7) {
+	                after -= 7;
+	            }
+	            cells += 7 - after;
+	            for (var i = 0, r = 0; i < cells; i++)
+	            {
+	                var day = new Date(year, month, 1 + (i - before)),
+	                    isSelected = isDate(this._d) ? compareDates(day, this._d) : false,
+	                    isToday = compareDates(day, now),
+	                    isEmpty = i < before || i >= (days + before),
+	                    isDisabled = (opts.minDate && day < opts.minDate) ||
+	                                 (opts.maxDate && day > opts.maxDate) ||
+	                                 (opts.disableWeekends && isWeekend(day)) ||
+	                                 (opts.disableDayFn && opts.disableDayFn(day));
+	
+	                row.push(renderDay(1 + (i - before), month, year, isSelected, isToday, isDisabled, isEmpty));
+	
+	                if (++r === 7) {
+	                    if (opts.showWeekNumber) {
+	                        row.unshift(renderWeek(i - before, month, year));
+	                    }
+	                    data.push(renderRow(row, opts.isRTL));
+	                    row = [];
+	                    r = 0;
+	                }
+	            }
+	            return renderTable(opts, data);
+	        },
+	
+	        isVisible: function()
+	        {
+	            return this._v;
+	        },
+	
+	        show: function()
+	        {
+	            if (!this._v) {
+	                removeClass(this.el, 'is-hidden');
+	                this._v = true;
+	                this.draw();
+	                if (this._o.bound) {
+	                    addEvent(document, 'click', this._onClick);
+	                    this.adjustPosition();
+	                }
+	                if (typeof this._o.onOpen === 'function') {
+	                    this._o.onOpen.call(this);
+	                }
+	            }
+	        },
+	
+	        hide: function()
+	        {
+	            var v = this._v;
+	            if (v !== false) {
+	                if (this._o.bound) {
+	                    removeEvent(document, 'click', this._onClick);
+	                }
+	                this.el.style.cssText = '';
+	                addClass(this.el, 'is-hidden');
+	                this._v = false;
+	                if (v !== undefined && typeof this._o.onClose === 'function') {
+	                    this._o.onClose.call(this);
+	                }
+	            }
+	        },
+	
+	        /**
+	         * GAME OVER
+	         */
+	        destroy: function()
+	        {
+	            this.hide();
+	            removeEvent(this.el, 'mousedown', this._onMouseDown, true);
+	            removeEvent(this.el, 'change', this._onChange);
+	            if (this._o.field) {
+	                removeEvent(this._o.field, 'change', this._onInputChange);
+	                if (this._o.bound) {
+	                    removeEvent(this._o.trigger, 'click', this._onInputClick);
+	                    removeEvent(this._o.trigger, 'focus', this._onInputFocus);
+	                    removeEvent(this._o.trigger, 'blur', this._onInputBlur);
+	                }
+	            }
+	            if (this.el.parentNode) {
+	                this.el.parentNode.removeChild(this.el);
+	            }
+	        }
+	
+	    };
+	
+	    return Pikaday;
+	
+	}));
+
 
 /***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var H = __webpack_require__(32);
+	var H = __webpack_require__(30);
 	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<input type=\"text\" class=\"date\">\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>");return t.fl(); },partials: {}, subs: {  }}, "<input type=\"text\" class=\"date\">\r\n<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prev\"></a>\r\n<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\r\n<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"next\"></a>", H);return T.render.apply(T, arguments); };
 
 /***/ },
@@ -5635,7 +5643,8 @@
 		merge: merge,
 		sanitize: sanitize,
 		serialize: serialize,
-		isNodeList: isNodeList
+		isNodeList: isNodeList,
+		months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 	};
 
 /***/ },
@@ -5652,17 +5661,17 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Toaster = _interopRequire(__webpack_require__(31));
+	var Toaster = _interopRequire(__webpack_require__(29));
 	
-	var Data = _interopRequire(__webpack_require__(24));
+	var Data = _interopRequire(__webpack_require__(22));
 	
-	var Categories = _interopRequire(__webpack_require__(27));
+	var Categories = _interopRequire(__webpack_require__(23));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Moment = _interopRequire(__webpack_require__(9));
+	var Moment = _interopRequire(__webpack_require__(8));
 	
-	var tpl = __webpack_require__(29);
+	var tpl = __webpack_require__(27);
 	var _defaults = {
 		onAdd: function onAdd() {}
 	};
@@ -5998,6 +6007,103 @@
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var H = __webpack_require__(30);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var _clone = function _clone(o) {
+		return JSON.parse(JSON.stringify(o));
+	},
+	    _options = {
+		chart: { renderTo: "", type: "", backgroundColor: null, spacing: [20, 10, 10, 10] },
+		title: { align: "left", style: { color: "#eee" }, text: "" },
+		colors: $.colors,
+		credits: { enabled: false },
+		tooltip: {
+			hideDelay: 0,
+			backgroundColor: "rgba(0, 0, 0, 0.9)",
+			style: { color: "#F0F0F0" },
+			valuePrefix: "€"
+		},
+		legend: {
+			verticalAlign: "top",
+			align: "left",
+			x: 0,
+			y: 30,
+			itemStyle: { color: "#ccc" },
+			itemHoverStyle: { color: "#fff" },
+			itemHiddenStyle: { color: "#888" }
+		},
+		plotOptions: {}
+	},
+	    _xAxis = { labels: { style: { color: "#ccc" } } },
+	    _yAxis = {
+		title: { text: null },
+		labels: {
+			style: { color: "#ccc" },
+			formatter: function formatter() {
+				return "€" + this.value;
+			}
+		},
+		showFirstLabel: false,
+		min: 0,
+		tickPixelInterval: 50,
+		gridLineColor: "#444"
+	};
+	
+	module.exports = function (type, containerId, title, data) {
+		var chart = "Chart";
+		var options = _clone(_options);
+		options.chart.renderTo = containerId;
+		options.title.text = title;
+		if (data) options.series = [data];
+	
+		if (type === "pie") {
+			options.chart.type = type;
+			options.legend.layout = "vertical";
+			options.legend.align = "left";
+			options.tooltip.headerFormat = "<span style=\"font-size: 10px\">Expenses</span><br/>";
+			options.tooltip.pointFormatter = function () {
+				return "<span style=\"color: " + this.color + "\">●</span> " + this.name + ": €" + this.y;
+			};
+			options.plotOptions.pie = {
+				borderWidth: 0,
+				showInLegend: true,
+				allowPointSelect: false,
+				dataLabels: { enabled: false }
+			};
+		} else if (type === "line") {
+			if (data) options.series = data;
+			options.chart.type = type;
+			options.tooltip.crosshairs = true;
+			options.tooltip.shared = true;
+			options.legend.align = "right";
+			options.yAxis = _clone(_yAxis);
+			options.xAxis = _clone(_xAxis);
+			options.xAxis.categories = $.months;
+		} else if (type === "stock") {
+			chart = "StockChart";
+			options.rangeSelector = { enabled: false };
+			options.tooltip.xDateFormat = "%a, %e %b %Y";
+			options.xAxis = _clone(_xAxis);
+			options.yAxis = _clone(_yAxis);
+		}
+		return new window.Highcharts[chart](options);
+	};
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -6008,13 +6114,13 @@
 	
 	var $ = _interopRequire(__webpack_require__(3));
 	
-	var Toaster = _interopRequire(__webpack_require__(31));
+	var Toaster = _interopRequire(__webpack_require__(29));
 	
 	var Data = _interopRequire(__webpack_require__(25));
 	
 	var Calendar = _interopRequire(__webpack_require__(1));
 	
-	var Moment = _interopRequire(__webpack_require__(9));
+	var Moment = _interopRequire(__webpack_require__(8));
 	
 	var _defaults = {
 		onAdd: function onAdd() {}
@@ -6241,187 +6347,7 @@
 	module.exports = Form;
 
 /***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	var isReady = false,
-	    chart,
-	    options = {
-		chart: { renderTo: "chart0", type: "pie", backgroundColor: null },
-		title: { align: "left", style: { color: "#eee" },
-			text: "Spending by category (this month)"
-		},
-		colors: $.colors,
-		credits: { enabled: false },
-	
-		tooltip: {
-			hideDelay: 0,
-			backgroundColor: "rgba(0, 0, 0, 0.9)",
-			style: { color: "#F0F0F0" },
-			headerFormat: "<span style=\"font-size: 10px\">Expenses</span><br/>",
-			pointFormatter: function pointFormatter() {
-				return "<span style=\"color: " + this.color + "\">●</span> " + this.name + ": €" + this.y;
-			}
-		},
-		legend: {
-			align: "left",
-			verticalAlign: "top",
-			layout: "vertical",
-			x: 0,
-			y: 30,
-			itemStyle: { color: "#ccc" },
-			itemHoverStyle: { color: "#fff" },
-			itemHiddenStyle: { color: "#888" }
-		},
-		plotOptions: {
-			pie: { borderWidth: 0, showInLegend: true, allowPointSelect: false,
-				dataLabels: { enabled: false }
-			}
-		}
-	};
-	
-	module.exports = function (data) {
-		if (!isReady) {
-			options.series = [data];
-			chart = new window.Highcharts.Chart(options);
-			isReady = true;
-		} else chart.series[0] = data;
-	};
-
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	var isReady = false,
-	    chart,
-	    options = {
-		chart: { renderTo: "chart1", type: "line", backgroundColor: null },
-		title: { align: "left", style: { color: "#eee" },
-			text: "Income vs Expenses (this year)"
-		},
-		colors: $.colors,
-		credits: { enabled: false },
-		yAxis: {
-			title: { text: null },
-			labels: { style: { color: "#ccc" } },
-			showFirstLabel: false,
-			min: 0,
-			gridLineColor: "#444"
-		},
-		xAxis: {
-			labels: { style: { color: "#ccc" } },
-			categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-		},
-		tooltip: {
-			backgroundColor: "rgba(0, 0, 0, 0.9)",
-			style: { color: "#F0F0F0" },
-			crosshairs: true,
-			shared: true,
-			hideDelay: 0,
-			valuePrefix: "€"
-		},
-		legend: {
-			align: "right",
-			verticalAlign: "top",
-			x: 0,
-			y: 30,
-			itemStyle: { color: "#ccc" },
-			itemHoverStyle: { color: "#fff" },
-			itemHiddenStyle: { color: "#888" }
-		}
-	};
-	
-	module.exports = function (data) {
-		if (!isReady) {
-			options.series = data;
-			chart = new window.Highcharts.Chart(options);
-			isReady = true;
-		} else chart.setSeries(data);
-	};
-
-/***/ },
 /* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	var isReady = false,
-	    chart,
-	    options = {
-		chart: { renderTo: "chart2", backgroundColor: null },
-		title: { align: "left", style: { color: "#eee" },
-			text: "Spending by time (day-by-day, current month), for [categories dropdown]"
-		},
-		colors: $.colors,
-		credits: { enabled: false },
-		rangeSelector: { enabled: false },
-		yAxis: {
-			title: { text: null },
-			labels: {
-				style: { color: "#ccc" },
-				formatter: function formatter() {
-					return "€" + this.value;
-				}
-			},
-			showFirstLabel: false,
-			min: 0,
-			tickPixelInterval: 50,
-			gridLineColor: "#444"
-		},
-		xAxis: {
-			labels: { style: { color: "#ccc" } }
-		},
-		tooltip: {
-			hideDelay: 0,
-			backgroundColor: "rgba(0, 0, 0, 0.9)",
-			style: { color: "#F0F0F0" },
-			valuePrefix: "€"
-		},
-		legend: {
-			align: "left",
-			verticalAlign: "top",
-			layout: "vertical",
-			x: 0,
-			y: 30,
-			itemStyle: { color: "#ccc" },
-			itemHoverStyle: { color: "#fff" },
-			itemHiddenStyle: { color: "#888" }
-		}
-	};
-	
-	module.exports = function (data) {
-		if (!isReady) {
-			options.series = [data];
-			chart = new window.Highcharts.StockChart(options);
-			isReady = true;
-		} else chart.series[0].setData(data);
-	};
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var H = __webpack_require__(32);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
-
-/***/ },
-/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6446,6 +6372,59 @@
 		del: function (id) {
 			return $.del(_url + "/" + id);
 		}
+	};
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	var _url = "categories";
+	
+	module.exports = {
+		get: function () {
+			return $.get(_url);
+		},
+		getTree: function () {
+			return $.get("categorytree");
+		},
+		save: function (params) {
+			if (!params.id) delete params.id;
+			return $.post(_url + (params.id ? "/" + params.id : ""), params);
+		},
+		del: function (params) {
+			return $.del(_url + "/" + params.id);
+		}
+	};
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	
+	var $ = _interopRequire(__webpack_require__(3));
+	
+	module.exports = {
+		spendingByCategory: function (params) {
+			return $.get("spendingByCategory", params || {});
+		},
+	
+		incomeVsExpenses: function (params) {
+			return $.get("incomeVsExpenses", params || {});
+		},
+	
+		spendingByDay: function (params) {
+			return $.get("spendingByDay", params || {});
+		}
+	
 	};
 
 /***/ },
@@ -6478,59 +6457,6 @@
 
 /***/ },
 /* 26 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	module.exports = {
-		spendingByCategory: function (params) {
-			return $.get("spendingByCategory", params || {});
-		},
-	
-		incomeVsExpenses: function (params) {
-			return $.get("incomeVsExpenses", params || {});
-		},
-	
-		spendingByDay: function (params) {
-			return $.get("spendingByDay", params || {});
-		}
-	
-	};
-
-/***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-	
-	var $ = _interopRequire(__webpack_require__(3));
-	
-	var _url = "categories";
-	
-	module.exports = {
-		get: function () {
-			return $.get(_url);
-		},
-		getTree: function () {
-			return $.get("categorytree");
-		},
-		save: function (params) {
-			if (!params.id) delete params.id;
-			return $.post(_url + (params.id ? "/" + params.id : ""), params);
-		},
-		del: function (params) {
-			return $.del(_url + "/" + params.id);
-		}
-	};
-
-/***/ },
-/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function webpackUniversalModuleDefinition(root, factory) {
@@ -6579,7 +6505,7 @@
 	/******/ 	__webpack_require__.c = installedModules;
 	
 	/******/ 	// __webpack_public_path__
-	/******/ 	__webpack_require__.p = "./assets/";
+	/******/ 	__webpack_require__.p = "";
 	
 	/******/ 	// Load entry module and return exports
 	/******/ 	return __webpack_require__(0);
@@ -6595,15 +6521,15 @@
 	
 		var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 	
-		var data = _interopRequire(__webpack_require__(2));
+		var data = _interopRequire(__webpack_require__(1));
 	
-		var events = _interopRequire(__webpack_require__(3));
+		var events = _interopRequire(__webpack_require__(2));
 	
-		var html = _interopRequire(__webpack_require__(4));
+		var html = _interopRequire(__webpack_require__(3));
 	
-		var columns = _interopRequire(__webpack_require__(5));
+		var columns = _interopRequire(__webpack_require__(4));
 	
-		var rows = _interopRequire(__webpack_require__(6));
+		var rows = _interopRequire(__webpack_require__(5));
 	
 		if (!Object.assign) Object.defineProperty(Object, "assign", {
 			enumerable: false,
@@ -6689,8 +6615,7 @@
 		module.exports = Grid;
 	
 	/***/ },
-	/* 1 */,
-	/* 2 */
+	/* 1 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		"use strict";
@@ -6755,6 +6680,7 @@
 			if (this.cfg.items.root && data[this.cfg.items.root]) {
 				this.items = data[this.cfg.items.root] || [];
 			} else this.items = Array.isArray(data) ? data : [];
+			this.originalItems = Object.assign([], this.items);
 			return this.sortItems();
 		}
 	
@@ -6762,9 +6688,9 @@
 			if (sortBy) this.cfg.sort.by = sortBy;
 			if (order) this.cfg.sort.order = order;
 	
-			if (this.items.length) {
-				this.items.sort(_sortFn({ by: "id", order: "desc" }, this.items));
-				if (sortBy) this.items.sort(_sortFn(this.cfg.sort, this.items));
+			if (this.originalItems.length) {
+				this.originalItems.sort(_sortFn({ by: "id", order: "desc" }, this.originalItems));
+				if (sortBy) this.originalItems.sort(_sortFn(this.cfg.sort, this.originalItems));
 			}
 			this.populate();
 	
@@ -6784,15 +6710,64 @@
 			})[0];
 		}
 	
+		function fuzzy(haystack, s) {
+			var hay = ("" + haystack).toLowerCase(),
+			    i = 0,
+			    n = -1,
+			    l;
+			s = ("" + s).toLowerCase();
+			for (; l = s[i++];) if (! ~(n = hay.indexOf(l, n + 1))) {
+				return false;
+			}return true;
+		}
+	
+		function filterData() {
+			if (!this.filter) {
+				this.items = Object.assign([], this.originalItems);
+				return;
+			}
+			this.items = [];
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+	
+			try {
+				for (var _iterator = this.originalItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var item = _step.value;
+	
+					for (var f in item) {
+						if (fuzzy(item[f], this.filter)) {
+							this.items.push(item);
+							break;
+						}
+					}
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator["return"]) {
+						_iterator["return"]();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+		}
+	
 		module.exports = {
 			load: load,
 			setData: setData,
 			sortItems: sortItems,
-			getItemById: getItemById
+			getItemById: getItemById,
+			filterData: filterData
 		};
 	
 	/***/ },
-	/* 3 */
+	/* 2 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		"use strict";
@@ -6812,21 +6787,26 @@
 		}
 	
 		function _onClick(e) {
-			var target = e.target;
+			var target = e.target,
+			    action = "";
 	
 			if (_closest(target, "td.sort")) {
 				target = _closest(target, "td.sort");
 				var icon = target.querySelector(".fa-sort");
 				var isDesc = icon.classList.contains("fa-sort-desc");
 				this.sortItems(target.dataset.sortby, isDesc ? "asc" : "desc");
+			} else if (_closest(target, ".grid-header-cell.action")) {
+				target = _closest(target, ".row-action");
+				if (target.dataset) action = target.dataset.action;
+				if (action === "search") this.toggleSearchBox();
 			} else if (_closest(target, ".row-action")) {
 				target = _closest(target, ".row-action");
 				e.preventDefault();
 				var row = _closest(target, ".grid-row"),
-				    action = target.dataset.action,
-				    id = +row.dataset.id,
-				    item = this.getItemById(id);
-				this.iconHandlers[action].call(this, item, row);
+				    id = row && +row.dataset.id,
+				    item = row && this.getItemById(id);
+				if (target.dataset) action = target.dataset.action;
+				this.iconHandlers[action].call(this, item || null, row || null);
 			}
 		}
 	
@@ -6846,49 +6826,44 @@
 			window.addEventListener("resize", _onResize.bind(this));
 		}
 	
+		function initFilterEvents() {
+			if (!this.hasFilter) {
+				return;
+			}var self = this;
+			this.el.filterInput.addEventListener("input", function () {
+				self.populate.call(self, this.value);
+			});
+			this.el.filterInput.addEventListener("keyup", function (e) {
+				if (e.keyCode === 27) {
+					self.populate.call(self);
+					self.toggleSearchBox.call(self);
+				}
+			});
+		}
+	
 		module.exports = {
-			initEvents: initEvents
+			initEvents: initEvents,
+			initFilterEvents: initFilterEvents
 		};
 	
 	/***/ },
-	/* 4 */
+	/* 3 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		"use strict";
 	
-		var frameTpl = __webpack_require__(7);
-		var rowTpl = __webpack_require__(8);
-		var headerCellTpl = __webpack_require__(9);
-		var footerCellTpl = __webpack_require__(10);
+		var frameTpl = __webpack_require__(6);
+		var rowTpl = __webpack_require__(7);
+		var headerCellTpl = __webpack_require__(8);
+		var footerCellTpl = __webpack_require__(9);
 	
 		function _getRowIcons(icons) {
 			var iconHtml = "",
 			    icon;
-			var _iteratorNormalCompletion = true;
-			var _didIteratorError = false;
-			var _iteratorError = undefined;
-	
-			try {
-				for (var _iterator = Object.keys(icons)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-					icon = _step.value;
-	
-					iconHtml += "<a href=\"#\" class=\"row-action\" data-action=\"" + icon + "\"><i class=\"fa fa-" + icon + "\"></i></a>";
-				}
-			} catch (err) {
-				_didIteratorError = true;
-				_iteratorError = err;
-			} finally {
-				try {
-					if (!_iteratorNormalCompletion && _iterator["return"]) {
-						_iterator["return"]();
-					}
-				} finally {
-					if (_didIteratorError) {
-						throw _iteratorError;
-					}
-				}
+			for (icon in icons) {
+				var title = icons[icon] && icons[icon].title || icon;
+				iconHtml += "<a href=\"#\" class=\"row-action\" " + "data-action=\"" + icon + "\" " + "title=\"" + title + "\" " + "><i class=\"fa fa-" + icon + "\"></i></a>";
 			}
-	
 			return iconHtml;
 		}
 	
@@ -6903,7 +6878,13 @@
 					var col = _step.value;
 	
 					var sortCls = col.sortable ? "sort" : "";
-					col.headerCls = ["grid-cell", "grid-header-cell", col.field, sortCls].join(" ");
+					col.headerCls = ["grid-cell", "grid-header-cell", col.field, sortCls];
+					if (!col.name && col.icons) {
+						col.headerCls.push("action");
+						col.name = "<a href=\"#\" class=\"row-action\" data-action=\"search\" " + "title=\"Search\"><i class=\"fa fa-search\"></i></a>" + "<div class=\"filter-box\"><input class=\"filter-input\" type=\"text\"></div>";
+						this.hasFilter = true;
+					}
+					col.headerCls = col.headerCls.join(" ");
 					cells.push(headerCellTpl(col));
 				}
 			} catch (err) {
@@ -7005,11 +6986,18 @@
 			}, this).join("");
 		}
 	
-		function populate() {
+		function populate(filter) {
 			if (!this.isRendered) {
 				this.el.head.innerHTML = _getHeaderRow.call(this);
+				if (this.hasFilter) {
+					this.el.filterBox = this.el.head.querySelector(".filter-box");
+					this.el.filterInput = this.el.head.querySelector(".filter-input");
+					this.initFilterEvents();
+				}
 				this.isRendered = true;
 			}
+			this.filter = filter;
+			this.filterData();
 			this.el.body.innerHTML = _getBody.call(this);
 			this.el.foot.innerHTML = _getFooterRow.call(this);
 			return this.updateColumnWidths();
@@ -7033,13 +7021,23 @@
 			return this;
 		}
 	
+		function toggleSearchBox() {
+			if (!this.hasFilter) {
+				return;
+			}this.el.filterBox.classList.toggle("visible");
+			if (this.el.filterBox.classList.contains("visible")) {
+				this.el.filterInput.focus();
+			}
+		}
+	
 		module.exports = {
 			populate: populate,
-			draw: draw
+			draw: draw,
+			toggleSearchBox: toggleSearchBox
 		};
 	
 	/***/ },
-	/* 5 */
+	/* 4 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		"use strict";
@@ -7061,7 +7059,9 @@
 	
 					if (col.icons) {
 						for (var icon in col.icons) {
-							actions[icon] = col.icons[icon];
+							var cb = function cb() {};
+							if (typeof col.icons[icon] === "function") cb = col.icons[icon];else if (typeof col.icons[icon].cb === "function") cb = col.icons[icon].cb;
+							actions[icon] = cb;
 						}
 					}
 					if (typeof col.width === "string" && col.width.indexOf("%") === -1) {
@@ -7157,7 +7157,7 @@
 		};
 	
 	/***/ },
-	/* 6 */
+	/* 5 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		"use strict";
@@ -7182,35 +7182,35 @@
 		};
 	
 	/***/ },
+	/* 6 */
+	/***/ function(module, exports, __webpack_require__) {
+	
+		var H = __webpack_require__(10);
+		module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"grid ");t.b(t.v(t.f("theme",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("	<table class=\"grid-table grid-header-table\">\r");t.b("\n" + i);t.b("		<thead><tr class=\"grid-header\"></tr></thead>\r");t.b("\n" + i);t.b("	</table>\r");t.b("\n" + i);t.b("	<div class=\"grid-scroller\">\r");t.b("\n" + i);t.b("		<table class=\"grid-table grid-body-table\">\r");t.b("\n" + i);t.b("			<tbody class=\"grid-body\"></tbody>\r");t.b("\n" + i);t.b("		</table>\r");t.b("\n" + i);t.b("	</div>\r");t.b("\n" + i);t.b("	<table class=\"grid-table grid-footer-table\">\r");t.b("\n" + i);t.b("		<tfoot><tr class=\"grid-footer\"></tr></tfoot>\r");t.b("\n" + i);t.b("	</table>\r");t.b("\n" + i);t.b("</div>");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"grid {{theme}}\">\r\n\t<table class=\"grid-table grid-header-table\">\r\n\t\t<thead><tr class=\"grid-header\"></tr></thead>\r\n\t</table>\r\n\t<div class=\"grid-scroller\">\r\n\t\t<table class=\"grid-table grid-body-table\">\r\n\t\t\t<tbody class=\"grid-body\"></tbody>\r\n\t\t</table>\r\n\t</div>\r\n\t<table class=\"grid-table grid-footer-table\">\r\n\t\t<tfoot><tr class=\"grid-footer\"></tr></tfoot>\r\n\t</table>\r\n</div>", H);return T.render.apply(T, arguments); };
+	
+	/***/ },
 	/* 7 */
 	/***/ function(module, exports, __webpack_require__) {
 	
-		var H = __webpack_require__(11);
-		module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"grid ");t.b(t.v(t.f("theme",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("	<table class=\"grid-table grid-header-table\">\r");t.b("\n" + i);t.b("		<thead><tr class=\"grid-header\"></tr></thead>\r");t.b("\n" + i);t.b("	</table>\r");t.b("\n" + i);t.b("	<div class=\"grid-scroller\">\r");t.b("\n" + i);t.b("		<table class=\"grid-table grid-body-table\">\r");t.b("\n" + i);t.b("			<tbody class=\"grid-body\"></tbody>\r");t.b("\n" + i);t.b("		</table>\r");t.b("\n" + i);t.b("	</div>\r");t.b("\n" + i);t.b("	<table class=\"grid-table grid-footer-table\">\r");t.b("\n" + i);t.b("		<tfoot><tr class=\"grid-footer\"></tr></tfoot>\r");t.b("\n" + i);t.b("	</table>\r");t.b("\n" + i);t.b("</div>");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"grid {{theme}}\">\r\n\t<table class=\"grid-table grid-header-table\">\r\n\t\t<thead><tr class=\"grid-header\"></tr></thead>\r\n\t</table>\r\n\t<div class=\"grid-scroller\">\r\n\t\t<table class=\"grid-table grid-body-table\">\r\n\t\t\t<tbody class=\"grid-body\"></tbody>\r\n\t\t</table>\r\n\t</div>\r\n\t<table class=\"grid-table grid-footer-table\">\r\n\t\t<tfoot><tr class=\"grid-footer\"></tr></tfoot>\r\n\t</table>\r\n</div>", H);return T.render.apply(T, arguments); };
+		var H = __webpack_require__(10);
+		module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<tr data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\" class=\"grid-row\">\r");t.b("\n" + i);if(t.s(t.f("cells",c,p,1),c,p,0,51,140,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("		<td class=\"grid-cell ");t.b(t.v(t.f("cls",c,p,0)));t.b("\"><span class=\"grid-cell-inner\">");t.b(t.t(t.f("text",c,p,0)));t.b("</span></td>\r");t.b("\n" + i);});c.pop();}t.b("</tr>");return t.fl(); },partials: {}, subs: {  }}, "<tr data-id=\"{{id}}\" class=\"grid-row\">\r\n\t{{#cells}}\r\n\t\t<td class=\"grid-cell {{cls}}\"><span class=\"grid-cell-inner\">{{{text}}}</span></td>\r\n\t{{/cells}}\r\n</tr>", H);return T.render.apply(T, arguments); };
 	
 	/***/ },
 	/* 8 */
 	/***/ function(module, exports, __webpack_require__) {
 	
-		var H = __webpack_require__(11);
-		module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<tr data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\" class=\"grid-row\">\r");t.b("\n" + i);if(t.s(t.f("cells",c,p,1),c,p,0,51,140,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("		<td class=\"grid-cell ");t.b(t.v(t.f("cls",c,p,0)));t.b("\"><span class=\"grid-cell-inner\">");t.b(t.t(t.f("text",c,p,0)));t.b("</span></td>\r");t.b("\n" + i);});c.pop();}t.b("</tr>");return t.fl(); },partials: {}, subs: {  }}, "<tr data-id=\"{{id}}\" class=\"grid-row\">\r\n\t{{#cells}}\r\n\t\t<td class=\"grid-cell {{cls}}\"><span class=\"grid-cell-inner\">{{{text}}}</span></td>\r\n\t{{/cells}}\r\n</tr>", H);return T.render.apply(T, arguments); };
+		var H = __webpack_require__(10);
+		module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<td class=\"");t.b(t.v(t.f("headerCls",c,p,0)));t.b("\" data-sortby=\"");t.b(t.v(t.f("field",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("sortable",c,p,1),c,p,0,66,92,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<i class=\"fa fa-sort\"></i>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	<span class=\"grid-header-cell-inner\">");t.b(t.t(t.f("name",c,p,0)));t.b("</span>\r");t.b("\n" + i);t.b("</td>");return t.fl(); },partials: {}, subs: {  }}, "<td class=\"{{headerCls}}\" data-sortby=\"{{field}}\">\r\n\t{{#sortable}}<i class=\"fa fa-sort\"></i>{{/sortable}}\r\n\t<span class=\"grid-header-cell-inner\">{{{name}}}</span>\r\n</td>", H);return T.render.apply(T, arguments); };
 	
 	/***/ },
 	/* 9 */
 	/***/ function(module, exports, __webpack_require__) {
 	
-		var H = __webpack_require__(11);
-		module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<td class=\"");t.b(t.v(t.f("headerCls",c,p,0)));t.b("\" data-sortby=\"");t.b(t.v(t.f("field",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("sortable",c,p,1),c,p,0,66,92,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<i class=\"fa fa-sort\"></i>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	<span class=\"grid-header-cell-inner\">");t.b(t.v(t.f("name",c,p,0)));t.b("</span>\r");t.b("\n" + i);t.b("</td>");return t.fl(); },partials: {}, subs: {  }}, "<td class=\"{{headerCls}}\" data-sortby=\"{{field}}\">\r\n\t{{#sortable}}<i class=\"fa fa-sort\"></i>{{/sortable}}\r\n\t<span class=\"grid-header-cell-inner\">{{name}}</span>\r\n</td>", H);return T.render.apply(T, arguments); };
-	
-	/***/ },
-	/* 10 */
-	/***/ function(module, exports, __webpack_require__) {
-	
-		var H = __webpack_require__(11);
+		var H = __webpack_require__(10);
 		module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<td class=\"");t.b(t.v(t.f("footerCls",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("	<span class=\"grid-footer-cell-inner\">");t.b(t.v(t.f("footerText",c,p,0)));t.b("</span>\r");t.b("\n" + i);t.b("</td>");return t.fl(); },partials: {}, subs: {  }}, "<td class=\"{{footerCls}}\">\r\n\t<span class=\"grid-footer-cell-inner\">{{footerText}}</span>\r\n</td>", H);return T.render.apply(T, arguments); };
 	
 	/***/ },
-	/* 11 */
+	/* 10 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/*
@@ -7230,14 +7230,14 @@
 	
 		// This file is for use with Node.js. See dist/ for browser files.
 	
-		var Hogan = __webpack_require__(12);
-		Hogan.Template = __webpack_require__(13).Template;
+		var Hogan = __webpack_require__(11);
+		Hogan.Template = __webpack_require__(12).Template;
 		Hogan.template = Hogan.Template;
 		module.exports = Hogan;
 	
 	
 	/***/ },
-	/* 12 */
+	/* 11 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/*
@@ -7666,7 +7666,7 @@
 	
 	
 	/***/ },
-	/* 13 */
+	/* 12 */
 	/***/ function(module, exports, __webpack_require__) {
 	
 		/*
@@ -8018,14 +8018,14 @@
 	;
 
 /***/ },
-/* 29 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var H = __webpack_require__(32);
+	var H = __webpack_require__(30);
 	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"form-row\">\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]id\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]date\">\r");t.b("\n" + i);t.b("	<select name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]category_id\" class=\"category\">\r");t.b("\n" + i);if(t.s(t.f("categories",c,p,1),c,p,0,202,317,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("		<optgroup label=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("			");if(t.s(t.f("items",c,p,1),c,p,0,248,288,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<option value=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</option>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("		</optgroup>\r");t.b("\n" + i);});c.pop();}t.b("	</select>\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]amount\" class=\"amount\" placeholder=\"0.00\">\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]description\" class=\"description\" placeholder=\"description\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("first",c,p,1),c,p,0,518,590,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-angle-double-down\"></a>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	");if(!t.s(t.f("first",c,p,1),c,p,1,0,0,"")){t.b("<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>");};t.b("\r");t.b("\n" + i);t.b("</div>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"form-row\">\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]id\">\r\n\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]date\">\r\n\t<select name=\"items[{{idx}}]category_id\" class=\"category\">\r\n\t\t{{#categories}}\r\n\t\t<optgroup label=\"{{name}}\">\r\n\t\t\t{{#items}}<option value=\"{{id}}\">{{name}}</option>{{/items}}\r\n\t\t</optgroup>\r\n\t\t{{/categories}}\r\n\t</select>\r\n\t<input name=\"items[{{idx}}]amount\" class=\"amount\" placeholder=\"0.00\">\r\n\t<input name=\"items[{{idx}}]description\" class=\"description\" placeholder=\"description\">\r\n\t{{#first}}<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-angle-double-down\"></a>{{/first}}\r\n\t{{^first}}<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>{{/first}}\r\n</div>\r\n", H);return T.render.apply(T, arguments); };
 
 /***/ },
-/* 30 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(module) {
@@ -8041,7 +8041,7 @@
 
 
 /***/ },
-/* 31 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8071,7 +8071,7 @@
 	module.exports = Toaster;
 
 /***/ },
-/* 32 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -8091,14 +8091,14 @@
 	
 	// This file is for use with Node.js. See dist/ for browser files.
 	
-	var Hogan = __webpack_require__(33);
-	Hogan.Template = __webpack_require__(34).Template;
+	var Hogan = __webpack_require__(31);
+	Hogan.Template = __webpack_require__(32).Template;
 	Hogan.template = Hogan.Template;
 	module.exports = Hogan;
 
 
 /***/ },
-/* 33 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -8527,7 +8527,7 @@
 
 
 /***/ },
-/* 34 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

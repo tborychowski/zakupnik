@@ -87,5 +87,6 @@ export default {
 	merge,
 	sanitize,
 	serialize,
-	isNodeList
+	isNodeList,
+	months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 };

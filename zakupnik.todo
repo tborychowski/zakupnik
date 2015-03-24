@@ -1,0 +1,20 @@
+TODO:
+ ☐ make lib out of tp js
+
+ ☐ make all 3 sections (but stats) look the same: @ui
+   ☐ form in the middle
+   ☐ table/tree on the right
+
+ ☐ add prev/next month to the calendar swither @ux
+   sth like: < < today > >
+
+ ✔ correct timeline chart to show all days (even with 0 entries) @api @done (2015-03-24 21:44)
+
+ ☐ Oauth2 authentication @api
+
+
+Grid:
+ ✔ make grid filterable @done (2015-03-24 17:10)
+   input field could expand from the header of icons column (after clicking on search icon there)
+
+ ✔ clear on Esc @done (2015-03-24 21:01)
