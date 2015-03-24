@@ -73,6 +73,11 @@ export default function (type, containerId, title, data) {
 		options.yAxis = _clone(_yAxis);
 		options.xAxis = _clone(_xAxis);
 		options.xAxis.categories = $.months;
+		options.xAxis.plotLines = [{
+			width: 24,
+			color: 'rgba(80,80,80,0.3)',
+			value: (new Date()).getMonth()
+		}];
 	}
 
 	else if (type === 'stock') {
