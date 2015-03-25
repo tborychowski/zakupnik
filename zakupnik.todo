@@ -1,13 +1,15 @@
 UI/UX:
  ☐ make all 3 sections (but stats) look the same:
-   ☐ form in the middle
+   ☐ form in the middle (more focus)
    ☐ table/tree on the right
+   ☐ improve design of look&feel
 
- ☐ add prev/next month to the calendar swither
+ ☐ add prev/next month to the calendar switcher
    sth like: < < today > >
 
  ✔ add "now" vertical line to chart1 @done (2015-03-24 22:10)
- ☐ test data labels instead of levend for pie
+ ☐ test data labels instead of legend for pie
+ ☐ add category dropdown filter to the timeline chart
 
 
 BUILD:
@@ -20,9 +22,9 @@ API/SERVER:
 
 
 
-
 GRID:
  ✔ make grid filterable @done (2015-03-24 17:10)
    input field could expand from the header of icons column (after clicking on search icon there)
 
  ✔ clear on Esc @done (2015-03-24 21:01)
+ 
