@@ -1,15 +1,16 @@
-var path = require('path');
+var path = require('path'),
+	webpack = require('webpack');
 
 module.exports = {
-	devtool: '#source-map',
+	// devtool: '#source-map',
 	debug: false,
 	output: {
 		filename: 'app.js',
-		sourceMapFilename: 'app.js.map',
+		// sourceMapFilename: 'app.js.map',
 		publicPath: './assets/'
 	},
 	resolve: {
-		// modulesDirectories: ['src', 'node_modules'],
+		modulesDirectories: ['src', 'node_modules'],
 		root: path.join(__dirname, '/src'),
 		extensions: ['', '.js', '.json']
 	},
@@ -22,5 +23,10 @@ module.exports = {
 				loader: 'babel-loader?experimental&comments=false'
 			}
 		]
-	}
+	},
+	plugins: [
+		// new webpack.optimize.UglifyJsPlugin(),
+		// new webpack.optimize.DedupePlugin()
+	]
+
 };

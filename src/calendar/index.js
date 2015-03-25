@@ -1,5 +1,4 @@
 import $ from 'util';
-
 import Pikaday from 'pikaday';
 import Moment from 'moment';
 

@@ -1,10 +1,8 @@
 @import '_lib'
 
-form-width = 475px;
-
 #income
 	h2
-		bg body-bg; position relative; z 9; width form-width;
+		bg body-bg; position relative; z 9;
 	.btn-split
 	.btn-del
 	.btn-reset
@@ -15,19 +13,8 @@ form-width = 475px;
 		&:active
 			color #888;
 
-.income-table
-	pos 0 0 0 500; bg rgba(#000, .4); shadow 2 0 3 #000 0.3 inset;
-
-	.grid
-		pos 10 10 10 15;
-
-	.grid-body .amount
-	.grid-footer .amount
-		text-align right;
-
-
 .income-form
-	position relative; width form-width; z 9; bg body-bg;
+	position relative; z 9; bg body-bg;
 
 	.subforms
 		overflow-y auto;
@@ -51,29 +38,5 @@ form-width = 475px;
 	.btn-del
 		margin-left 5px;
 
-// .repeat-ch
 .repeat-in
 	size 40 19; padding 0 0 0 5; margin-left 3; border none;
-
-
-.preview
-	position absolute; bottom 0; size 480 242; margin 50 0 0; opacity 0.5;
-	transition opacity .3s ease-out; pointer-events none;
-
-	&.hidden
-		opacity 0;
-
-	.preview-table
-		position relative; margin 10 0 0;
-		.fa-sort
-			show 0;
-		.grid
-			min-height 204px;
-
-		.grid-body .amount
-		.grid-footer .amount
-			text-align right;
-
-		.warn .fa
-			color #FF6A44; margin-right 5;
-			position relative; top -1;

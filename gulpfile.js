@@ -1,7 +1,6 @@
 'use strict';
 
 var gulp = require('gulp'),
-	uglify = require('gulp-uglify'),
 	cssmin = require('gulp-minify-css'),
 	webpack = require('gulp-webpack'),
     concat = require('gulp-concat'),
@@ -10,7 +9,6 @@ var gulp = require('gulp'),
     live   = require('gulp-livereload'),
     notify = require('gulp-notify'),
     plumber = require('gulp-plumber'),
-	wpCfg = require('./gulpfile-webpack.conf.js'),
 	wpErr = function (err, stats) {
 		if (err) notify.onError('Error: ' + err);
 		err = stats.compilation.errors;
@@ -20,10 +18,15 @@ var gulp = require('gulp'),
 
 gulp.task('js', function () {
 	return gulp.src(['src/app.js'])
-		.pipe(webpack(wpCfg, null, wpErr))
-		// .pipe(uglify())
+		.pipe(webpack(require('./webpack.conf.js'), null, wpErr))
 		.pipe(gulp.dest('assets/'))
 		.pipe(live());
+});
+
+gulp.task('lib', function () {
+	return gulp.src([ 'lib/standalone-framework.js', 'lib/*.js' ])
+		.pipe(concat('lib.js'))
+		.pipe(gulp.dest('assets/'));
 });
 
 
@@ -51,6 +54,7 @@ gulp.task('watch', ['js', 'styl'], function () {
 });
 
 gulp.task('default', [
+	'lib',
 	'jshint',
 	'js',
 	'styl',

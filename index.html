@@ -21,52 +21,77 @@
 	<ul id="menu">
 		<li><a class="fa fa-shopping-cart" href="#expenses" title="Expenses">Expenses</a></li>
 		<li><a class="fa fa-money" href="#income" title="Incomes">Income</a></li>
-		<li><a class="fa fa-line-chart" href="#stats" title="Stats">Stats</a></li>
 		<li><a class="fa fa-tags" href="#categories" title="Categories">Categories</a></li>
+		<li><a class="fa fa-line-chart" href="#stats" title="Stats">Stats</a></li>
 	</ul>
 
 	<div id="content">
 
 		<div class="section" id="expenses">
-			<h2>Expenses <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
-			<form class="expenses-form">
-				<div class="subforms"></div>
-				<div class="form-row">
-					<button type="submit" class="btn-add">Add</button>
-					<label>Repeat every month, for months</label>
-					<input type="number" class="repeat-in" min="1" max="12" name="repeat"/>
+			<div class="middle-column">
+				<h2>Expenses <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
+				<form class="expenses-form">
+					<div class="subforms"></div>
+					<div class="form-row">
+						<button type="submit" class="btn-add">Add</button>
+						<label>Repeat every month, for months</label>
+						<input type="number" class="repeat-in" min="1" max="12" name="repeat"/>
+					</div>
+				</form>
+				<div class="preview hidden">
+					<h3>Preview</h3>
+					<div class="preview-table"></div>
 				</div>
-			</form>
-			<div class="preview hidden">
-				<h3>Preview</h3>
-				<div class="preview-table"></div>
 			</div>
-			<div class="expenses-table"></div>
+
+			<div class="right-column expenses-table"></div>
 		</div>
 
 
 		<div class="section" id="income">
-			<h2>Income <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
-			<form class="income-form">
-				<div class="subforms">
-					<div class="form-row">
-						<input type="hidden" name="id">
-						<input type="hidden" name="date">
-						<input name="amount" class="amount" placeholder="0.00">
-						<input name="description" class="description" placeholder="description">
+			<div class="middle-column">
+				<h2>Income <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
+				<form class="income-form">
+					<div class="subforms">
+						<div class="form-row">
+							<input type="hidden" name="id">
+							<input type="hidden" name="date">
+							<input name="amount" class="amount" placeholder="0.00">
+							<input name="description" class="description" placeholder="description">
+						</div>
 					</div>
+					<div class="form-row">
+						<button type="submit" class="btn-add">Add</button>
+						<label>Repeat every month, for months</label>
+						<input type="number" class="repeat-in" min="1" max="12" name="repeat"/>
+					</div>
+				</form>
+				<div class="preview hidden">
+					<h3>Preview</h3>
+					<div class="preview-table"></div>
 				</div>
-				<div class="form-row">
-					<button type="submit" class="btn-add">Add</button>
-					<label>Repeat every month, for months</label>
-					<input type="number" class="repeat-in" min="1" max="12" name="repeat"/>
-				</div>
-			</form>
-			<div class="preview hidden">
-				<h3>Preview</h3>
-				<div class="preview-table"></div>
 			</div>
-			<div class="income-table"></div>
+
+			<div class="right-column income-table"></div>
+		</div>
+
+
+		<div class="section" id="categories">
+			<div class="middle-column">
+				<h2>Categories <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
+				<div class="form">
+					<form>
+						<input type="hidden" name="id">
+						<select name="parent_id" class="category"></select>
+						<input type="text" name="name" placeholder="name">
+						<button type="submit" class="btn btn-add">Add</button>
+						<button type="submit" class="btn btn-sav">Save</button>
+						<button type="button" class="btn btn-del">Remove</button>
+					</form>
+				</div>
+			</div>
+
+			<div class="right-column tree"></div>
 		</div>
 
 
@@ -79,27 +104,10 @@
 			</div>
 		</div>
 
-
-		<div class="section" id="categories">
-			<h2>Categories <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
-			<div class="tree"></div>
-			<div class="form">
-				<form>
-					<input type="hidden" name="id">
-					<select name="parent_id" class="category"></select>
-					<input type="text" name="name" placeholder="name">
-					<button type="submit" class="btn btn-add">Add</button>
-					<button type="submit" class="btn btn-sav">Save</button>
-					<button type="button" class="btn btn-del">Remove</button>
-				</form>
-			</div>
-		</div>
-
 	</div>
 
 
-	<script async src="assets/standalone-framework.js"></script>
-	<script async src="assets/highstock.js"></script>
+	<script async src="assets/lib.js"></script>
 	<script async src="assets/app.js"></script>
 	<script async src="http://localhost:35729/livereload.js"></script>
 	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:700,300,600,400">

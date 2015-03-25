@@ -5,6 +5,9 @@ border-width = 1px;
 item-height = 2.1em;
 offset = 1em;			// indentation
 
+.tree
+	padding 10;
+
 .category-tree
 	&
 	ul
@@ -33,7 +36,7 @@ offset = 1em;			// indentation
 		width (offset / 1.3)
 
 	ul li:last-child:before
-		height auto; bottom 0; background body-bg; top (item-height / 2)
+		height auto; bottom 0; background #2C3844; top (item-height / 2)
 
 	.cat
 		color #fff; u 0;
@@ -51,15 +54,12 @@ offset = 1em;			// indentation
 			color #888;
 
 	.form
-		pos 60 20; width 500;
-
 		.cat
 			show 1; padding 3 5 0 0;
 		a
 			color #fff; u 0;
 			&:hover
 				u 1;
-
 
 	form
 		margin 10 0;

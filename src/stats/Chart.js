@@ -42,6 +42,8 @@ var _clone = function (o) { return JSON.parse(JSON.stringify(o)); },
 
 
 export default function (type, containerId, title, data) {
+	window.Highcharts.setOptions({ lang: { thousandsSep: ',' } });
+
 	var chart = 'Chart';
 	var options = _clone(_options);
 	options.chart.renderTo = containerId;
@@ -58,6 +60,7 @@ export default function (type, containerId, title, data) {
 		};
 		options.plotOptions.pie = {
 			borderWidth: 0,
+			innerSize: '50%',
 			showInLegend: true,
 			allowPointSelect: false,
 			dataLabels: { enabled: false }
