@@ -38,7 +38,7 @@ gulp.task('jshint', function () {
 });
 
 gulp.task('styl', function () {
-	return gulp.src(['src/app.styl', 'src/**/*.styl'])
+	return gulp.src(['src/reset.styl', 'src/app.styl', 'src/**/*.styl'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(stylus({ paths: ['src'], 'include css': true }))
 		.pipe(cssmin({ keepSpecialComments: 0 }))
