@@ -5,6 +5,19 @@
 @import "_lib";
 
 
+html
+body
+	-ms-text-size-adjust 100%; -webkit-text-size-adjust 100%;
+	size 100%; overflow hidden; position fixed; // <- chrome scroll bug
+
+body
+	margin 0; font 400 15px/1 main-font; cursor default; color #fff; bg #282828 'noise.png' 0 0 repeat;
+
+*
+	box-sizing border-box;
+
+
+
 #content
 	pos top-height 0 0 menu-width; padding 10 0 10 10; border-radius 10px 0 0 0; bg body-bg;
 	shadow -2 -2 3 #000 .4; overflow-y auto;

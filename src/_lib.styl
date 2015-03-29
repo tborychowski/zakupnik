@@ -1,3 +1,4 @@
+main-font = 'open_sanslight', sans-serif;
 sidebar-bg = #222
 sidebar-width = 300
 
@@ -86,6 +87,8 @@ border-bottom() { border-bottom: setBorder(arguments); }
 border-left() { border-left: setBorder(arguments); }
 border()
 	if arguments[0] == 'none' { border: none; } else { border: setBorder(arguments); }
+
+border-radius() { border-radius: joinArgs(arguments); }
 
 
 gradient()

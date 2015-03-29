@@ -1,0 +1,47 @@
+@import "_lib";
+
+form-color = #ccc;
+form-color-light = #eee;
+form-color-dark = #444;
+
+select
+input
+	font inherit;
+	line-height 16px;
+	box-sizing border-box;
+	padding 0 10;
+	border-radius 5;
+	vertical-align top;
+	height 34;
+	transition background-color .2s, border-color .2s;
+
+	border 2 form-color;
+	color form-color-light;
+	bg rgba(form-color-light, 0.1);
+
+select
+input
+	&:focus
+		border-color orange; outline none; bg rgba(form-color-dark, 0.3);
+	&::-moz-focus-inner
+		padding 0; border 0; outline none;
+
+label
+	display inline-block; margin-top 2; vertical-align top;
+
+.select-wrap
+	position relative; overflow hidden; display inline-block; vertical-align top;
+	&:after
+		content ''; pos 12 12; size 6; border 2 form-color;
+		border-width 0 2px 2px 0;
+		rotate 45;
+	select
+		-moz-appearance none; -webkit-appearance none; appearance none; padding-right 28
+	optgroup
+		padding 10 0 0; margin 0; i 0;
+	option
+		padding 3 10; margin 0;
+
+.repeat-in
+	size 60 22; margin-left 3; border-radius 5 0 0 5; padding-right 0;
+

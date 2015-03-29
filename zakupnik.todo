@@ -1,15 +1,16 @@
 UI/UX:
- ☐ make all 3 sections (but stats) look the same:
+ ✔ make all 3 sections (but stats) look the same: @done (2015-03-29 15:13)
    ✔ form in the middle (more focus) @done (2015-03-25 19:58)
    ✔ table/tree on the right @done (2015-03-25 19:58)
-   ☐ improve design of look&feel
+   ✔ improve design of look&feel @done (2015-03-29 15:13)
 
  ☐ add prev/next month to the calendar switcher
    sth like: < < today > >
 
+ ☐ add category dropdown filter to the timeline chart
  ✔ add "now" vertical line to chart1 @done (2015-03-24 22:10)
  ✔ test data labels instead of legend for pie @done (2015-03-25 20:10)
- ☐ add category dropdown filter to the timeline chart
+ ✔ replace google fonts with local @done (2015-03-29 15:26)
 
 
 BUILD:

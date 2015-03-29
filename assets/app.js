@@ -202,19 +202,19 @@
 
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-	var sizzle = _interopRequire(__webpack_require__(19));
+	var sizzle = _interopRequire(__webpack_require__(15));
 
-	var ajax = _interopRequire(__webpack_require__(20));
+	var ajax = _interopRequire(__webpack_require__(16));
 
-	var form = _interopRequire(__webpack_require__(21));
+	var form = _interopRequire(__webpack_require__(17));
 
-	var pubsub = _interopRequire(__webpack_require__(22));
+	var pubsub = _interopRequire(__webpack_require__(18));
 
-	var keys = _interopRequire(__webpack_require__(23));
+	var keys = _interopRequire(__webpack_require__(19));
 
-	var colors = _interopRequire(__webpack_require__(24));
+	var colors = _interopRequire(__webpack_require__(20));
 
-	var util = _interopRequire(__webpack_require__(25));
+	var util = _interopRequire(__webpack_require__(21));
 
 	var all = { ajax: ajax, form: form };
 	Object.assign(all, ajax, pubsub, keys, colors, util);
@@ -232,7 +232,7 @@
 
 	var $ = _interopRequire(__webpack_require__(3));
 
-	var Data = _interopRequire(__webpack_require__(15));
+	var Data = _interopRequire(__webpack_require__(22));
 
 	var Calendar = _interopRequire(__webpack_require__(1));
 
@@ -384,7 +384,7 @@
 
 	var $ = _interopRequire(__webpack_require__(3));
 
-	var Data = _interopRequire(__webpack_require__(16));
+	var Data = _interopRequire(__webpack_require__(23));
 
 	var Calendar = _interopRequire(__webpack_require__(1));
 
@@ -537,9 +537,9 @@
 
 	var Calendar = _interopRequire(__webpack_require__(1));
 
-	var Data = _interopRequire(__webpack_require__(17));
+	var Data = _interopRequire(__webpack_require__(25));
 
-	var Chart = _interopRequire(__webpack_require__(13));
+	var Chart = _interopRequire(__webpack_require__(14));
 
 	var lastLoadDate, _chart0, _chart1, _chart2;
 
@@ -585,7 +585,7 @@
 
 	var $ = _interopRequire(__webpack_require__(3));
 
-	var Data = _interopRequire(__webpack_require__(18));
+	var Data = _interopRequire(__webpack_require__(24));
 
 	var el,
 	    treeContainer,
@@ -593,7 +593,7 @@
 	    form,
 	    btn = {},
 	    catSel;
-	var tpl = __webpack_require__(14);
+	var tpl = __webpack_require__(13);
 
 	function updateCatSelect(data) {
 		var options = ["<option value=\"0\"></option>"];
@@ -4827,9 +4827,9 @@
 
 	var Toaster = _interopRequire(__webpack_require__(28));
 
-	var Data = _interopRequire(__webpack_require__(15));
+	var Data = _interopRequire(__webpack_require__(22));
 
-	var Categories = _interopRequire(__webpack_require__(18));
+	var Categories = _interopRequire(__webpack_require__(24));
 
 	var Calendar = _interopRequire(__webpack_require__(1));
 
@@ -5183,7 +5183,7 @@
 
 	var Toaster = _interopRequire(__webpack_require__(28));
 
-	var Data = _interopRequire(__webpack_require__(16));
+	var Data = _interopRequire(__webpack_require__(23));
 
 	var Calendar = _interopRequire(__webpack_require__(1));
 
@@ -5417,6 +5417,13 @@
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var H = __webpack_require__(30);
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
@@ -5512,13 +5519,6 @@
 	};
 
 /***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var H = __webpack_require__(30);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<a href=\"#\" class=\"cat\"\r");t.b("\n" + i);t.b("	data-id=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-name=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\"\r");t.b("\n" + i);t.b("	data-parent_id=\"");t.b(t.v(t.f("parent_id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</a>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<a href=\"#\" class=\"cat\"\r\n\tdata-id=\"{{id}}\"\r\n\tdata-name=\"{{name}}\"\r\n\tdata-parent_id=\"{{parent_id}}\">{{name}}</a>\r\n", H);return T.render.apply(T, arguments); };
-
-/***/ },
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -5526,116 +5526,7 @@
 
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-	var $ = _interopRequire(__webpack_require__(3));
-
-	var _url = "entries";
-
-	module.exports = {
-		get: function (params) {
-			var id = typeof params === "number" ? params : null;
-			return $.get(_url + (id ? "/" + id : ""), params || {});
-		},
-
-		save: function (params) {
-			if (params.length === 1 && params[0].id) params = params[0];
-			return $.post(_url + (params.id ? "/" + params.id : ""), params);
-		},
-
-		del: function (id) {
-			return $.del(_url + "/" + id);
-		}
-	};
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-	var $ = _interopRequire(__webpack_require__(3));
-
-	var _url = "incomes";
-
-	module.exports = {
-		get: function (params) {
-			var id = typeof params === "number" ? params : null;
-			return $.get(_url + (id ? "/" + id : ""), params || {});
-		},
-
-		save: function (params) {
-			if (params.length === 1 && params[0].id) params = params[0];
-			return $.post(_url + (params.id ? "/" + params.id : ""), params);
-		},
-
-		del: function (id) {
-			return $.del(_url + "/" + id);
-		}
-	};
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-	var $ = _interopRequire(__webpack_require__(3));
-
-	module.exports = {
-		spendingByCategory: function (params) {
-			return $.get("spendingByCategory", params || {});
-		},
-
-		incomeVsExpenses: function (params) {
-			return $.get("incomeVsExpenses", params || {});
-		},
-
-		spendingByDay: function (params) {
-			return $.get("spendingByDay", params || {});
-		}
-
-	};
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-	var $ = _interopRequire(__webpack_require__(3));
-
-	var _url = "categories";
-
-	module.exports = {
-		get: function () {
-			return $.get(_url);
-		},
-		getTree: function () {
-			return $.get("categorytree");
-		},
-		save: function (params) {
-			if (!params.id) delete params.id;
-			return $.post(_url + (params.id ? "/" + params.id : ""), params);
-		},
-		del: function (params) {
-			return $.del(_url + "/" + params.id);
-		}
-	};
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-	var util = _interopRequire(__webpack_require__(25));
+	var util = _interopRequire(__webpack_require__(21));
 
 	function sizzle(mixed, context) {
 		if (!mixed) {
@@ -5813,14 +5704,14 @@
 	module.exports = sizzle;
 
 /***/ },
-/* 20 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-	var util = _interopRequire(__webpack_require__(25));
+	var util = _interopRequire(__webpack_require__(21));
 
 	var base_url = "api/";
 
@@ -5872,7 +5763,7 @@
 		} };
 
 /***/ },
-/* 21 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6117,7 +6008,7 @@
 	module.exports = Form;
 
 /***/ },
-/* 22 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6158,7 +6049,7 @@
 	module.exports = { on: on, off: off, trigger: trigger };
 
 /***/ },
-/* 23 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6277,7 +6168,7 @@
 	};
 
 /***/ },
-/* 24 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6317,7 +6208,7 @@
 	};
 
 /***/ },
-/* 25 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6461,6 +6352,115 @@
 		serialize: serialize,
 		isNodeList: isNodeList,
 		months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+	};
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+	var $ = _interopRequire(__webpack_require__(3));
+
+	var _url = "entries";
+
+	module.exports = {
+		get: function (params) {
+			var id = typeof params === "number" ? params : null;
+			return $.get(_url + (id ? "/" + id : ""), params || {});
+		},
+
+		save: function (params) {
+			if (params.length === 1 && params[0].id) params = params[0];
+			return $.post(_url + (params.id ? "/" + params.id : ""), params);
+		},
+
+		del: function (id) {
+			return $.del(_url + "/" + id);
+		}
+	};
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+	var $ = _interopRequire(__webpack_require__(3));
+
+	var _url = "incomes";
+
+	module.exports = {
+		get: function (params) {
+			var id = typeof params === "number" ? params : null;
+			return $.get(_url + (id ? "/" + id : ""), params || {});
+		},
+
+		save: function (params) {
+			if (params.length === 1 && params[0].id) params = params[0];
+			return $.post(_url + (params.id ? "/" + params.id : ""), params);
+		},
+
+		del: function (id) {
+			return $.del(_url + "/" + id);
+		}
+	};
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+	var $ = _interopRequire(__webpack_require__(3));
+
+	var _url = "categories";
+
+	module.exports = {
+		get: function () {
+			return $.get(_url);
+		},
+		getTree: function () {
+			return $.get("categorytree");
+		},
+		save: function (params) {
+			if (!params.id) delete params.id;
+			return $.post(_url + (params.id ? "/" + params.id : ""), params);
+		},
+		del: function (params) {
+			return $.del(_url + "/" + params.id);
+		}
+	};
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+	var $ = _interopRequire(__webpack_require__(3));
+
+	module.exports = {
+		spendingByCategory: function (params) {
+			return $.get("spendingByCategory", params || {});
+		},
+
+		incomeVsExpenses: function (params) {
+			return $.get("incomeVsExpenses", params || {});
+		},
+
+		spendingByDay: function (params) {
+			return $.get("spendingByDay", params || {});
+		}
+
 	};
 
 /***/ },
@@ -8032,7 +8032,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var H = __webpack_require__(30);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"form-row\">\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]id\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]date\">\r");t.b("\n" + i);t.b("	<div class=\"select-wrap\">\r");t.b("\n" + i);t.b("		<select name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]category_id\" class=\"category\">\r");t.b("\n" + i);if(t.s(t.f("categories",c,p,1),c,p,0,232,351,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("			<optgroup label=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("				");if(t.s(t.f("items",c,p,1),c,p,0,280,320,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<option value=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</option>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("			</optgroup>\r");t.b("\n" + i);});c.pop();}t.b("		</select>\r");t.b("\n" + i);t.b("	</div>\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]amount\" class=\"amount\" placeholder=\"0.00\">\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]description\" class=\"description\" placeholder=\"description\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("first",c,p,1),c,p,0,562,634,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-angle-double-down\"></a>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	");if(!t.s(t.f("first",c,p,1),c,p,1,0,0,"")){t.b("<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>");};t.b("\r");t.b("\n" + i);t.b("</div>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"form-row\">\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]id\">\r\n\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]date\">\r\n\t<div class=\"select-wrap\">\r\n\t\t<select name=\"items[{{idx}}]category_id\" class=\"category\">\r\n\t\t\t{{#categories}}\r\n\t\t\t<optgroup label=\"{{name}}\">\r\n\t\t\t\t{{#items}}<option value=\"{{id}}\">{{name}}</option>{{/items}}\r\n\t\t\t</optgroup>\r\n\t\t\t{{/categories}}\r\n\t\t</select>\r\n\t</div>\r\n\t<input name=\"items[{{idx}}]amount\" class=\"amount\" placeholder=\"0.00\">\r\n\t<input name=\"items[{{idx}}]description\" class=\"description\" placeholder=\"description\">\r\n\t{{#first}}<a href=\"#\" title=\"Split\" class=\"btn-split fa fa-angle-double-down\"></a>{{/first}}\r\n\t{{^first}}<a href=\"#\" title=\"Remove\" class=\"btn-del fa fa-trash-o\"></a>{{/first}}\r\n</div>\r\n", H);return T.render.apply(T, arguments); };
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"form-row\">\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]id\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]date\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<div class=\"select-wrap\">\r");t.b("\n" + i);t.b("		<select name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]category_id\" class=\"category\">\r");t.b("\n" + i);if(t.s(t.f("categories",c,p,1),c,p,0,234,353,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("			<optgroup label=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("				");if(t.s(t.f("items",c,p,1),c,p,0,282,322,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<option value=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</option>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("			</optgroup>\r");t.b("\n" + i);});c.pop();}t.b("		</select>\r");t.b("\n" + i);t.b("	</div>\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]amount\" class=\"amount\" placeholder=\"0.00\">\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]description\" class=\"description\" placeholder=\"description\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("first",c,p,1),c,p,0,566,668,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<button type=\"button\" title=\"Split\" class=\"btn-split\"><i class=\"fa fa-angle-double-down\"></i></button>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	");if(!t.s(t.f("first",c,p,1),c,p,1,0,0,"")){t.b("<button type=\"button\" title=\"Remove\" class=\"btn-del\"><i class=\"fa fa-trash-o\"></i></button>");};t.b("\r");t.b("\n" + i);t.b("</div>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"form-row\">\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]id\">\r\n\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]date\">\r\n\r\n\t<div class=\"select-wrap\">\r\n\t\t<select name=\"items[{{idx}}]category_id\" class=\"category\">\r\n\t\t\t{{#categories}}\r\n\t\t\t<optgroup label=\"{{name}}\">\r\n\t\t\t\t{{#items}}<option value=\"{{id}}\">{{name}}</option>{{/items}}\r\n\t\t\t</optgroup>\r\n\t\t\t{{/categories}}\r\n\t\t</select>\r\n\t</div>\r\n\r\n\t<input name=\"items[{{idx}}]amount\" class=\"amount\" placeholder=\"0.00\">\r\n\t<input name=\"items[{{idx}}]description\" class=\"description\" placeholder=\"description\">\r\n\t{{#first}}<button type=\"button\" title=\"Split\" class=\"btn-split\"><i class=\"fa fa-angle-double-down\"></i></button>{{/first}}\r\n\t{{^first}}<button type=\"button\" title=\"Remove\" class=\"btn-del\"><i class=\"fa fa-trash-o\"></i></button>{{/first}}\r\n</div>\r\n", H);return T.render.apply(T, arguments); };
 
 /***/ },
 /* 28 */
