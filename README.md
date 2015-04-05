@@ -19,11 +19,14 @@ Record your monthly expenses and income.
 
 
 ##Screens
-- enter multiple receipts of the same type
+
+####enter multiple receipts of the same type
 ![Main](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen1.png)
-- split one receipt into different categories
+
+####split one receipt into different categories
 ![Split](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen2-split.png)
-- repeat an expense every month
+
+####repeat an expense every month
 ![Repeat](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen3-repeat.png)
 
 
