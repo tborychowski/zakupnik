@@ -110,7 +110,7 @@ export default class Form {
 
 	getData (clean = false) {
 		var date = Calendar.get(true),
-			format = (n) => n.toLocaleString('en-GB', { minimumFractionDigits: 2 }),
+			format = (n) => $.formatNumber(n),
 			formData = this.form.get(true),
 			data = [],
 			errors = [],

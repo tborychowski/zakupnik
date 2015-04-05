@@ -4,13 +4,14 @@ UI/UX:
    ✔ table/tree on the right @done (2015-03-25 19:58)
    ✔ improve design of look&feel @done (2015-03-29 15:13)
 
- ☐ add prev/next month to the calendar switcher
+ ✔ add prev/next month to the calendar switcher @done (2015-04-05 14:06)
    sth like: < < today > >
 
- ☐ add category dropdown filter to the timeline chart
+ ✔ 1st chart is not reloading on month change @done (2015-04-05 14:06)
  ✔ add "now" vertical line to chart1 @done (2015-03-24 22:10)
  ✔ test data labels instead of legend for pie @done (2015-03-25 20:10)
  ✔ replace google fonts with local @done (2015-03-29 15:26)
+ ☐ add category dropdown filter to the timeline chart
 
 
 BUILD:

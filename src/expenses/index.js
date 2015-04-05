@@ -50,7 +50,7 @@ function onPreview () {
 
 	if (!data.items) return;
 	for (let r of data.items) sum += r.amount;
-	total_str = sum.toLocaleString('en-GB', { minimumFractionDigits: 2 });
+	total_str = $.formatNumber(sum);
 	if (data.items) previewGrid.setData({ total_str, items: data.items });
 }
 

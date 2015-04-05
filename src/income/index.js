@@ -51,7 +51,7 @@ function onPreview () {
 
 	if (!data.items) return;
 	for (let r of data.items) sum += r.amount;
-	total_str = sum.toLocaleString('en-GB', { minimumFractionDigits: 2 });
+	total_str = $.formatNumber(sum);
 	if (data.items) previewGrid.setData({ total_str, items: data.items });
 }
 
@@ -91,7 +91,7 @@ function init () {
 				{ width: 52, icons: { pencil: edit, 'trash-o': del }},
 				{ name: 'Date', field: 'date', width: 90 },
 				{ name: 'Description', field: 'description' },
-				{ name: 'Amount', field: 'amount', width: 100, renderer, footer }
+				{ name: 'Amount', field: 'amount', width: 105, renderer, footer }
 			]
 		});
 
@@ -102,7 +102,7 @@ function init () {
 			columns: [
 				{ name: 'Date', field: 'date', width: 90 },
 				{ name: 'Description', field: 'description' },
-				{ name: 'Amount', field: 'amount', width: 100, renderer, footer }
+				{ name: 'Amount', field: 'amount', width: 105, renderer, footer }
 			]
 		});
 

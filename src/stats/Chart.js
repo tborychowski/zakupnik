@@ -1,4 +1,5 @@
 import $ from 'util';
+import Moment from 'moment';
 
 var _clone = function (o) { return JSON.parse(JSON.stringify(o)); },
 
@@ -72,15 +73,24 @@ export default function (type, containerId, title, data) {
 		options.chart.type = type;
 		options.tooltip.crosshairs = true;
 		options.tooltip.shared = true;
+		options.tooltip.formatter = function() {
+			let html = this.x + '<br>', sum = this.points[0].y - this.points[1].y;
+			for (let point of this.points) {
+				html += '<span style="color: ' + point.series.color + '">●</span> ' +
+					point.series.name + ' €' + $.formatNumber(point.y) + '<br>';
+			}
+			html += '<span style="color: green">●</span> savings: €' + $.formatNumber(sum) + '<br>';
+
+			return html;
+		};
+
 		options.legend.align = 'right';
 		options.yAxis = _clone(_yAxis);
 		options.xAxis = _clone(_xAxis);
 		options.xAxis.categories = $.months;
-		options.xAxis.plotLines = [{
-			width: 24,
-			color: 'rgba(80,80,80,0.3)',
-			value: (new Date()).getMonth()
-		}];
+
+		var m = (new Date()).getMonth() - 0.5;
+		options.xAxis.plotBands = [{ id: 'm', from: m, to: m + 1, color: 'rgba(80,80,80,0.3)' }];
 	}
 
 	else if (type === 'stock') {

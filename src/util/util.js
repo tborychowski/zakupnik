@@ -9,6 +9,10 @@ function isNumber (v) {
 	return (/^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/).test(v);
 }
 
+function formatNumber (num) {
+	return num.toLocaleString('en-GB', { minimumFractionDigits: 2 });
+}
+
 function serialize (obj) {
 	var keys = Object.keys(obj);
 	if (!keys || !keys.length) return '';
@@ -82,6 +86,7 @@ export default {
 	rand,
 	each,
 	isNumber,
+	formatNumber,
 	varToRealType,
 	isObjectEmpty,
 	merge,

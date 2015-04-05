@@ -74,7 +74,7 @@ export default class Form {
 
 	getData (clean = false) {
 		var date = Calendar.get(true),
-			format = (n) => n.toLocaleString('en-GB', { minimumFractionDigits: 2 }),
+			format = (n) => $.formatNumber(n),
 			item = this.form.get(true),
 			repeat = item.repeat,
 			errors = [];

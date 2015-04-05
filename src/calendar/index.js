@@ -8,6 +8,8 @@ var el, picker,
 	gotoMap = {
 		prev: function (c) { return c.subtract(1, 'days'); },
 		next: function (c) { return c.add(1, 'days'); },
+		prevMonth: function (c) { return c.subtract(1, 'months'); },
+		nextMonth: function (c) { return c.add(1, 'months'); },
 		today: function () { return Moment(); }
 	};
 
