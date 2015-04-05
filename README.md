@@ -8,6 +8,7 @@ Record your monthly expenses and income.
 - just enter your receipts & salary and see the charts
 - focus on speed and minimalism
 - keyboard friendly
+- preview before adding
 
 
 ##Installation
@@ -18,8 +19,11 @@ Record your monthly expenses and income.
 
 
 ##Screens
+- enter multiple receipts of the same type
 ![Main](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen1.png)
+- split one receipt into different categories
 ![Split](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen2-split.png)
+- repeat an expense every month
 ![Repeat](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen3-repeat.png)
 
 
