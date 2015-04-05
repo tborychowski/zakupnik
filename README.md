@@ -21,13 +21,19 @@ Record your monthly expenses and income.
 ##Screens
 
 ####enter multiple receipts of the same type
-![Main](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen1.png)
+![Main](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen.png)
 
 ####split one receipt into different categories
-![Split](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen2-split.png)
+![Split](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen-split.png)
 
 ####repeat an expense every month
-![Repeat](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen3-repeat.png)
+![Repeat](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen-repeat.png)
+
+####Categories
+![Categories](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen-categories.png)
+
+####Stats
+![Stats](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen-stats.png)
 
 
 ##License
