@@ -238,18 +238,19 @@
 
 	var $ = _interopRequire(__webpack_require__(3));
 
-	var Data = _interopRequire(__webpack_require__(23));
+	var Data = _interopRequire(__webpack_require__(22));
 
 	var Calendar = _interopRequire(__webpack_require__(1));
 
 	var Grid = _interopRequire(__webpack_require__(26));
 
-	var Form = _interopRequire(__webpack_require__(12));
+	var Form = _interopRequire(__webpack_require__(11));
 
 	var el,
 	    grid,
 	    previewGrid,
 	    preview,
+	    formContainer,
 	    form,
 	    isReady = false,
 	    lastLoadDate;
@@ -268,27 +269,33 @@
 
 	function onResp(resp) {
 		if (resp.result === "success") load(true);
-	}
-
-	function del(item, row) {
-		grid.selectRow(row, true);
-		if (window.confirm("Are you sure you wish to delete this row?")) {
-			Data.del(item.id).then(onResp);
-		}
+		formContainer.removeClass("update");
 	}
 
 	function edit(item, row) {
+		formContainer.addClass("update");
 		grid.selectRow(row, true);
 		Data.get(item.id).then(function (data) {
 			Calendar.set(data.date);
-			form.set({ items: { 0: data } });
+			form.set({ items: { 0: data }, repeat: 1 });
 		});
 	}
 
+	function onDel(e) {
+		if (e) e.preventDefault();
+		var data = form.getData().items,
+		    id = data && data[0] ? data[0].id : null;
+		if (id && window.confirm("Are you sure you wish to delete this item?")) {
+			Data.del(id).then(onResp);
+		}
+	}
+
 	function onReset(e) {
-		e.preventDefault();
+		if (e) e.preventDefault();
+		formContainer.removeClass("update");
 		Calendar.set(new Date());
 		form.reset();
+		grid.unselectRows();
 		onPreview();
 	}
 
@@ -335,6 +342,10 @@
 		return "€" + item.amount_str;
 	}
 
+	function categoryRenderer(v, item) {
+		return v + " - " + item.description;
+	}
+
 	function footer(data) {
 		return "€" + data.total_str;
 	}
@@ -344,8 +355,9 @@
 			el = $("#expenses");
 			preview = el.find(".preview");
 
+			formContainer = el.find(".form");
 			form = new Form({
-				target: el.find(".expenses-form"),
+				target: formContainer,
 				onAdd: onResp,
 				onChange: onPreview
 			});
@@ -356,7 +368,7 @@
 				dataSource: function (params) {
 					return Data.get(params);
 				},
-				columns: [{ width: 52, icons: { pencil: edit, "trash-o": del } }, { name: "Date", field: "date", width: 90 }, { name: "Category", field: "category", width: "40%" }, { name: "Description", field: "description" }, { name: "Amount", field: "amount", width: 100, renderer: renderer, footer: footer }]
+				columns: [{ width: 27, icons: { pencil: edit } }, { name: "Date", field: "date", width: 90 }, { name: "Category", field: "category", renderer: categoryRenderer }, { name: "Amount", field: "amount", width: 100, renderer: renderer, footer: footer }]
 			});
 
 			previewGrid = new Grid({
@@ -369,8 +381,9 @@
 			});
 
 			el.find(".btn-reset").on("click", onReset);
+			el.find(".btn-del").on("click", onDel);
 			$.on("calendar/changed", load);
-		}
+		} else onReset();
 
 		load();
 		isReady = true;
@@ -390,18 +403,19 @@
 
 	var $ = _interopRequire(__webpack_require__(3));
 
-	var Data = _interopRequire(__webpack_require__(22));
+	var Data = _interopRequire(__webpack_require__(24));
 
 	var Calendar = _interopRequire(__webpack_require__(1));
 
 	var Grid = _interopRequire(__webpack_require__(26));
 
-	var Form = _interopRequire(__webpack_require__(11));
+	var Form = _interopRequire(__webpack_require__(13));
 
 	var el,
 	    grid,
 	    previewGrid,
 	    preview,
+	    formContainer,
 	    form,
 	    isReady = false,
 	    lastLoadDate;
@@ -420,27 +434,34 @@
 
 	function onResp(resp) {
 		if (resp.result === "success") load(true);
-	}
-
-	function del(item, row) {
-		grid.selectRow(row, true);
-		if (window.confirm("Are you sure you wish to delete this row?")) {
-			Data.del(item.id).then(onResp);
-		}
+		formContainer.removeClass("update");
 	}
 
 	function edit(item, row) {
+		formContainer.addClass("update");
 		grid.selectRow(row, true);
 		Data.get(item.id).then(function (data) {
 			Calendar.set(data.date);
+			data.repeat = 1;
 			form.set(data);
 		});
 	}
 
+	function onDel(e) {
+		if (e) e.preventDefault();
+		var data = form.getData().items,
+		    id = data && data[0] ? data[0].id : null;
+		if (id && window.confirm("Are you sure you wish to delete this item?")) {
+			Data.del(id).then(onResp);
+		}
+	}
+
 	function onReset(e) {
-		e.preventDefault();
+		if (e) e.preventDefault();
+		formContainer.removeClass("update");
 		Calendar.set(new Date());
 		form.reset();
+		grid.unselectRows();
 		onPreview();
 	}
 
@@ -495,9 +516,10 @@
 		if (!isReady) {
 			el = $("#income");
 			preview = el.find(".preview");
+			formContainer = el.find(".form");
 
 			form = new Form({
-				target: el.find(".income-form"),
+				target: formContainer,
 				onAdd: onResp,
 				onChange: onPreview
 			});
@@ -507,7 +529,7 @@
 				dataSource: function (params) {
 					return Data.get(params);
 				},
-				columns: [{ width: 52, icons: { pencil: edit, "trash-o": del } }, { name: "Date", field: "date", width: 90 }, { name: "Description", field: "description" }, { name: "Amount", field: "amount", width: 105, renderer: renderer, footer: footer }]
+				columns: [{ width: 27, icons: { pencil: edit } }, { name: "Date", field: "date", width: 90 }, { name: "Description", field: "description" }, { name: "Amount", field: "amount", width: 105, renderer: renderer, footer: footer }]
 			});
 
 			previewGrid = new Grid({
@@ -520,8 +542,9 @@
 			});
 
 			el.find(".btn-reset").on("click", onReset);
+			el.find(".btn-del").on("click", onDel);
 			$.on("calendar/changed", load);
-		}
+		} else onReset();
 
 		load();
 		isReady = true;
@@ -543,11 +566,15 @@
 
 	var Calendar = _interopRequire(__webpack_require__(1));
 
-	var Data = _interopRequire(__webpack_require__(24));
+	var Data = _interopRequire(__webpack_require__(23));
 
-	var Chart = _interopRequire(__webpack_require__(13));
+	var Chart = _interopRequire(__webpack_require__(12));
 
-	var lastLoadDate, _chart0, _chart1, _chart2;
+	var lastLoadDate,
+	    _chart0,
+	    _chart1,
+	    _chart2,
+	    isReady = false;
 
 	function chart0(data) {
 		if (!_chart0) _chart0 = Chart("pie", "chart0", "Spending by category (this month)", data);else {
@@ -580,8 +607,11 @@
 	}
 
 	function init() {
-		$.on("calendar/changed", load);
-		load();
+		if (!isReady) {
+			$.on("calendar/changed", load);
+			load();
+			isReady = true;
+		}
 	}
 
 	module.exports = {
@@ -607,9 +637,10 @@
 	    btn = {},
 	    catSel;
 	var tpl = __webpack_require__(14);
+	var isReady = false;
 
 	function updateCatSelect(data) {
-		var options = ["<option value=\"0\"></option>"];
+		var options = ["<option value=\"0\">[root]</option>"];
 		var _iteratorNormalCompletion = true;
 		var _didIteratorError = false;
 		var _iteratorError = undefined;
@@ -711,21 +742,25 @@
 	}
 
 	function init() {
-		el = $("#categories");
-		treeContainer = el.find(".tree");
-		formContainer = el.find(".form form");
-		form = $.form(formContainer[0]);
-		btn.add = formContainer.find(".btn-add");
-		btn.del = formContainer.find(".btn-del");
-		btn.sav = formContainer.find(".btn-sav");
-		catSel = formContainer.find(".category");
+		if (!isReady) {
+			el = $("#categories");
+			treeContainer = el.find(".tree");
+			formContainer = el.find(".form");
+			form = $.form(formContainer[0]);
+			btn.add = formContainer.find(".btn-add");
+			btn.del = formContainer.find(".btn-del");
+			btn.sav = formContainer.find(".btn-sav");
+			catSel = formContainer.find(".category");
 
-		el.on("click", onClick);
-		formContainer.on("submit", function (e) {
-			save();e.preventDefault();
-		});
-
-		loadTree();
+			el.on("click", onClick);
+			formContainer.on("submit", function (e) {
+				save();e.preventDefault();
+			});
+			loadTree();
+			isReady = true;
+		} else {
+			edit({});
+		}
 	}
 
 	module.exports = {
@@ -4842,6 +4877,509 @@
 
 	var Data = _interopRequire(__webpack_require__(22));
 
+	var Categories = _interopRequire(__webpack_require__(25));
+
+	var Calendar = _interopRequire(__webpack_require__(1));
+
+	var Moment = _interopRequire(__webpack_require__(9));
+
+	var tpl = __webpack_require__(27);
+	var _defaults = {
+		onAdd: function onAdd() {}
+	};
+	function parseCategories(cats) {
+		var map = {};
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+
+		try {
+			for (var _iterator = cats[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var p = _step.value;
+				var _iteratorNormalCompletion2 = true;
+				var _didIteratorError2 = false;
+				var _iteratorError2 = undefined;
+
+				try {
+					for (var _iterator2 = p.items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+						var c = _step2.value;
+						map[c.id] = c.name;
+					}
+				} catch (err) {
+					_didIteratorError2 = true;
+					_iteratorError2 = err;
+				} finally {
+					try {
+						if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+							_iterator2["return"]();
+						}
+					} finally {
+						if (_didIteratorError2) {
+							throw _iteratorError2;
+						}
+					}
+				}
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+
+		return map;
+	}
+
+	function cloneItem(item) {
+		var addMonths = arguments[1] === undefined ? 1 : arguments[1];
+
+		var newItem = JSON.parse(JSON.stringify(item));
+		newItem.date = Moment(newItem.date).add(addMonths, "months").format("YYYY-MM-DD");
+		return newItem;
+	}
+
+	function repeatItems(items, times) {
+		if (!items || !items.length) {
+			return [];
+		}var newItems = [];
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+
+		try {
+			for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var item = _step.value;
+
+				for (var i = 1; i < times; i++) {
+					newItems.push(cloneItem(item, i));
+				}
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator["return"]) {
+					_iterator["return"]();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+
+		items = items.concat(newItems);
+		items.sort(function (a, b) {
+			return a.date.localeCompare(b.date);
+		});
+		return items;
+	}
+
+	var Form = (function () {
+		function Form(config) {
+			_classCallCheck(this, Form);
+
+			this.cfg = Object.assign(_defaults, config);
+			this.el = this.cfg.target;
+			this.form = $.form(this.el[0]);
+			this.subforms = this.cfg.target.find(".subforms");
+
+			this.categories = [];
+			this.catMap = {};
+
+			this.el.on("submit", this.onSubmit.bind(this));
+			this.el.on("click", this.onClick.bind(this));
+
+			if (typeof this.cfg.onChange === "function") {
+				this.form.observe((function (nv, ov, f) {
+					this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
+				}).bind(this));
+			}
+			this.draw();
+		}
+
+		_prototypeProperties(Form, null, {
+			draw: {
+				value: function draw() {
+					var _this = this;
+
+					if (this.categories.length) this.reset();else Categories.getTree().then(function (data) {
+						_this.categories = data;
+						_this.catMap = parseCategories(data);
+						_this.reset();
+					});
+					return this;
+				},
+				writable: true,
+				configurable: true
+			},
+			reset: {
+				value: function reset() {
+					this.subforms.html("");
+					this.split(true);
+					var rep = this.el.find(".repeat-in");
+					if (rep) rep[0].value = 1;
+					return this;
+				},
+				writable: true,
+				configurable: true
+			},
+			set: {
+				value: function set(data) {
+					this.reset();
+					this.form.set(data);
+					return this;
+				},
+				writable: true,
+				configurable: true
+			},
+			unsplit: {
+				value: function unsplit(btn) {
+					btn.closest(".form-row").remove();
+					var rows = this.el.find(".form-row");
+					$.each(rows, function (row, i) {
+						var fields = $(row).find("input,select");
+						$.each(fields, function (f) {
+							if (!f.name) return;
+							f.name = f.name.replace(/\[\d+\]/, "[" + i + "]");
+						});
+					});
+					this.subforms.find(".form-row:last-of-type .category")[0].focus();
+					this.cfg.onChange.call(this.cfg.onChange);
+				},
+				writable: true,
+				configurable: true
+			},
+			split: {
+				value: function split(first) {
+					var idx = this.subforms.find(".form-row").length;
+					var firstDesc = this.subforms.find(".form-row:first-of-type .description")[0];
+					var description = firstDesc ? firstDesc.value : "";
+					var rec = { first: first === true, categories: this.categories, idx: idx, description: description };
+					var subform = $(tpl(rec));
+					subform.appendTo(this.subforms).find("select")[0].focus();
+					this.addInputEvents(subform);
+				},
+				writable: true,
+				configurable: true
+			},
+			setDate: {
+				value: function setDate(date) {
+					var dates = this.subforms.find("input[name$=\"date\"]");
+					$.each(dates, function (f) {
+						f.value = date;
+					});
+				},
+				writable: true,
+				configurable: true
+			},
+			getData: {
+				value: function getData() {
+					var clean = arguments[0] === undefined ? false : arguments[0];
+
+					var date = Calendar.get(true),
+					    format = function (n) {
+						return $.formatNumber(n);
+					},
+					    formData = this.form.get(true),
+					    data = [],
+					    errors = [],
+					    total = 0;
+
+					$.each(formData.items, function (item, i) {
+						if (!item.date) item.date = date;
+						if (!item.amount) errors.push("Please enter amount!");else {
+							item.amount = this.parseAmount(item.amount);
+							if (i.toString() === "0") total = item.amount;else total -= item.amount;
+							if (!clean) {
+								item.amount_str = format(item.amount);
+								item.category = this.catMap[item.category_id];
+							}
+							data.push(item);
+						}
+					}, this);
+					if (errors.length && clean) {
+						return Toaster.error(errors[0]);
+					}if (data && data.length) {
+						data[0].amount = total;
+						if (!clean) data[0].amount_str = format(total);
+					}
+					formData.items = repeatItems(data, formData.repeat);
+					return formData;
+				},
+				writable: true,
+				configurable: true
+			},
+			parseAmount: {
+				value: function parseAmount(amount) {
+					amount = ("" + amount).replace(/\s/g, "");
+					if (!/^[\+\-\\*\/\(\)\d\.]+$/i.test(amount)) {
+						return 0;
+					}if (/[\+\-\\*\/\.]+/i.test(amount)) {
+						try {
+							amount = eval(amount);
+						} catch (e) {
+							amount = 0;
+						}
+					}
+					return parseFloat(amount);
+				},
+				writable: true,
+				configurable: true
+			},
+			validate: {
+				value: function validate(data) {
+					if (!data || !data.length) {
+						return false;
+					}var _iteratorNormalCompletion = true;
+					var _didIteratorError = false;
+					var _iteratorError = undefined;
+
+					try {
+						for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+							var d = _step.value;
+
+							if (d.amount <= 0) return Toaster.error("Amount cannot be negative");
+						}
+					} catch (err) {
+						_didIteratorError = true;
+						_iteratorError = err;
+					} finally {
+						try {
+							if (!_iteratorNormalCompletion && _iterator["return"]) {
+								_iterator["return"]();
+							}
+						} finally {
+							if (_didIteratorError) {
+								throw _iteratorError;
+							}
+						}
+					}
+
+					return true;
+				},
+				writable: true,
+				configurable: true
+			},
+			addInputEvents: {
+				value: function addInputEvents(subform) {
+					var inputs = subform.find(".category, .amount, .description");
+					var amount = subform.find(".amount");
+					amount.on("keydown", this.onKeyDown.bind(this));
+					inputs.on("keyup", this.onKeyUp.bind(this));
+				},
+				writable: true,
+				configurable: true
+			},
+			onKeyUp: {
+				value: function onKeyUp(e) {
+					var target = $(e.target);
+					if (e.keyCode === $.keys.C && e.ctrlKey) this.split();else if (e.keyCode === $.keys.X && e.ctrlKey) this.unsplit(target);else {
+						return;
+					}e.preventDefault();
+				},
+				writable: true,
+				configurable: true
+			},
+			onKeyDown: {
+				value: function onKeyDown(e) {
+					if ($.isAllowed(e)) {
+						return true;
+					}e.preventDefault();
+				},
+				writable: true,
+				configurable: true
+			},
+			onClick: {
+				value: function onClick(e) {
+					var target = $(e.target);
+					if (target.is(".btn-split")) this.split();else if (target.is(".btn-unsplit")) this.unsplit(target);else {
+						return;
+					}e.preventDefault();
+				},
+				writable: true,
+				configurable: true
+			},
+			onSubmit: {
+				value: function onSubmit(e) {
+					var _this = this;
+
+					e.preventDefault();
+					var data = this.getData(true).items;
+					if (!this.validate(data)) {
+						return;
+					}if (data) Data.save(data).then(function (resp) {
+						if (resp.result === "success") _this.reset();return resp;
+					}).then(this.cfg.onAdd);
+				},
+				writable: true,
+				configurable: true
+			}
+		});
+
+		return Form;
+	})();
+
+	module.exports = Form;
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+	var $ = _interopRequire(__webpack_require__(3));
+
+	var Moment = _interopRequire(__webpack_require__(9));
+
+	var _clone = function _clone(o) {
+		return JSON.parse(JSON.stringify(o));
+	},
+	    _options = {
+		chart: { renderTo: "", type: "", backgroundColor: null, spacing: [20, 10, 10, 10] },
+		title: { align: "left", style: { color: "#eee" }, text: "" },
+		colors: $.colors,
+		credits: { enabled: false },
+		tooltip: {
+			hideDelay: 0,
+			backgroundColor: "rgba(0, 0, 0, 0.9)",
+			style: { color: "#F0F0F0" },
+			valuePrefix: "€"
+		},
+		legend: {
+			verticalAlign: "top",
+			align: "left",
+			x: 0,
+			y: 30,
+			itemStyle: { color: "#ccc" },
+			itemHoverStyle: { color: "#fff" },
+			itemHiddenStyle: { color: "#888" }
+		},
+		plotOptions: {}
+	},
+	    _xAxis = { labels: { style: { color: "#ccc" } } },
+	    _yAxis = {
+		title: { text: null },
+		labels: {
+			style: { color: "#ccc" },
+			formatter: function formatter() {
+				return "€" + this.value;
+			}
+		},
+		showFirstLabel: false,
+		min: 0,
+		tickPixelInterval: 50,
+		gridLineColor: "#444"
+	};
+
+	module.exports = function (type, containerId, title, data) {
+		window.Highcharts.setOptions({ lang: { thousandsSep: "," } });
+
+		var chart = "Chart";
+		var options = _clone(_options);
+		options.chart.renderTo = containerId;
+		options.title.text = title;
+		if (data) options.series = [data];
+
+		if (type === "pie") {
+			options.chart.type = type;
+			options.legend.layout = "vertical";
+			options.legend.align = "left";
+			options.tooltip.headerFormat = "<span style=\"font-size: 10px\">Expenses</span><br/>";
+			options.tooltip.pointFormatter = function () {
+				return "<span style=\"color: " + this.color + "\">●</span> " + this.name + ": €" + this.y;
+			};
+			options.plotOptions.pie = {
+				borderWidth: 0,
+				innerSize: "50%",
+				showInLegend: true,
+				allowPointSelect: false,
+				dataLabels: { enabled: false }
+			};
+		} else if (type === "line") {
+			if (data) options.series = data;
+			options.chart.type = type;
+			options.tooltip.crosshairs = true;
+			options.tooltip.shared = true;
+			options.tooltip.formatter = function () {
+				var html = this.x + "<br>",
+				    sum = this.points[0].y - this.points[1].y;
+				var _iteratorNormalCompletion = true;
+				var _didIteratorError = false;
+				var _iteratorError = undefined;
+
+				try {
+					for (var _iterator = this.points[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+						var point = _step.value;
+
+						html += "<span style=\"color: " + point.series.color + "\">●</span> " + point.series.name + " €" + $.formatNumber(point.y) + "<br>";
+					}
+				} catch (err) {
+					_didIteratorError = true;
+					_iteratorError = err;
+				} finally {
+					try {
+						if (!_iteratorNormalCompletion && _iterator["return"]) {
+							_iterator["return"]();
+						}
+					} finally {
+						if (_didIteratorError) {
+							throw _iteratorError;
+						}
+					}
+				}
+
+				html += "<span style=\"color: green\">●</span> savings: €" + $.formatNumber(sum) + "<br>";
+
+				return html;
+			};
+
+			options.legend.align = "right";
+			options.yAxis = _clone(_yAxis);
+			options.xAxis = _clone(_xAxis);
+			options.xAxis.categories = $.months;
+
+			var m = new Date().getMonth() - 0.5;
+			options.xAxis.plotBands = [{ id: "m", from: m, to: m + 1, color: "rgba(80,80,80,0.3)" }];
+		} else if (type === "stock") {
+			chart = "StockChart";
+			options.rangeSelector = { enabled: false };
+			options.tooltip.xDateFormat = "%a, %e %b %Y";
+			options.xAxis = _clone(_xAxis);
+			options.yAxis = _clone(_yAxis);
+		}
+		return new window.Highcharts[chart](options);
+	};
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+
+	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+	var $ = _interopRequire(__webpack_require__(3));
+
+	var Toaster = _interopRequire(__webpack_require__(28));
+
+	var Data = _interopRequire(__webpack_require__(24));
+
 	var Calendar = _interopRequire(__webpack_require__(1));
 
 	var Moment = _interopRequire(__webpack_require__(9));
@@ -5069,493 +5607,6 @@
 	})();
 
 	module.exports = Form;
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-	var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
-
-	var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
-	var $ = _interopRequire(__webpack_require__(3));
-
-	var Toaster = _interopRequire(__webpack_require__(28));
-
-	var Data = _interopRequire(__webpack_require__(23));
-
-	var Categories = _interopRequire(__webpack_require__(25));
-
-	var Calendar = _interopRequire(__webpack_require__(1));
-
-	var Moment = _interopRequire(__webpack_require__(9));
-
-	var tpl = __webpack_require__(27);
-	var _defaults = {
-		onAdd: function onAdd() {}
-	};
-	function parseCategories(cats) {
-		var map = {};
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-
-		try {
-			for (var _iterator = cats[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var p = _step.value;
-				var _iteratorNormalCompletion2 = true;
-				var _didIteratorError2 = false;
-				var _iteratorError2 = undefined;
-
-				try {
-					for (var _iterator2 = p.items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-						var c = _step2.value;
-						map[c.id] = c.name;
-					}
-				} catch (err) {
-					_didIteratorError2 = true;
-					_iteratorError2 = err;
-				} finally {
-					try {
-						if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-							_iterator2["return"]();
-						}
-					} finally {
-						if (_didIteratorError2) {
-							throw _iteratorError2;
-						}
-					}
-				}
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-
-		return map;
-	}
-
-	function cloneItem(item) {
-		var addMonths = arguments[1] === undefined ? 1 : arguments[1];
-
-		var newItem = JSON.parse(JSON.stringify(item));
-		newItem.date = Moment(newItem.date).add(addMonths, "months").format("YYYY-MM-DD");
-		return newItem;
-	}
-
-	function repeatItems(items, times) {
-		if (!items || !items.length) {
-			return [];
-		}var newItems = [];
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-
-		try {
-			for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var item = _step.value;
-
-				for (var i = 1; i < times; i++) {
-					newItems.push(cloneItem(item, i));
-				}
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator["return"]) {
-					_iterator["return"]();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-
-		items = items.concat(newItems);
-		items.sort(function (a, b) {
-			return a.date.localeCompare(b.date);
-		});
-		return items;
-	}
-
-	var Form = (function () {
-		function Form(config) {
-			_classCallCheck(this, Form);
-
-			this.cfg = Object.assign(_defaults, config);
-			this.el = this.cfg.target;
-			this.form = $.form(this.el[0]);
-			this.subforms = this.cfg.target.find(".subforms");
-
-			this.categories = [];
-			this.catMap = {};
-
-			this.el.on("submit", this.onSubmit.bind(this));
-			this.el.on("click", this.onClick.bind(this));
-
-			if (typeof this.cfg.onChange === "function") {
-				this.form.observe((function (nv, ov, f) {
-					this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
-				}).bind(this));
-			}
-			this.draw();
-		}
-
-		_prototypeProperties(Form, null, {
-			draw: {
-				value: function draw() {
-					var _this = this;
-
-					if (this.categories.length) this.reset();else Categories.getTree().then(function (data) {
-						_this.categories = data;
-						_this.catMap = parseCategories(data);
-						_this.reset();
-					});
-					return this;
-				},
-				writable: true,
-				configurable: true
-			},
-			reset: {
-				value: function reset() {
-					this.subforms.html("");
-					this.split(true);
-					var rep = this.el.find(".repeat-in");
-					if (rep) rep[0].value = 1;
-					return this;
-				},
-				writable: true,
-				configurable: true
-			},
-			set: {
-				value: function set(data) {
-					this.reset();
-					this.form.set(data);
-					return this;
-				},
-				writable: true,
-				configurable: true
-			},
-			unsplit: {
-				value: function unsplit(btn) {
-					btn.closest(".form-row").remove();
-					var rows = this.el.find(".form-row");
-					$.each(rows, function (row, i) {
-						var fields = $(row).find("input,select");
-						$.each(fields, function (f) {
-							if (!f.name) return;
-							f.name = f.name.replace(/\[\d+\]/, "[" + i + "]");
-						});
-					});
-					this.cfg.onChange.call(this.cfg.onChange);
-				},
-				writable: true,
-				configurable: true
-			},
-			split: {
-				value: function split(first) {
-					var idx = this.subforms.find(".form-row").length;
-					var subform = $(tpl({ first: first === true, categories: this.categories, idx: idx }));
-					subform.appendTo(this.subforms).find("select")[0].focus();
-					this.addInputEvents(subform);
-				},
-				writable: true,
-				configurable: true
-			},
-			setDate: {
-				value: function setDate(date) {
-					var dates = this.subforms.find("input[name$=\"date\"]");
-					$.each(dates, function (f) {
-						f.value = date;
-					});
-				},
-				writable: true,
-				configurable: true
-			},
-			getData: {
-				value: function getData() {
-					var clean = arguments[0] === undefined ? false : arguments[0];
-
-					var date = Calendar.get(true),
-					    format = function (n) {
-						return $.formatNumber(n);
-					},
-					    formData = this.form.get(true),
-					    data = [],
-					    errors = [],
-					    total = 0;
-
-					$.each(formData.items, function (item, i) {
-						if (!item.date) item.date = date;
-						if (!item.amount) errors.push("Please enter amount!");else {
-							item.amount = this.parseAmount(item.amount);
-							if (i.toString() === "0") total = item.amount;else total -= item.amount;
-							if (!clean) {
-								item.amount_str = format(item.amount);
-								item.category = this.catMap[item.category_id];
-							}
-							data.push(item);
-						}
-					}, this);
-					if (errors.length && clean) {
-						return Toaster.error(errors[0]);
-					}if (data && data.length) {
-						data[0].amount = total;
-						if (!clean) data[0].amount_str = format(total);
-					}
-					formData.items = repeatItems(data, formData.repeat);
-					return formData;
-				},
-				writable: true,
-				configurable: true
-			},
-			parseAmount: {
-				value: function parseAmount(amount) {
-					amount = ("" + amount).replace(/\s/g, "");
-					if (!/^[\+\-\\*\/\(\)\d\.]+$/i.test(amount)) {
-						return 0;
-					}if (/[\+\-\\*\/\.]+/i.test(amount)) {
-						try {
-							amount = eval(amount);
-						} catch (e) {
-							amount = 0;
-						}
-					}
-					return parseFloat(amount);
-				},
-				writable: true,
-				configurable: true
-			},
-			validate: {
-				value: function validate(data) {
-					if (!data || !data.length) {
-						return false;
-					}var _iteratorNormalCompletion = true;
-					var _didIteratorError = false;
-					var _iteratorError = undefined;
-
-					try {
-						for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-							var d = _step.value;
-
-							if (d.amount <= 0) return Toaster.error("Amount cannot be negative");
-						}
-					} catch (err) {
-						_didIteratorError = true;
-						_iteratorError = err;
-					} finally {
-						try {
-							if (!_iteratorNormalCompletion && _iterator["return"]) {
-								_iterator["return"]();
-							}
-						} finally {
-							if (_didIteratorError) {
-								throw _iteratorError;
-							}
-						}
-					}
-
-					return true;
-				},
-				writable: true,
-				configurable: true
-			},
-			addInputEvents: {
-				value: function addInputEvents(subform) {
-					var inputs = subform.find(".amount");
-					inputs.on("keydown", this.onKeyDown.bind(this));
-				},
-				writable: true,
-				configurable: true
-			},
-			onKeyDown: {
-				value: function onKeyDown(e) {
-					if ($.isAllowed(e)) {
-						return true;
-					}e.preventDefault();
-				},
-				writable: true,
-				configurable: true
-			},
-			onClick: {
-				value: function onClick(e) {
-					var target = $(e.target);
-					if (target.is(".btn-split")) this.split();else if (target.is(".btn-del")) this.unsplit(target);else {
-						return;
-					}e.preventDefault();
-				},
-				writable: true,
-				configurable: true
-			},
-			onSubmit: {
-				value: function onSubmit(e) {
-					var _this = this;
-
-					e.preventDefault();
-					var data = this.getData(true).items;
-					if (!this.validate(data)) {
-						return;
-					}if (data) Data.save(data).then(function (resp) {
-						if (resp.result === "success") _this.reset();return resp;
-					}).then(this.cfg.onAdd);
-				},
-				writable: true,
-				configurable: true
-			}
-		});
-
-		return Form;
-	})();
-
-	module.exports = Form;
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-	var $ = _interopRequire(__webpack_require__(3));
-
-	var Moment = _interopRequire(__webpack_require__(9));
-
-	var _clone = function _clone(o) {
-		return JSON.parse(JSON.stringify(o));
-	},
-	    _options = {
-		chart: { renderTo: "", type: "", backgroundColor: null, spacing: [20, 10, 10, 10] },
-		title: { align: "left", style: { color: "#eee" }, text: "" },
-		colors: $.colors,
-		credits: { enabled: false },
-		tooltip: {
-			hideDelay: 0,
-			backgroundColor: "rgba(0, 0, 0, 0.9)",
-			style: { color: "#F0F0F0" },
-			valuePrefix: "€"
-		},
-		legend: {
-			verticalAlign: "top",
-			align: "left",
-			x: 0,
-			y: 30,
-			itemStyle: { color: "#ccc" },
-			itemHoverStyle: { color: "#fff" },
-			itemHiddenStyle: { color: "#888" }
-		},
-		plotOptions: {}
-	},
-	    _xAxis = { labels: { style: { color: "#ccc" } } },
-	    _yAxis = {
-		title: { text: null },
-		labels: {
-			style: { color: "#ccc" },
-			formatter: function formatter() {
-				return "€" + this.value;
-			}
-		},
-		showFirstLabel: false,
-		min: 0,
-		tickPixelInterval: 50,
-		gridLineColor: "#444"
-	};
-
-	module.exports = function (type, containerId, title, data) {
-		window.Highcharts.setOptions({ lang: { thousandsSep: "," } });
-
-		var chart = "Chart";
-		var options = _clone(_options);
-		options.chart.renderTo = containerId;
-		options.title.text = title;
-		if (data) options.series = [data];
-
-		if (type === "pie") {
-			options.chart.type = type;
-			options.legend.layout = "vertical";
-			options.legend.align = "left";
-			options.tooltip.headerFormat = "<span style=\"font-size: 10px\">Expenses</span><br/>";
-			options.tooltip.pointFormatter = function () {
-				return "<span style=\"color: " + this.color + "\">●</span> " + this.name + ": €" + this.y;
-			};
-			options.plotOptions.pie = {
-				borderWidth: 0,
-				innerSize: "50%",
-				showInLegend: true,
-				allowPointSelect: false,
-				dataLabels: { enabled: false }
-			};
-		} else if (type === "line") {
-			if (data) options.series = data;
-			options.chart.type = type;
-			options.tooltip.crosshairs = true;
-			options.tooltip.shared = true;
-			options.tooltip.formatter = function () {
-				var html = this.x + "<br>",
-				    sum = this.points[0].y - this.points[1].y;
-				var _iteratorNormalCompletion = true;
-				var _didIteratorError = false;
-				var _iteratorError = undefined;
-
-				try {
-					for (var _iterator = this.points[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-						var point = _step.value;
-
-						html += "<span style=\"color: " + point.series.color + "\">●</span> " + point.series.name + " €" + $.formatNumber(point.y) + "<br>";
-					}
-				} catch (err) {
-					_didIteratorError = true;
-					_iteratorError = err;
-				} finally {
-					try {
-						if (!_iteratorNormalCompletion && _iterator["return"]) {
-							_iterator["return"]();
-						}
-					} finally {
-						if (_didIteratorError) {
-							throw _iteratorError;
-						}
-					}
-				}
-
-				html += "<span style=\"color: green\">●</span> savings: €" + $.formatNumber(sum) + "<br>";
-
-				return html;
-			};
-
-			options.legend.align = "right";
-			options.yAxis = _clone(_yAxis);
-			options.xAxis = _clone(_xAxis);
-			options.xAxis.categories = $.months;
-
-			var m = new Date().getMonth() - 0.5;
-			options.xAxis.plotBands = [{ id: "m", from: m, to: m + 1, color: "rgba(80,80,80,0.3)" }];
-		} else if (type === "stock") {
-			chart = "StockChart";
-			options.rangeSelector = { enabled: false };
-			options.tooltip.xDateFormat = "%a, %e %b %Y";
-			options.xAxis = _clone(_xAxis);
-			options.yAxis = _clone(_yAxis);
-		}
-		return new window.Highcharts[chart](options);
-	};
 
 /***/ },
 /* 14 */
@@ -6120,6 +6171,7 @@
 		A: 65,
 		X: 88,
 		C: 67,
+		D: 68,
 		V: 86,
 		Z: 90,
 		F1: 112,
@@ -6415,7 +6467,7 @@
 
 	var $ = _interopRequire(__webpack_require__(3));
 
-	var _url = "incomes";
+	var _url = "entries";
 
 	module.exports = {
 		get: function (params) {
@@ -6443,7 +6495,32 @@
 
 	var $ = _interopRequire(__webpack_require__(3));
 
-	var _url = "entries";
+	module.exports = {
+		spendingByCategory: function (params) {
+			return $.get("spendingByCategory", params || {});
+		},
+
+		incomeVsExpenses: function (params) {
+			return $.get("incomeVsExpenses", params || {});
+		},
+
+		spendingByDay: function (params) {
+			return $.get("spendingByDay", params || {});
+		}
+
+	};
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+	var $ = _interopRequire(__webpack_require__(3));
+
+	var _url = "incomes";
 
 	module.exports = {
 		get: function (params) {
@@ -6459,31 +6536,6 @@
 		del: function (id) {
 			return $.del(_url + "/" + id);
 		}
-	};
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
-	var $ = _interopRequire(__webpack_require__(3));
-
-	module.exports = {
-		spendingByCategory: function (params) {
-			return $.get("spendingByCategory", params || {});
-		},
-
-		incomeVsExpenses: function (params) {
-			return $.get("incomeVsExpenses", params || {});
-		},
-
-		spendingByDay: function (params) {
-			return $.get("spendingByDay", params || {});
-		}
-
 	};
 
 /***/ },
@@ -6589,71 +6641,6 @@
 		var columns = _interopRequire(__webpack_require__(4));
 
 		var rows = _interopRequire(__webpack_require__(5));
-
-		if (!Object.assign) Object.defineProperty(Object, "assign", {
-			enumerable: false,
-			configurable: true,
-			writable: true,
-			value: function value(target) {
-				for (var _len = arguments.length, sources = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-					sources[_key - 1] = arguments[_key];
-				}
-
-				if (!target) throw new TypeError("Cannot convert first argument to object");
-				var to = Object(target);
-				var _iteratorNormalCompletion = true;
-				var _didIteratorError = false;
-				var _iteratorError = undefined;
-
-				try {
-					for (var _iterator = sources[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-						var source = _step.value;
-
-						var keys = Object.keys(Object(source));
-						var _iteratorNormalCompletion2 = true;
-						var _didIteratorError2 = false;
-						var _iteratorError2 = undefined;
-
-						try {
-							for (var _iterator2 = keys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-								var key = _step2.value;
-
-								var desc = Object.getOwnPropertyDescriptor(source, key);
-								if (desc !== undefined && desc.enumerable) to[key] = source[key];
-							}
-						} catch (err) {
-							_didIteratorError2 = true;
-							_iteratorError2 = err;
-						} finally {
-							try {
-								if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
-									_iterator2["return"]();
-								}
-							} finally {
-								if (_didIteratorError2) {
-									throw _iteratorError2;
-								}
-							}
-						}
-					}
-				} catch (err) {
-					_didIteratorError = true;
-					_iteratorError = err;
-				} finally {
-					try {
-						if (!_iteratorNormalCompletion && _iterator["return"]) {
-							_iterator["return"]();
-						}
-					} finally {
-						if (_didIteratorError) {
-							throw _iteratorError;
-						}
-					}
-				}
-
-				return to;
-			}
-		});
 
 		var Grid = function Grid(cfg) {
 			_classCallCheck(this, Grid);
@@ -6895,8 +6882,9 @@
 			});
 			this.el.filterInput.addEventListener("keyup", function (e) {
 				if (e.keyCode === 27) {
+					self.el.filterInput.value = "";
+					self.el.filterBtn.focus();
 					self.populate.call(self);
-					self.toggleSearchBox.call(self);
 				}
 			});
 			this.el.filterInput.addEventListener("blur", function (e) {
@@ -6944,7 +6932,7 @@
 					col.headerCls = ["grid-cell", "grid-header-cell", col.field, sortCls];
 					if (!col.name && col.icons) {
 						col.headerCls.push("action");
-						col.name = "<a href=\"#\" class=\"row-action\" data-action=\"search\" " + "title=\"Search\"><i class=\"fa fa-search\"></i></a>" + "<div class=\"filter-box\"><input class=\"filter-input\" type=\"text\"></div>";
+						col.name = "<a href=\"#\" class=\"row-action filter-btn\" data-action=\"search\" " + "title=\"Search\"><i class=\"fa fa-search\"></i></a>" + "<div class=\"filter-box\"><input class=\"filter-input\" type=\"text\"></div>";
 						this.hasFilter = true;
 					}
 					col.headerCls = col.headerCls.join(" ");
@@ -7053,8 +7041,9 @@
 			if (!this.isRendered) {
 				this.el.head.innerHTML = _getHeaderRow.call(this);
 				if (this.hasFilter) {
-					this.el.filterBox = this.el.head.querySelector(".filter-box");
-					this.el.filterInput = this.el.head.querySelector(".filter-input");
+					this.el.filterBox = this.el.target.querySelector(".filter-box");
+					this.el.filterInput = this.el.target.querySelector(".filter-input");
+					this.el.filterBtn = this.el.target.querySelector(".filter-btn");
 					this.initFilterEvents();
 				}
 				this.isRendered = true;
@@ -7087,11 +7076,9 @@
 		function toggleSearchBox() {
 			if (!this.hasFilter) {
 				return;
-			}var filterCell = this.el.filterBox.parentNode;
-			filterCell.classList.toggle("filter-visible");
-			if (filterCell.classList.contains("filter-visible")) {
-				this.el.filterInput.focus();
-			}
+			}var filterCell = this.el.filterBox.parentNode.classList;
+			filterCell.toggle("filter-visible");
+			if (filterCell.contains("filter-visible")) this.el.filterInput.focus();
 		}
 
 		module.exports = {
@@ -7271,7 +7258,7 @@
 	/***/ function(module, exports, __webpack_require__) {
 
 		var H = __webpack_require__(10);
-		module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<td class=\"");t.b(t.v(t.f("footerCls",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("	<span class=\"grid-footer-cell-inner\">");t.b(t.v(t.f("footerText",c,p,0)));t.b("</span>\r");t.b("\n" + i);t.b("</td>");return t.fl(); },partials: {}, subs: {  }}, "<td class=\"{{footerCls}}\">\r\n\t<span class=\"grid-footer-cell-inner\">{{footerText}}</span>\r\n</td>", H);return T.render.apply(T, arguments); };
+		module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<td class=\"");t.b(t.v(t.f("footerCls",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("	<span class=\"grid-footer-cell-inner\">");t.b(t.t(t.f("footerText",c,p,0)));t.b("</span>\r");t.b("\n" + i);t.b("</td>");return t.fl(); },partials: {}, subs: {  }}, "<td class=\"{{footerCls}}\">\r\n\t<span class=\"grid-footer-cell-inner\">{{{footerText}}}</span>\r\n</td>", H);return T.render.apply(T, arguments); };
 
 	/***/ },
 	/* 10 */
@@ -8086,7 +8073,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var H = __webpack_require__(30);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"form-row\">\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]id\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]date\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<div class=\"select-wrap\">\r");t.b("\n" + i);t.b("		<select name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]category_id\" class=\"category\">\r");t.b("\n" + i);if(t.s(t.f("categories",c,p,1),c,p,0,234,353,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("			<optgroup label=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("				");if(t.s(t.f("items",c,p,1),c,p,0,282,322,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<option value=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</option>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("			</optgroup>\r");t.b("\n" + i);});c.pop();}t.b("		</select>\r");t.b("\n" + i);t.b("	</div>\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]amount\" class=\"amount\" placeholder=\"0.00\">\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]description\" class=\"description\" placeholder=\"description\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("first",c,p,1),c,p,0,566,668,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<button type=\"button\" title=\"Split\" class=\"btn-split\"><i class=\"fa fa-angle-double-down\"></i></button>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	");if(!t.s(t.f("first",c,p,1),c,p,1,0,0,"")){t.b("<button type=\"button\" title=\"Remove\" class=\"btn-del\"><i class=\"fa fa-trash-o\"></i></button>");};t.b("\r");t.b("\n" + i);t.b("</div>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"form-row\">\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]id\">\r\n\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]date\">\r\n\r\n\t<div class=\"select-wrap\">\r\n\t\t<select name=\"items[{{idx}}]category_id\" class=\"category\">\r\n\t\t\t{{#categories}}\r\n\t\t\t<optgroup label=\"{{name}}\">\r\n\t\t\t\t{{#items}}<option value=\"{{id}}\">{{name}}</option>{{/items}}\r\n\t\t\t</optgroup>\r\n\t\t\t{{/categories}}\r\n\t\t</select>\r\n\t</div>\r\n\r\n\t<input name=\"items[{{idx}}]amount\" class=\"amount\" placeholder=\"0.00\">\r\n\t<input name=\"items[{{idx}}]description\" class=\"description\" placeholder=\"description\">\r\n\t{{#first}}<button type=\"button\" title=\"Split\" class=\"btn-split\"><i class=\"fa fa-angle-double-down\"></i></button>{{/first}}\r\n\t{{^first}}<button type=\"button\" title=\"Remove\" class=\"btn-del\"><i class=\"fa fa-trash-o\"></i></button>{{/first}}\r\n</div>\r\n", H);return T.render.apply(T, arguments); };
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"form-row\">\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]id\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input type=\"hidden\" name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]date\">\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<div class=\"select-wrap\">\r");t.b("\n" + i);t.b("		<select name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]category_id\" class=\"category\">\r");t.b("\n" + i);if(t.s(t.f("categories",c,p,1),c,p,0,234,353,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("			<optgroup label=\"");t.b(t.v(t.f("name",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("				");if(t.s(t.f("items",c,p,1),c,p,0,282,322,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<option value=\"");t.b(t.v(t.f("id",c,p,0)));t.b("\">");t.b(t.v(t.f("name",c,p,0)));t.b("</option>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("			</optgroup>\r");t.b("\n" + i);});c.pop();}t.b("		</select>\r");t.b("\n" + i);t.b("	</div>\r");t.b("\n" + i);t.b("\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]amount\" class=\"amount\" placeholder=\"0.00\">\r");t.b("\n" + i);t.b("	<input name=\"items[");t.b(t.v(t.f("idx",c,p,0)));t.b("]description\" class=\"description\" placeholder=\"description\" value=\"");t.b(t.v(t.f("description",c,p,0)));t.b("\">\r");t.b("\n" + i);t.b("	");if(t.s(t.f("first",c,p,1),c,p,0,590,692,"{{ }}")){t.rs(c,p,function(c,p,t){t.b("<button type=\"button\" title=\"Split\" class=\"btn-split\"><i class=\"fa fa-angle-double-down\"></i></button>");});c.pop();}t.b("\r");t.b("\n" + i);t.b("	");if(!t.s(t.f("first",c,p,1),c,p,1,0,0,"")){t.b("<button type=\"button\" title=\"Remove\" class=\"btn-unsplit\"><i class=\"fa fa-trash-o\"></i></button>");};t.b("\r");t.b("\n" + i);t.b("</div>\r");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"form-row\">\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]id\">\r\n\r\n\t<input type=\"hidden\" name=\"items[{{idx}}]date\">\r\n\r\n\t<div class=\"select-wrap\">\r\n\t\t<select name=\"items[{{idx}}]category_id\" class=\"category\">\r\n\t\t\t{{#categories}}\r\n\t\t\t<optgroup label=\"{{name}}\">\r\n\t\t\t\t{{#items}}<option value=\"{{id}}\">{{name}}</option>{{/items}}\r\n\t\t\t</optgroup>\r\n\t\t\t{{/categories}}\r\n\t\t</select>\r\n\t</div>\r\n\r\n\t<input name=\"items[{{idx}}]amount\" class=\"amount\" placeholder=\"0.00\">\r\n\t<input name=\"items[{{idx}}]description\" class=\"description\" placeholder=\"description\" value=\"{{description}}\">\r\n\t{{#first}}<button type=\"button\" title=\"Split\" class=\"btn-split\"><i class=\"fa fa-angle-double-down\"></i></button>{{/first}}\r\n\t{{^first}}<button type=\"button\" title=\"Remove\" class=\"btn-unsplit\"><i class=\"fa fa-trash-o\"></i></button>{{/first}}\r\n</div>\r\n", H);return T.render.apply(T, arguments); };
 
 /***/ },
 /* 28 */

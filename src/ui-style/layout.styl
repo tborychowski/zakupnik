@@ -1,0 +1,56 @@
+@import "_lib";
+
+#content
+	pos top-height 0 0 menu-width; padding 0 0 10 10; border-radius 10px 0 0 0; bg body-bg;
+	shadow -2 -2 3 #000 .4; overflow-y auto;
+
+.section
+	show 0; opacity 0; transition opacity .2s ease-out; bg body-bg;
+
+	&.visible
+		show 2;
+
+	&.active
+		opacity 1;
+
+
+
+
+
+.middle-column
+	pos 0 auto 0 0; width middle-width; z 9; bg body-bg; padding 0 15 15;
+
+	.preview
+		position absolute; bottom 0; size (middle-width - 25) 242; margin 50 0 0; opacity 0.5;
+		transition opacity .3s ease-out; pointer-events none;
+
+		&.hidden
+			opacity 0;
+
+		.preview-table
+			position relative; margin 10 0 0;
+			.fa-sort
+				show 0;
+			.grid
+				min-height 204px;
+
+			.grid-body .amount
+			.grid-footer .amount
+				text-align right;
+
+			.warn .fa
+				color #FF6A44; margin-right 5;
+				position relative; top -1;
+
+
+.right-column
+	pos 0 0 0 (middle-width); bg body-bg-dark; shadow 2 0 3 #000 0.3 inset; overflow-y auto;
+
+	.grid
+		pos 10 10 10 15;
+	.grid-body .amount
+	.grid-footer .amount
+		text-align right;
+
+	.filter-input
+		height 29;

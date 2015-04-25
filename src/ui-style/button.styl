@@ -1,9 +1,5 @@
 @import "_lib";
 
-form-color = #ccc;
-form-color-light = #eee;
-form-color-dark = #444;
-
 button
 	font inherit;
 	font 14/16px;
@@ -13,12 +9,14 @@ button
 	vertical-align top;
 	height 34;
 	transition background-color .2s, border-color .2s;
-	border 2 form-color;
-	shadow 0 3 3 #fff .3 inset;
-	bg rgba(form-color-light, 0.1); color form-color;
+	border 1 form-color;
+	color form-color;
+	bg rgba(form-color-dark, 0.5);
+	// shadow 0 2 1 #fff .2 inset, 0 -2 1 #000 .2 inset;
+	shadow 0 16 5 #fff .1 inset;
 
 	&:active
-		shadow none; background-color rgba(form-color-dark, 0.3); color rgba(form-color, .5)
+		shadow none; background-color rgba(form-color-dark, 1); color rgba(form-color, .2)
 
 	&:focus
 		border-color orange; outline none;

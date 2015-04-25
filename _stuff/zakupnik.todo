@@ -1,34 +1,38 @@
 UI/UX:
- ✔ make all 3 sections (but stats) look the same: @done (2015-03-29 15:13)
-   ✔ form in the middle (more focus) @done (2015-03-25 19:58)
-   ✔ table/tree on the right @done (2015-03-25 19:58)
-   ✔ improve design of look&feel @done (2015-03-29 15:13)
-
- ✔ add prev/next month to the calendar switcher @done (2015-04-05 14:06)
-   sth like: < < today > >
-
- ✔ 1st chart is not reloading on month change @done (2015-04-05 14:06)
- ✔ add "now" vertical line to chart1 @done (2015-03-24 22:10)
- ✔ test data labels instead of legend for pie @done (2015-03-25 20:10)
- ✔ replace google fonts with local @done (2015-03-29 15:26)
+ ✔ add classes so: edit entry button is called "save" and for a new item - "add" @done (2015-04-25 19:42)
+ ✔ clone description on split @done (2015-04-25 20:03)
+ ✔ merge category with description @done (2015-04-25 20:10)
+ ☐ toaster
+ ☐ show clickable week days in the top (calendar)
  ☐ add category dropdown filter to the timeline chart
-
-
-BUILD:
- ✔ make lib out of tp js @done (2015-03-25 20:14)
+ ☐ add colors to categories (?)
+ ☐ change logout to icon (?)
 
 
 API/SERVER:
  ☐ Oauth2 authentication
- ✔ correct timeline chart to show all days (even with 0 entries) @done (2015-03-24 21:44)
 
 
 
 
-
-GRID:
- ✔ make grid filterable @done (2015-03-24 17:10)
-   input field could expand from the header of icons column (after clicking on search icon there)
-
- ✔ clear on Esc @done (2015-03-24 21:01)
-
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ category: select, switch to different section & back - form is cleared @done (2015-04-25 18:58) @project(BUGS)
+ ✔ tweak default button bg color @done (2015-04-25 16:59) @project(UI/UX)
+ ✘ move filter to footer (always visible) @cancelled (2015-04-25 15:22) @project(GRID)
+ ✔ enter filter keyword, click escape, click search again - keyword is still there @done (2015-04-25 15:22) @project(GRID)
+ ✔ add prev/next month to the calendar switcher @done (2015-04-05 14:06) @project(UI/UX)
+  sth like: < < today > >
+ ✔ 1st chart is not reloading on month change @done (2015-04-05 14:06) @project(UI/UX)
+ ✔ replace google fonts with local @done (2015-03-29 15:26) @project(UI/UX)
+ ✔ make all 3 sections (but stats) look the same: @done (2015-03-29 15:13) @project(UI/UX)
+ ✔ improve design of look&feel @done (2015-03-29 15:13) @project(UI/UX)
+ ✔ make lib out of tp js @done (2015-03-25 20:14) @project(BUILD)
+ ✔ test data labels instead of legend for pie @done (2015-03-25 20:10) @project(UI/UX)
+ ✔ table/tree on the right @done (2015-03-25 19:58) @project(UI/UX)
+ ✔ form in the middle (more focus) @done (2015-03-25 19:58) @project(UI/UX)
+ ✔ add "now" vertical line to chart1 @done (2015-03-24 22:10) @project(UI/UX)
+ ✔ correct timeline chart to show all days (even with 0 entries) @done (2015-03-24 21:44) @project(API/SERVER)
+ ✔ clear on Esc @done (2015-03-24 21:01) @project(GRID)
+ ✔ make grid filterable @done (2015-03-24 17:10) @project(GRID)
+  input field could expand from the header of icons column (after clicking on search icon there)

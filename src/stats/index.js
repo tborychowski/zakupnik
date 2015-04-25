@@ -3,7 +3,7 @@ import Calendar from 'calendar';
 import Data from 'data/stats';
 import Chart from './Chart';
 
-var lastLoadDate, _chart0, _chart1, _chart2;
+var lastLoadDate, _chart0, _chart1, _chart2, isReady = false;
 
 function chart0 (data) {
 	if (!_chart0) _chart0 = Chart('pie', 'chart0', 'Spending by category (this month)', data);
@@ -39,8 +39,11 @@ function load (force) {
 }
 
 function init () {
-	$.on('calendar/changed', load);
-	load();
+	if (!isReady) {
+		$.on('calendar/changed', load);
+		load();
+		isReady = true;
+	}
 }
 
 export default {

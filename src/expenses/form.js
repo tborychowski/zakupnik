@@ -93,12 +93,16 @@ export default class Form {
 				f.name = f.name.replace(/\[\d+\]/, '[' + i + ']');
 			});
 		});
+		this.subforms.find('.form-row:last-of-type .category')[0].focus();
 		this.cfg.onChange.call(this.cfg.onChange);
 	}
 
 	split (first) {
 		let idx = this.subforms.find('.form-row').length;
-		let subform = $(tpl({ first: first === true, categories: this.categories, idx }));
+		let firstDesc = this.subforms.find('.form-row:first-of-type .description')[0];
+		let description = firstDesc ? firstDesc.value : '';
+		let rec = { first: first === true, categories: this.categories, idx, description };
+		let subform = $(tpl(rec));
 		subform.appendTo(this.subforms).find('select')[0].focus();
 		this.addInputEvents(subform);
 	}
@@ -160,10 +164,20 @@ export default class Form {
 
 
 	addInputEvents (subform) {
-		let inputs = subform.find('.amount');
-		inputs.on('keydown', this.onKeyDown.bind(this));
+		let inputs = subform.find('.category, .amount, .description');
+		let amount = subform.find('.amount');
+		amount.on('keydown', this.onKeyDown.bind(this));
+		inputs.on('keyup', this.onKeyUp.bind(this));
 	}
 
+
+	onKeyUp (e) {
+		var target = $(e.target);
+		if (e.keyCode === $.keys.C && e.ctrlKey) this.split();
+		else if (e.keyCode === $.keys.X && e.ctrlKey) this.unsplit(target);
+		else return;
+		e.preventDefault();
+	}
 
 	onKeyDown (e) {
 		if ($.isAllowed(e)) return true;
@@ -173,7 +187,7 @@ export default class Form {
 	onClick (e) {
 		var target = $(e.target);
 		if (target.is('.btn-split')) this.split();
-		else if (target.is('.btn-del')) this.unsplit(target);
+		else if (target.is('.btn-unsplit')) this.unsplit(target);
 		else return;
 		e.preventDefault();
 	}

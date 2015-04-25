@@ -3,9 +3,10 @@ import Data from 'data/categories';
 
 var el, treeContainer, formContainer, form, btn = {}, catSel;
 var tpl = require('./category.html');
+var isReady = false;
 
 function updateCatSelect (data) {
-	var options = ['<option value="0"></option>'];
+	var options = ['<option value="0">[root]</option>'];
 	for (let c of data) options.push(`<option value="${c.id}">${c.name}</option>`);
 	catSel.html(options.join(''));
 	return data;
@@ -63,19 +64,24 @@ function loadTree () {
 }
 
 function init () {
-	el = $('#categories');
-	treeContainer = el.find('.tree');
-	formContainer = el.find('.form form');
-	form = $.form(formContainer[0]);
-	btn.add = formContainer.find('.btn-add');
-	btn.del = formContainer.find('.btn-del');
-	btn.sav = formContainer.find('.btn-sav');
-	catSel = formContainer.find('.category');
+	if (!isReady) {
+		el = $('#categories');
+		treeContainer = el.find('.tree');
+		formContainer = el.find('.form');
+		form = $.form(formContainer[0]);
+		btn.add = formContainer.find('.btn-add');
+		btn.del = formContainer.find('.btn-del');
+		btn.sav = formContainer.find('.btn-sav');
+		catSel = formContainer.find('.category');
 
-	el.on('click', onClick);
-	formContainer.on('submit', function (e) { save(); e.preventDefault(); });
-
-	loadTree();
+		el.on('click', onClick);
+		formContainer.on('submit', function (e) { save(); e.preventDefault(); });
+		loadTree();
+		isReady = true;
+	}
+	else {
+		edit({});	// reset form
+	}
 }
 
 export default {

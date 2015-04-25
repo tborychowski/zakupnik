@@ -13,7 +13,7 @@
 <body>
 
 	<div id="top">
-		<a href="#" class="logout">Logout</a>
+		<!-- <a href="#" class="logout">Logout</a> -->
 		<h1>zakupnik</h1>
 	</div>
 	<div id="calendar"></div>
@@ -30,12 +30,17 @@
 		<div class="section" id="expenses">
 			<div class="middle-column">
 				<h2>Expenses <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
-				<form class="expenses-form">
+				<form class="form expenses-form">
 					<div class="subforms"></div>
 					<div class="form-row">
-						<button type="submit" class="btn-add success">Add</button>
 						<label>Repeat every month, for months</label>
 						<input type="number" class="repeat-in" min="1" max="12" name="repeat"/>
+					</div>
+					<div class="form-row">
+						<button type="submit" class="btn-add success">Add</button>
+						<button type="submit" class="btn btn-sav success">Save</button>
+						<button type="submit" class="btn btn-reset">Cancel</button>
+						<button type="button" class="btn btn-del warning">Remove</button>
 					</div>
 				</form>
 				<div class="preview hidden">
@@ -51,7 +56,7 @@
 		<div class="section" id="income">
 			<div class="middle-column">
 				<h2>Income <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
-				<form class="income-form">
+				<form class="form income-form">
 					<div class="subforms">
 						<div class="form-row">
 							<input type="hidden" name="id">
@@ -61,9 +66,14 @@
 						</div>
 					</div>
 					<div class="form-row">
-						<button type="submit" class="btn-add success">Add</button>
 						<label>Repeat every month, for months</label>
 						<input type="number" class="repeat-in" min="1" max="12" name="repeat"/>
+					</div>
+					<div class="form-row">
+						<button type="submit" class="btn-add success">Add</button>
+						<button type="submit" class="btn btn-sav success">Save</button>
+						<button type="submit" class="btn btn-reset">Cancel</button>
+						<button type="button" class="btn btn-del warning">Remove</button>
 					</div>
 				</form>
 				<div class="preview hidden">
@@ -79,18 +89,21 @@
 		<div class="section" id="categories">
 			<div class="middle-column">
 				<h2>Categories <a href="#" class="btn-reset fa fa-plus-circle"></a></h2>
-				<div class="form">
-					<form>
+				<form class="form">
+					<div class="form-row">
 						<input type="hidden" name="id">
 						<div class="select-wrap">
 							<select name="parent_id" class="category"></select>
 						</div>
 						<input type="text" name="name" placeholder="name">
+					</div>
+					<div class="form-row">
 						<button type="submit" class="btn btn-add success">Add</button>
 						<button type="submit" class="btn btn-sav success">Save</button>
+						<button type="submit" class="btn btn-reset">Cancel</button>
 						<button type="button" class="btn btn-del warning">Remove</button>
-					</form>
-				</div>
+					</div>
+				</form>
 			</div>
 
 			<div class="right-column tree"></div>

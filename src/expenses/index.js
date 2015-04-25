@@ -4,7 +4,7 @@ import Calendar from 'calendar';
 import Grid from 'grid';
 import Form from './form';
 
-var el, grid, previewGrid, preview, form, isReady = false, lastLoadDate;
+var el, grid, previewGrid, preview, formContainer, form, isReady = false, lastLoadDate;
 
 function load (force) {
 	let date = Calendar.get('YYYY-MM');
@@ -20,27 +20,32 @@ function load (force) {
 
 function onResp (resp) {
 	if (resp.result === 'success') load(true);
-}
-
-function del (item, row) {
-	grid.selectRow(row, true);
-	if (window.confirm('Are you sure you wish to delete this row?')) {
-		Data.del(item.id).then(onResp);
-	}
+	formContainer.removeClass('update');
 }
 
 function edit (item, row) {
+	formContainer.addClass('update');
 	grid.selectRow(row, true);
 	Data.get(item.id).then(data => {
 		Calendar.set(data.date);
-		form.set({ items: { 0: data } });
+		form.set({ items: { 0: data }, repeat: 1 });
 	});
 }
 
+function onDel (e) {
+	if (e) e.preventDefault();
+	var data = form.getData().items, id = (data && data[0] ? data[0].id : null);
+	if (id && window.confirm('Are you sure you wish to delete this item?')) {
+		Data.del(id).then(onResp);
+	}
+}
+
 function onReset (e) {
-	e.preventDefault();
+	if (e) e.preventDefault();
+	formContainer.removeClass('update');
 	Calendar.set(new Date());
 	form.reset();
+	grid.unselectRows();
 	onPreview();
 }
 
@@ -65,9 +70,12 @@ function renderer (v, item) {
 	return '€' + item.amount_str;
 }
 
-/**
- * Footer renderer/formatter
- */
+// Category & description renderer/formatter
+function categoryRenderer (v, item) {
+	return v + ' - ' + item.description;
+}
+
+// Footer renderer/formatter
 function footer (data) {
 	return '€' + data.total_str;
 }
@@ -77,8 +85,9 @@ function init () {
 		el = $('#expenses');
 		preview = el.find('.preview');
 
+		formContainer = el.find('.form');
 		form = new Form({
-			target: el.find('.expenses-form'),
+			target: formContainer,
 			onAdd: onResp,
 			onChange: onPreview
 		});
@@ -88,10 +97,9 @@ function init () {
 			sort: { by: 'date', order: 'desc' },
 			dataSource: (params) => Data.get(params),
 			columns: [
-				{ width: 52, icons: { pencil: edit, 'trash-o': del }},
+				{ width: 27, icons: { pencil: edit }},
 				{ name: 'Date', field: 'date', width: 90 },
-				{ name: 'Category', field: 'category', width: '40%' },
-				{ name: 'Description', field: 'description' },
+				{ name: 'Category', field: 'category', renderer: categoryRenderer },
 				{ name: 'Amount', field: 'amount', width: 100, renderer, footer }
 			]
 		});
@@ -109,8 +117,10 @@ function init () {
 		});
 
 		el.find('.btn-reset').on('click', onReset);
+		el.find('.btn-del').on('click', onDel);
 		$.on('calendar/changed', load);
 	}
+	else onReset();
 
 	load();
 	isReady = true;

@@ -5,16 +5,12 @@ border-width = 1px;
 item-height = 2.1em;
 offset = 1em;			// indentation
 
-.tree
-	padding 10;
 
 .category-tree
-	&
-	ul
-		margin 0; padding 0; list-style none
+	margin 20 10 30; padding 0; list-style none;
 
 	ul
-		position relative; margin-left offset
+		margin 0; position relative; margin-left offset
 
 		ul
 			margin-left (offset / 2)
@@ -24,9 +20,8 @@ offset = 1em;			// indentation
 			border-left border-width solid border-color
 
 	li
-		position relative; margin 0; color #fff;
+		position relative; margin 0; color #fff; line-height item-height;
 		padding 0 (offset + 0.2em)
-		line-height item-height
 
 	ul li:before
 		content ''; pos(); left 0; display block; height 0
@@ -44,30 +39,4 @@ offset = 1em;			// indentation
 			u 1;
 
 
-#categories
-	.btn-reset
-		color rgba(#fff, 0.6); u 0; font 21; vertical-align baseline;
-		margin-left 10px; transition color .3s ease-out;
-		&:hover
-			color #fff;
-		&:active
-			color #888;
-
-	.form
-		.cat
-			show 1; padding 3 5 0 0;
-		a
-			color #fff; u 0;
-			&:hover
-				u 1;
-
-	form
-		margin 10 0;
-		.btn-sav, .btn-del
-			show 0;
-
-	form.update
-		.btn-sav, .btn-del
-			show 1;
-		.btn-add
-			show 0;
+// #categories

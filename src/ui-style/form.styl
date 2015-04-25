@@ -1,9 +1,5 @@
 @import "_lib";
 
-form-color = #ccc;
-form-color-light = #eee;
-form-color-dark = #444;
-
 select
 input
 	font inherit;
@@ -15,9 +11,9 @@ input
 	height 34;
 	transition background-color .2s, border-color .2s;
 
-	border 2 form-color;
+	border 1 form-color;
 	color form-color-light;
-	bg rgba(form-color-light, 0.1);
+	bg rgba(form-color-dark, 0.1);
 
 select
 input
@@ -45,3 +41,47 @@ label
 .repeat-in
 	size 60 22; margin-left 3; border-radius 5 0 0 5; padding-right 0;
 
+
+
+.form
+	position relative; z 9; bg body-bg; margin 0 -15; padding 10 15;
+
+	.subforms
+		overflow-y auto;
+
+	.amount
+		width 100; text-align right;
+
+	.category
+		width 120;
+
+	.description
+		width 180;
+
+	.btn-del, .btn-sav, .btn-reset
+		show 0;
+
+	.btn-add, .btn-sav
+		b 1;
+	.btn-add, .btn-sav, .btn-reset
+		float right; margin-left 5;
+
+	.subforms .btn-del
+		show 1;
+
+	&.update
+		.btn-sav, .btn-del, .btn-reset
+			show 1;
+
+		.btn-add
+			show 0;
+
+
+.form-row
+	clear both; overflow hidden; padding 2 2 20;
+
+
+
+@media (max-height: 520px)
+	.form
+		shadow 0 6 5 #000 .3;
