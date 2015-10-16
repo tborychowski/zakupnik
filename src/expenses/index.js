@@ -36,7 +36,7 @@ function onDel (e) {
 	if (e) e.preventDefault();
 	var data = form.getData().items, id = (data && data[0] ? data[0].id : null);
 	if (id && window.confirm('Are you sure you wish to delete this item?')) {
-		Data.del(id).then(onResp);
+		Data.del(id).then(onResp).then(onReset);
 	}
 }
 
@@ -76,8 +76,11 @@ function categoryRenderer (v, item) {
 }
 
 // Footer renderer/formatter
-function footer (data) {
-	return '€' + data.total_str;
+function footer (/*data*/) {
+	let total = this.items.reduce(function(pre, cur) { return pre + cur.amount; }, 0);
+	total = $.formatNumber(total);
+	// let total = data.total_str;
+	return '€' + total;
 }
 
 function init () {

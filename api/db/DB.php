@@ -10,7 +10,7 @@ class DB {
 		'database_name' => 'zakupnik',
 		'server' => 'localhost',
 		'username' => 'root',
-		'password' => '',
+		'password' => 'root',
 		'charset' => 'utf8',
 
 		// optional

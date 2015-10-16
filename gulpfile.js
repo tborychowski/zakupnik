@@ -3,12 +3,12 @@
 var gulp = require('gulp'),
 	cssmin = require('gulp-minify-css'),
 	webpack = require('gulp-webpack'),
-    concat = require('gulp-concat'),
-    stylus = require('gulp-stylus'),
-    jshint = require('gulp-jshint'),
-    live   = require('gulp-livereload'),
-    notify = require('gulp-notify'),
-    plumber = require('gulp-plumber'),
+	concat = require('gulp-concat'),
+	stylus = require('gulp-stylus'),
+	jshint = require('gulp-jshint'),
+	live   = require('gulp-livereload'),
+	notify = require('gulp-notify'),
+	plumber = require('gulp-plumber'),
 	wpErr = function (err, stats) {
 		if (err) notify.onError('Error: ' + err);
 		err = stats.compilation.errors;
@@ -50,7 +50,7 @@ gulp.task('styl', function () {
 gulp.task('watch', ['js', 'styl'], function () {
 	live.listen();
 	gulp.watch('src/**/*.styl', ['styl']);
-	gulp.watch(['src/**/*.js'], ['js']);
+	gulp.watch('src/**/*.js', ['js']);
 });
 
 gulp.task('default', [

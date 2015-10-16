@@ -15,6 +15,9 @@ button
 	// shadow 0 2 1 #fff .2 inset, 0 -2 1 #000 .2 inset;
 	shadow 0 16 5 #fff .1 inset;
 
+	&::-moz-focus-inner
+		padding 0; border 0;
+
 	&:active
 		shadow none; background-color rgba(form-color-dark, 1); color rgba(form-color, .2)
 

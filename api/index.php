@@ -1,6 +1,6 @@
 <?php
 require('lib/_lib.php');
-header('content-type: text/plain; charset=utf8');	// XXX: for debug only
+//header('content-type: text/plain; charset=utf8');	// XXX: for debug only
 
 
 /*** EXPENSES *************************************************************************************/

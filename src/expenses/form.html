@@ -13,8 +13,8 @@
 		</select>
 	</div>
 
-	<input name="items[{{idx}}]amount" class="amount" placeholder="0.00">
 	<input name="items[{{idx}}]description" class="description" placeholder="description" value="{{description}}">
+	<input name="items[{{idx}}]amount" class="amount" placeholder="0.00">
 	{{#first}}<button type="button" title="Split" class="btn-split"><i class="fa fa-angle-double-down"></i></button>{{/first}}
 	{{^first}}<button type="button" title="Remove" class="btn-unsplit"><i class="fa fa-trash-o"></i></button>{{/first}}
 </div>
