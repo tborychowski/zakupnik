@@ -2,6 +2,7 @@
 class Router {
 
 	private static $index = 'index.php';
+	private static $paramName = '_path';
 	private static $requestUri;
 	public static $routeProccessed = false;
 
@@ -56,7 +57,6 @@ class Router {
 
 			array_shift($m);
 			if (is_array($m) && count($vars) == count($m)) $params = array_combine($vars, $m);
-
 			$params = array_merge($params, static::readParams());
 			$cb($params);
 			static::$routeProccessed = true;
@@ -81,38 +81,6 @@ class Router {
 			return static::$requestUri = $path;
 		}
 
-		// Check if ORIG_PATH_INFO exists
-		// $path = str_replace($_SERVER['SCRIPT_NAME'], '', (isset($_SERVER['ORIG_PATH_INFO'])) ?
-		// 	$_SERVER['ORIG_PATH_INFO'] : @getenv('ORIG_PATH_INFO'));
-
-		// if (trim($path, '/') != '' && $path != static::$index) {
-		// 	return static::$requestUri = $path;
-		// }
-
-		// Check for ?uri=x/y/z
-		// if (isset($_REQUEST['url'])) {
-		// 	return static::$requestUri = $_REQUEST['url'];
-		// }
-
-		// Check the _GET variable
-		// if (is_array($_GET) && count($_GET) == 1 && trim(key($_GET), '/') != '') {
-		// 	return static::$requestUri = key($_GET);
-		// }
-
-		// Check for QUERY_STRING
-		// $path = (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : @getenv('QUERY_STRING');
-		// if (trim($path, '/') != '') {
-		// 	return static::$requestUri = $path;
-		// }
-
-		// Check for requestUri
-		// $path = str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']);
-		// if (trim($path, '/') != '' && $path != static::$index) {
-		// 	return static::$requestUri = str_replace(str_replace(basename($_SERVER['SCRIPT_NAME']),
-		// 		'', $_SERVER['SCRIPT_NAME']), '', $path);
-		// }
-
-		// else:
 		return static::$requestUri = '/';
 	}
 
@@ -125,10 +93,10 @@ class Router {
 	private static function readParams () {
 		$data = file_get_contents('php://input');
 		if (!empty($data)) $data = json_decode($data, true);
-		elseif (!empty($_REQUEST)) $data = $_REQUEST;
+		if (empty($data) && !empty($_REQUEST)) $data = $_REQUEST;
 		if (!empty($data)) $data = static::sanitizeData($data);
 		if (empty($data)) $data = array();
-		if (isset($data['url'])) unset($data['url']);
+		if (isset($data[static::$paramName])) unset($data[static::$paramName]);
 		return $data;
 	}
 
