@@ -38,6 +38,7 @@ class Categories extends DB {
 	 * @return [array]       nested array
 	 */
 	private function get_tree ($data, $item = ['id' => 0]) {
+		if (!$data) return [];
 		$items = array_filter($data, function ($i) use($item) {
 			return $i['parent_id'] == $item['id'];
 		});

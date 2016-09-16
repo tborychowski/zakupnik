@@ -5,6 +5,7 @@ class Stats extends DB {
 
 
 	public function spendingByCategory ($p) {
+		if (!$this->db) return $this;
 		$data = [];
 		$where = '';
 		if (!empty($p['date'])) $where = 'WHERE entries.date LIKE \'' . $p['date'] . '%\' ';
@@ -27,14 +28,17 @@ class Stats extends DB {
 
 
 	private function getIncomeForMonth($m) {
+		if (!$this->db) return $this;
 		return $this->db->sum('incomes', 'amount', [ 'date[~]' => $m . '%' ]);
 	}
 
 	private function getExpensesSumForMonth($m) {
+		if (!$this->db) return $this;
 		return $this->db->sum($this->table, 'amount', [ 'date[~]' => $m . '%' ]);
 	}
 
 	public function incomeVsExpenses ($p) {
+		if (!$this->db) return $this;
 		$y = isset($p['year']) ? $p['year'] : date('Y');
 		$income = [];
 		$expenses = [];
@@ -55,6 +59,7 @@ class Stats extends DB {
 
 
 	public function spendingByDay ($p) {
+		if (!$this->db) return $this;
 		$q = 'SELECT date, SUM(amount) as amount FROM entries GROUP BY date ORDER BY date ASC';
 
 		$query = $this->db->query($q);

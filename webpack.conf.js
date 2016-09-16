@@ -1,5 +1,5 @@
-var path = require('path'),
-	webpack = require('webpack');
+const path = require('path');
+// const webpack = require('webpack');
 
 module.exports = {
 	// devtool: '#source-map',
@@ -18,9 +18,13 @@ module.exports = {
 		loaders: [
 			{ test: /\.html$/, loader: 'mustache' },
 			{
+				loader: 'babel-loader',
 				test: /\.js$/,
 				exclude: /node_modules/,
-				loader: 'babel-loader?experimental&comments=false'
+				query: {
+					presets: ['es2015'],
+					// plugins: ['transform-runtime', 'transform-object-rest-spread' ]
+				}
 			}
 		]
 	},

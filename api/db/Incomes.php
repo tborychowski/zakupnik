@@ -4,6 +4,7 @@ class Incomes extends DB {
 	private $table = 'incomes';
 
 	public function get ($p) {
+		if (!$this->db) return $this;
 		if (!empty($p['id'])) {
 			$this->get_by_id($this->table, $p['id']);
 			$this->integerise('amount');

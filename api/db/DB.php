@@ -21,7 +21,12 @@ class DB {
 
 
 	public function __construct($options = null) {
-		$this->db = new medoo($this->db_cfg);
+		try {
+			$this->db = new medoo($this->db_cfg);
+		}
+		catch (Exception $e) {
+			$this->db = null;
+		}
 	}
 
 	public function __toString () { return print_r($this->output, true); }
@@ -30,18 +35,21 @@ class DB {
 		// $flags = JSON_NUMERIC_CHECK;
 		$flags = 0;
 		if ($pretty) $flags = $flags | JSON_PRETTY_PRINT;
+		if (!$this->output) $this->output = [];
 		return json_encode($this->output, $flags);
 	}
 
 
 
 	public function get_all ($table) {
+		if (!$this->db) return $this;
 		$this->output = $this->db->select($table, '*');
 		$this->integerise();
 		return $this;
 	}
 
 	public function get_by_id ($table, $id) {
+		if (!$this->db) return $this;
 		$this->output = [];
 		$out = $this->db->select($table, '*', [ "id" => $id ]);
 		if (!empty($out)) $this->output = $out[0];
@@ -50,6 +58,7 @@ class DB {
 	}
 
 	public function insert ($table, $data) {
+		if (!$this->db) return $this;
 		$res = $this->db->insert($table, $data);
 		if (!is_array($res)) $res = [$res];
 		if (array_sum($res) === 0) $this->output = ['result' => 'error'];
@@ -58,6 +67,7 @@ class DB {
 	}
 
 	public function update ($table, $data) {
+		if (!$this->db) return $this;
 		$id = $data['id'];
 		unset($data['id']);
 		$res = $this->db->update($table, $data, [ 'id' => intval($id) ]);
@@ -68,6 +78,7 @@ class DB {
 	}
 
 	public function delete ($table, $id) {
+		if (!$this->db) return $this;
 		$res = $this->db->delete($table, [ 'id' => intval($id) ]);
 		if ($res == 0) $this->output = ['result' => 'error'];
 		else $this->output = ['result' => 'success'];

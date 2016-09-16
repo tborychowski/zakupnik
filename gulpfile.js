@@ -1,43 +1,33 @@
-'use strict';
-
-var gulp = require('gulp'),
-	cssmin = require('gulp-minify-css'),
-	webpack = require('gulp-webpack'),
-	concat = require('gulp-concat'),
-	stylus = require('gulp-stylus'),
-	jshint = require('gulp-jshint'),
-	live   = require('gulp-livereload'),
-	notify = require('gulp-notify'),
-	plumber = require('gulp-plumber'),
-	wpErr = function (err, stats) {
-		if (err) notify.onError('Error: ' + err);
-		err = stats.compilation.errors;
-		if (err.length) notify.onError('Error: ' + err[0].message);
-	};
+const gulp = require('gulp');
+const cssmin = require('gulp-minify-css');
+const webpack = require('webpack-stream');
+const concat = require('gulp-concat');
+const stylus = require('gulp-stylus');
+const live   = require('gulp-livereload');
+const notify = require('gulp-notify');
+const plumber = require('gulp-plumber');
+const wpErr = (err, stats) => {
+	if (err) notify.onError('Error: ' + err);
+	err = stats.compilation.errors;
+	if (err.length) notify.onError('Error: ' + err[0].message);
+};
 
 
-gulp.task('js', function () {
+gulp.task('js', () => {
 	return gulp.src(['src/app.js'])
 		.pipe(webpack(require('./webpack.conf.js'), null, wpErr))
 		.pipe(gulp.dest('assets/'))
 		.pipe(live());
 });
 
-gulp.task('lib', function () {
+gulp.task('lib', () => {
 	return gulp.src([ 'lib/standalone-framework.js', 'lib/*.js' ])
 		.pipe(concat('lib.js'))
 		.pipe(gulp.dest('assets/'));
 });
 
 
-gulp.task('jshint', function () {
-	return gulp.src([ 'src/app.js', 'src/**/*.js' ])
-		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-		.pipe(jshint('src/.jshintrc'))
-		.pipe(jshint.reporter('jshint-stylish'));
-});
-
-gulp.task('styl', function () {
+gulp.task('styl', () => {
 	return gulp.src(['src/reset.styl', 'src/app.styl', 'src/**/*.styl'])
 		.pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
 		.pipe(stylus({ paths: ['src'], 'include css': true }))
@@ -47,7 +37,7 @@ gulp.task('styl', function () {
 		.pipe(live());
 });
 
-gulp.task('watch', ['js', 'styl'], function () {
+gulp.task('watch', ['js', 'styl'], () => {
 	live.listen();
 	gulp.watch('src/**/*.styl', ['styl']);
 	gulp.watch('src/**/*.js', ['js']);
@@ -55,7 +45,6 @@ gulp.task('watch', ['js', 'styl'], function () {
 
 gulp.task('default', [
 	'lib',
-	'jshint',
 	'js',
 	'styl',
 	'watch'

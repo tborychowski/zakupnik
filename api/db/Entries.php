@@ -4,6 +4,7 @@ class Entries extends DB {
 	private $table = 'entries';
 
 	public function get ($p) {
+		if (!$this->db) return $this;
 		if (!empty($p['id'])) {
 			$this->get_by_id($this->table, $p['id']);
 			$this->integerise('category_id,amount');
