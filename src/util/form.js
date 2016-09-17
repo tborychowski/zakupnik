@@ -51,7 +51,7 @@ Form.prototype.set = function (params, clear) {
 		}
 
 		// if clear==true and no value = clear field, otherwise - leave it as it was
-		if (clear !== true && value === undefined) return;
+		if (clear !== true && value === undefined) continue;
 
 		// if no value - clear field
 		if (value === null || value === undefined) value = '';
@@ -79,13 +79,13 @@ Form.prototype.get = function (convert = false) {
 		let type = input.type && input.type.toLowerCase(), value, parts, lastPart, last;
 
 		// if we are submit or disabled - ignore
-		if ((type === 'submit') || !input.name || input.disabled)  return;
+		if ((type === 'submit') || !input.name || input.disabled)  continue;
 
 		value = input.value;
 		parts = input.name.match(keyBreaker);
 
 		// return only "checked" radio value
-		if (type === 'radio' && !input.checked) return;
+		if (type === 'radio' && !input.checked) continue;
 
 		// convert chekbox to [true | false]
 		if (type === 'checkbox') value = input.checked;

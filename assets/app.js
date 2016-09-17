@@ -724,7 +724,7 @@
 				}
 
 				// if clear==true and no value = clear field, otherwise - leave it as it was
-				if (clear !== true && value === undefined) return;
+				if (clear !== true && value === undefined) continue;
 
 				// if no value - clear field
 				if (value === null || value === undefined) value = '';
@@ -776,13 +776,13 @@
 				    last = void 0;
 
 				// if we are submit or disabled - ignore
-				if (type === 'submit' || !input.name || input.disabled) return;
+				if (type === 'submit' || !input.name || input.disabled) continue;
 
 				value = input.value;
 				parts = input.name.match(keyBreaker);
 
 				// return only "checked" radio value
-				if (type === 'radio' && !input.checked) return;
+				if (type === 'radio' && !input.checked) continue;
 
 				// convert chekbox to [true | false]
 				if (type === 'checkbox') value = input.checked;
@@ -9097,6 +9097,7 @@
 	var _defaults = {
 		onAdd: function onAdd() {}
 	};
+
 	function parseCategories(cats) {
 		var map = {};
 		var _iteratorNormalCompletion = true;
