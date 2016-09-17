@@ -4,7 +4,7 @@ class Categories extends DB {
 
 	public function get ($id = null) {
 		if (!empty($id)) $this->get_by_id('categories', $id);
-		else $this->get_all('categories');
+		else $this->get_all('categories', [ 'ORDER' => 'categories.name ASC' ]);
 		return $this;
 	}
 

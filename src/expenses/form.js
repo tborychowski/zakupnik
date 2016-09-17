@@ -12,7 +12,9 @@ var _defaults = {
 function parseCategories (cats) {
 	let map = {};
 	for (let p of cats) {
-		for (let c of p.items) map[c.id] = c.name;
+		if (p.items) {
+			for (let c of p.items) map[c.id] = c.name;
+		}
 	}
 	return map;
 }

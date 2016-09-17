@@ -13,13 +13,11 @@ Record your monthly expenses and income.
 
 ##Requirements
 - client: a modern browser
-- server: Apache + php 5.4 + mysql
-- building: nodejs and stuff
+- server: Apache + php 5.4 + sqlite
+- building: gulp, babel and stuff
 
 ##Installation
-- create a mysql DB from a file in `_stuff`
 - put files on a php server
-- update DB connection details in `api/db/DB.php`
 - it should work! :-)
 
 

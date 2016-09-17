@@ -9106,26 +9106,29 @@
 		try {
 			for (var _iterator = cats[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 				var p = _step.value;
-				var _iteratorNormalCompletion2 = true;
-				var _didIteratorError2 = false;
-				var _iteratorError2 = undefined;
 
-				try {
-					for (var _iterator2 = p.items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-						var c = _step2.value;
-						map[c.id] = c.name;
-					}
-				} catch (err) {
-					_didIteratorError2 = true;
-					_iteratorError2 = err;
-				} finally {
+				if (p.items) {
+					var _iteratorNormalCompletion2 = true;
+					var _didIteratorError2 = false;
+					var _iteratorError2 = undefined;
+
 					try {
-						if (!_iteratorNormalCompletion2 && _iterator2.return) {
-							_iterator2.return();
+						for (var _iterator2 = p.items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+							var c = _step2.value;
+							map[c.id] = c.name;
 						}
+					} catch (err) {
+						_didIteratorError2 = true;
+						_iteratorError2 = err;
 					} finally {
-						if (_didIteratorError2) {
-							throw _iteratorError2;
+						try {
+							if (!_iteratorNormalCompletion2 && _iterator2.return) {
+								_iterator2.return();
+							}
+						} finally {
+							if (_didIteratorError2) {
+								throw _iteratorError2;
+							}
 						}
 					}
 				}
@@ -9910,6 +9913,7 @@
 		}, {
 			key: 'onKeyDown',
 			value: function onKeyDown(e) {
+				if (e.keyCode === _util2.default.keys.ENTER) return true;
 				if (_util2.default.isAllowed(e)) return true;
 				e.preventDefault();
 			}
