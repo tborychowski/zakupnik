@@ -6,12 +6,15 @@ class DB {
 
 	private $db_cfg = [
 		// required
-		'database_type' => 'mysql',
-		'database_name' => 'zakupnik',
-		'server' => 'localhost',
-		'username' => 'root',
-		'password' => 'root',
-		'charset' => 'utf8',
+		// 'database_type' => 'mysql',
+		// 'database_name' => 'zakupnik',
+		// 'server' => 'localhost',
+		// 'username' => 'root',
+		// 'password' => 'root',
+		// 'charset' => 'utf8',
+
+		'database_type' => 'sqlite',
+		'database_file' => '../assets/database.db'
 
 		// optional
 		// 'port' => 3306,
@@ -25,6 +28,7 @@ class DB {
 			$this->db = new medoo($this->db_cfg);
 		}
 		catch (Exception $e) {
+			echo '{ "error": "DB ERROR" }';
 			$this->db = null;
 		}
 	}
@@ -60,6 +64,16 @@ class DB {
 	public function insert ($table, $data) {
 		if (!$this->db) return $this;
 		$res = $this->db->insert($table, $data);
+
+		var_dump($this->db->error());
+
+		use medoo->query(create........);
+		$database->query()
+		$database->query("CREATE TABLE table (
+			c1 INT STORAGE DISK,
+			c2 INT STORAGE MEMORY
+		) ENGINE NDB;");
+
 		if (!is_array($res)) $res = [$res];
 		if (array_sum($res) === 0) $this->output = ['result' => 'error'];
 		else $this->output = ['result' => 'success'];
