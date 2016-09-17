@@ -5,32 +5,24 @@ class DB {
 	public $db;
 
 	private $db_cfg = [
-		// required
-		// 'database_type' => 'mysql',
-		// 'database_name' => 'zakupnik',
-		// 'server' => 'localhost',
-		// 'username' => 'root',
-		// 'password' => 'root',
-		// 'charset' => 'utf8',
-
 		'database_type' => 'sqlite',
 		'database_file' => '../assets/database.db'
-
-		// optional
-		// 'port' => 3306,
-		// driver_option for connection, read more from http://www.php.net/manual/en/pdo.setattribute.php
-		// 'option' => [ PDO::ATTR_CASE => PDO::CASE_NATURAL ]
 	];
 
 
 	public function __construct($options = null) {
+		DBMaker::file($this->db_cfg['database_file']);
 		try {
 			$this->db = new medoo($this->db_cfg);
 		}
 		catch (Exception $e) {
-			echo '{ "error": "DB ERROR" }';
 			$this->db = null;
 		}
+
+		if ($this->db) return DBMaker::ensure_tables($this->db);
+		else echo 'DB Init error!';
+
+		return null;
 	}
 
 	public function __toString () { return print_r($this->output, true); }
@@ -45,9 +37,9 @@ class DB {
 
 
 
-	public function get_all ($table) {
+	public function get_all ($table, $where = []) {
 		if (!$this->db) return $this;
-		$this->output = $this->db->select($table, '*');
+		$this->output = $this->db->select($table, '*', $where);
 		$this->integerise();
 		return $this;
 	}
@@ -63,17 +55,17 @@ class DB {
 
 	public function insert ($table, $data) {
 		if (!$this->db) return $this;
+
+		if (is_array($data) && isset($data[0]['id'])) {
+			foreach ($data as &$item) {
+				if (empty($item['id'])) unset($item['id']);
+			}
+		}
+		else {
+			if (empty($data['id'])) unset($data['id']);
+		}
+
 		$res = $this->db->insert($table, $data);
-
-		var_dump($this->db->error());
-
-		use medoo->query(create........);
-		$database->query()
-		$database->query("CREATE TABLE table (
-			c1 INT STORAGE DISK,
-			c2 INT STORAGE MEMORY
-		) ENGINE NDB;");
-
 		if (!is_array($res)) $res = [$res];
 		if (array_sum($res) === 0) $this->output = ['result' => 'error'];
 		else $this->output = ['result' => 'success'];
@@ -85,8 +77,6 @@ class DB {
 		$id = $data['id'];
 		unset($data['id']);
 		$res = $this->db->update($table, $data, [ 'id' => intval($id) ]);
-		// if ($res == 0) $this->output = ['result' => 'error'];
-		// else $this->output = ['result' => 'success'];
 		$this->output = ['result' => 'success'];
 		return $this;
 	}

@@ -118,6 +118,7 @@ export default class Form {
 
 
 	onKeyDown (e) {
+		if (e.keyCode === $.keys.ENTER) return true;
 		if ($.isAllowed(e)) return true;
 		e.preventDefault();
 	}

@@ -1,5 +1,8 @@
 <?php
 require('lib/_lib.php');
+date_default_timezone_set('Europe/Dublin');
+
+
 //header('content-type: text/plain; charset=utf8');	// XXX: for debug only
 
 
@@ -91,23 +94,13 @@ Router::del('/categories/{id}', function ($params) {
 
 
 
-
-
-
-// Router::get('/', function () {
-// 	echo 'api root';
-// });
-
-
-
-// Router::get('/list/{id}/{name}', function ($params) {
-// 	print_r($params);
-// 	// echo 'id: ' . $params['id'] . ', name: ' . $params['name'];
-// });
-
-
-// Router::get('/api(\/?)', function () {
-// 	echo 'api';
+// Router::get('/debug', function ($params) {
+// 	echo "          DEBUG\n===============================\n\n";
+// 	$db = new DB();
+// 	$res = $db->db->insert('categories', ["parent_id" => 0, "name" => "ABCDEFG"]);
+// 	var_dump($res);
+// 	// var_dump($db->db->error());
+// 	// var_dump($db->db->log());
 // });
 
 
