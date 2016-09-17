@@ -9,6 +9,7 @@ var tpl = require('./form.html');
 var _defaults = {
 	onAdd: function () {}
 };
+
 function parseCategories (cats) {
 	let map = {};
 	for (let p of cats) {
