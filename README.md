@@ -18,6 +18,7 @@ Record your monthly expenses and income.
 
 ##Installation
 - put files on a php server
+- `chmod 777 assets` - so we can write to the sqlite db file
 - it should work! :-)
 
 
