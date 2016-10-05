@@ -73,7 +73,7 @@ export default function (type, containerId, title, data) {
 		options.chart.type = type;
 		options.tooltip.crosshairs = true;
 		options.tooltip.shared = true;
-		options.tooltip.formatter = function() {
+		options.tooltip.formatter = function () {
 			let html = this.x + '<br>', sum = this.points[0].y - this.points[1].y;
 			for (let point of this.points) {
 				html += '<span style="color: ' + point.series.color + '">●</span> ' +

@@ -22,8 +22,7 @@ function createTree (data, html = []) {
 	return '<ul class="category-tree">' + html.join('') + '</ul>';
 }
 
-
-function edit(cat) {
+function edit (cat) {
 	formContainer.toggleClass('update', !$.isObjectEmpty(cat));
 	form.set(cat, true);
 }
@@ -59,8 +58,12 @@ function loadTree () {
 	Data.getTree()
 		.then(updateCatSelect)
 		.then(createTree)
-		.then(function (html) { treeContainer.html(html); })
-		.catch(function (e) { console.error('ERROR:', e); });
+		.then(function (html) {
+			treeContainer.html(html);
+		})
+		.catch(function (e) {
+			console.error('ERROR:', e);
+		});
 }
 
 function init () {
@@ -75,7 +78,10 @@ function init () {
 		catSel = formContainer.find('.category');
 
 		el.on('click', onClick);
-		formContainer.on('submit', function (e) { save(); e.preventDefault(); });
+		formContainer.on('submit', function (e) {
+			save();
+			e.preventDefault();
+		});
 		loadTree();
 		isReady = true;
 	}
