@@ -79,7 +79,7 @@ Form.prototype.get = function (convert = false) {
 		let type = input.type && input.type.toLowerCase(), value, parts, lastPart, last;
 
 		// if we are submit or disabled - ignore
-		if ((type === 'submit') || !input.name || input.disabled)  continue;
+		if ((type === 'submit') || !input.name || input.disabled) continue;
 
 		value = input.value;
 		parts = input.name.match(keyBreaker);

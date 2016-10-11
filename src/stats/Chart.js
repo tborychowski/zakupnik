@@ -26,7 +26,7 @@ var _clone = function (o) { return JSON.parse(JSON.stringify(o)); },
 		plotOptions: {}
 	},
 
-	_xAxis = { labels: { style: { color: '#ccc' }} },
+	_xAxis = { labels: { style: { color: '#ccc' } } },
 
 	_yAxis = {
 		title: { text: null },

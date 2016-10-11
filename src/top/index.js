@@ -1,11 +1,10 @@
-import $ from 'util';
+// import $ from 'util';
 
-var el;
-
+// let el;
 
 
 function init () {
-	el = $('#top');
+	// el = $('#top');
 }
 
 export default {

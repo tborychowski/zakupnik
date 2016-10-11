@@ -10,6 +10,7 @@ function isNumber (v) {
 }
 
 function formatNumber (num) {
+	num = Math.round(0 + num * 100) / 100;
 	return num.toLocaleString('en-GB', { minimumFractionDigits: 2 });
 }
 
@@ -47,7 +48,11 @@ function rand (max, min = 0) {
 function each (arr, cb, scope) {
 	if (!arr) return;
 	if (type(arr) === 'object') for (var key in arr) cb.call(scope || cb, arr[key], key);
-	else for (var i = 0, item; item = arr[i]; i++) cb.call(scope || cb, item, i);
+	else {
+		for (var i = 0, item; item = arr[i]; i++) {
+			cb.call(scope || cb, item, i);
+		}
+	}
 	// return Array.prototype.forEach.call(collection, cb);
 }
 
@@ -70,11 +75,17 @@ function merge (target, ...sources) {
 	return to;
 }
 
-if (!Object.assign) Object.defineProperty(Object, 'assign', { value: merge,
-	enumerable: false, configurable: true, writable: true
-});
+if (!Object.assign) {
+	Object.defineProperty(Object, 'assign', {
+		value: merge,
+		enumerable: false,
+		configurable: true,
+		writable: true
+	});
+}
 
-function isNodeList(nodes) {
+
+function isNodeList (nodes) {
 	return (typeof nodes === 'object') &&
 		/^(htmlcollection|nodelist|object)$/.test(type(nodes)) &&
 		(nodes.length === 0 || (typeof nodes[0] === 'object' && nodes[0].nodeType > 0));

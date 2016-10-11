@@ -1,12 +1,17 @@
 {
 	"extends": "standard",
-
+	"env": {
+		"browser": true,
+		"es6": true
+	},
 	"rules": {
 		"semi": [2, "always"],
 		"one-var": [0],
 		"indent": ["error", "tab"],
 		"no-tabs": [0],
 		"brace-style": [2, "stroustrup", { "allowSingleLine": true }],
-		"no-multiple-empty-lines": [2, { "max": 3, "maxEOF": 1 }]
+		"no-multiple-empty-lines": [2, { "max": 3, "maxEOF": 1 }],
+		"no-cond-assign": [0],
+		"key-spacing": [ "error", { "mode": "minimum" }]
 	}
 }

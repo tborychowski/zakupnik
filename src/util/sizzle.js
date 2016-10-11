@@ -106,7 +106,7 @@ sizzle.fn.isIn = function (...classes) {
  * @param  {boolean} cond    [optional] true or false for toggle
  * @return {array}           same array of elements
  */
-function modElCls(el, action, cls, cond) {
+function modElCls (el, action, cls, cond) {
 	if (!el || !el.length) return el;
 	cls = cls.split(' ');
 	if (typeof cond === 'boolean') {

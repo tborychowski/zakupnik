@@ -52,13 +52,13 @@ function onReset (e) {
 
 
 function onPreview () {
-	var data = form.getData(), sum = 0, total_str;
+	var data = form.getData(), sum = 0, totalStr;
 	preview.toggleClass('hidden', !(data.items && data.items.length));
 
 	if (!data.items) return;
 	for (let r of data.items) sum += r.amount;
-	total_str = $.formatNumber(sum);
-	if (data.items) previewGrid.setData({ total_str, items: data.items });
+	totalStr = $.formatNumber(sum);
+	if (data.items) previewGrid.setData({ totalStr, items: data.items });
 }
 
 
@@ -95,7 +95,7 @@ function init () {
 			sort: { by: 'date', order: 'desc' },
 			dataSource: (params) => Data.get(params),
 			columns: [
-				{ width: 27, icons: { pencil: edit }},
+				{ width: 27, icons: { pencil: edit } },
 				{ name: 'Date', field: 'date', width: 90 },
 				{ name: 'Description', field: 'description' },
 				{ name: 'Amount', field: 'amount', width: 105, renderer, footer }
@@ -121,7 +121,6 @@ function init () {
 
 	load();
 	isReady = true;
-
 }
 
 export default {

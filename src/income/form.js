@@ -92,12 +92,12 @@ export default class Form {
 	}
 
 	parseAmount (amount) {
-		/*jshint evil: true */
+		/* eslint no-eval: 0 */
 		amount = ('' + amount).replace(/\s/g, '');
 		if (!(/^[\+\-\\*\/\(\)\d\.]+$/i).test(amount)) return 0;
 		if ((/[\+\-\\*\/\.]+/i).test(amount)) {
 			try { amount = eval(amount); }
-			catch(e) { amount = 0; }
+			catch (e) { amount = 0; }
 		}
 		return parseFloat(amount);
 	}
@@ -128,9 +128,11 @@ export default class Form {
 		e.preventDefault();
 		let data = this.getData(true);
 		if (!this.validate(data.items)) return;
-		if (data.items) Data.save(data.items)
-			.then(resp => { if (resp.result === 'success') this.reset(); return resp; })
-			.then(this.cfg.onAdd);
+		if (data.items) {
+			Data.save(data.items)
+				.then(resp => { if (resp.result === 'success') this.reset(); return resp; })
+				.then(this.cfg.onAdd);
+		}
 	}
 
 }

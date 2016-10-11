@@ -64,11 +64,13 @@ export default class Form {
 
 	draw () {
 		if (this.categories.length) this.reset();
-		else Categories.getTree().then(data => {
-			this.categories = data;
-			this.catMap = parseCategories(data);
-			this.reset();
-		});
+		else {
+			Categories.getTree().then(data => {
+				this.categories = data;
+				this.catMap = parseCategories(data);
+				this.reset();
+			});
+		}
 		return this;
 	}
 
@@ -147,12 +149,12 @@ export default class Form {
 	}
 
 	parseAmount (amount) {
-		/*jshint evil: true */
+		/* eslint no-eval: 0 */
 		amount = ('' + amount).replace(/\s/g, '');
 		if (!(/^[\+\-\\*\/\(\)\d\.]+$/i).test(amount)) return 0;
 		if ((/[\+\-\\*\/\.]+/i).test(amount)) {
 			try { amount = eval(amount); }
-			catch(e) { amount = 0; }
+			catch (e) { amount = 0; }
 		}
 		return parseFloat(amount);
 	}
@@ -201,9 +203,11 @@ export default class Form {
 		e.preventDefault();
 		let data = this.getData(true).items;
 		if (!this.validate(data)) return;
-		if (data) Data.save(data)
-			.then(resp => { if (resp.result === 'success') this.reset(); return resp; })
-			.then(this.cfg.onAdd);
+		if (data) {
+			Data.save(data)
+				.then(resp => { if (resp.result === 'success') this.reset(); return resp; })
+				.then(this.cfg.onAdd);
+		}
 	}
 
 }

@@ -438,6 +438,7 @@
 	}
 
 	function formatNumber(num) {
+		num = Math.round(0 + num * 100) / 100;
 		return num.toLocaleString('en-GB', { minimumFractionDigits: 2 });
 	}
 
@@ -7291,7 +7292,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var modules = { expenses: _expenses2.default, income: _income2.default, stats: _stats2.default, categories: _categories2.default };
-	var el, items, contents, selected;
+	var el = void 0,
+	    items = void 0,
+	    contents = void 0,
+	    selected = void 0;
 
 	function onChange() {
 		var hash = location.hash.substr(1);
@@ -7417,7 +7421,7 @@
 	function onPreview() {
 		var data = form.getData(),
 		    sum = 0,
-		    total_str;
+		    totalStr;
 		preview.toggleClass('hidden', !(data.items && data.items.length));
 
 		if (!data.items) return;
@@ -7445,8 +7449,8 @@
 			}
 		}
 
-		total_str = _util2.default.formatNumber(sum);
-		if (data.items) previewGrid.setData({ total_str: total_str, items: data.items });
+		totalStr = _util2.default.formatNumber(sum);
+		if (data.items) previewGrid.setData({ totalStr: totalStr, items: data.items });
 	}
 
 	/**
@@ -7465,12 +7469,13 @@
 	}
 
 	// Footer renderer/formatter
-	function footer() /*data*/{
+	function footer() /* data */{
 		var total = this.items.reduce(function (pre, cur) {
 			return pre + cur.amount;
 		}, 0);
+		console.log(total);
 		total = _util2.default.formatNumber(total);
-		// let total = data.total_str;
+		// let total = data.totalStr;
 		return '€' + total;
 	}
 
@@ -10324,7 +10329,8 @@
 
 			el.on('click', onClick);
 			formContainer.on('submit', function (e) {
-				save();e.preventDefault();
+				save();
+				e.preventDefault();
 			});
 			loadTree();
 			isReady = true;

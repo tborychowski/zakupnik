@@ -5,8 +5,8 @@ import stats from 'stats';
 import categories from 'categories';
 
 
-var modules = {expenses, income, stats, categories};
-var el, items, contents, selected;
+const modules = {expenses, income, stats, categories};
+let el, items, contents, selected;
 
 function onChange () {
 	var hash = location.hash.substr(1);

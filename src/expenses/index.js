@@ -50,13 +50,13 @@ function onReset (e) {
 }
 
 function onPreview () {
-	var data = form.getData(), sum = 0, total_str;
+	var data = form.getData(), sum = 0, totalStr;
 	preview.toggleClass('hidden', !(data.items && data.items.length));
 
 	if (!data.items) return;
 	for (let r of data.items) sum += r.amount;
-	total_str = $.formatNumber(sum);
-	if (data.items) previewGrid.setData({ total_str, items: data.items });
+	totalStr = $.formatNumber(sum);
+	if (data.items) previewGrid.setData({ totalStr, items: data.items });
 }
 
 /**
@@ -76,10 +76,11 @@ function categoryRenderer (v, item) {
 }
 
 // Footer renderer/formatter
-function footer (/*data*/) {
-	let total = this.items.reduce(function(pre, cur) { return pre + cur.amount; }, 0);
+function footer (/* data */) {
+	let total = this.items.reduce(function (pre, cur) { return pre + cur.amount; }, 0);
+	console.log(total);
 	total = $.formatNumber(total);
-	// let total = data.total_str;
+	// let total = data.totalStr;
 	return '€' + total;
 }
 
@@ -100,7 +101,7 @@ function init () {
 			sort: { by: 'date', order: 'desc' },
 			dataSource: (params) => Data.get(params),
 			columns: [
-				{ width: 27, icons: { pencil: edit }},
+				{ width: 27, icons: { pencil: edit } },
 				{ name: 'Date', field: 'date', width: 90 },
 				{ name: 'Category', field: 'category', renderer: categoryRenderer },
 				{ name: 'Amount', field: 'amount', width: 100, renderer, footer }
