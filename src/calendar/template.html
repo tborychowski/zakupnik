@@ -1,8 +1,22 @@
-<input type="text" class="date">
-<a href="#" class="btn fa fa-chevron-left" data-go="prevMonth"></a>
-<a href="#" class="btn fa fa-angle-left" data-go="prev"></a>
+<div class="calendar-week">
+	<a href="#" class="btn fa fa-angle-left" data-go="prev"></a>
+	<a href="#" class="btn btn-mon" data-go="Monday">Mon</a>
+	<a href="#" class="btn btn-tue" data-go="Tuesday">Tue</a>
+	<a href="#" class="btn btn-wed" data-go="Wednesday">Wed</a>
+	<a href="#" class="btn btn-thu" data-go="Thursday">Thu</a>
+	<a href="#" class="btn btn-fri" data-go="Friday">Fri</a>
+	<a href="#" class="btn btn-sat" data-go="Saturday">Sat</a>
+	<a href="#" class="btn btn-sun" data-go="Sunday">Sun</a>
+	<a href="#" class="btn fa fa-angle-right" data-go="next"></a>
+</div>
 
-<a href="#" class="btn btn-today" data-go="today">Today</a>
+<div class="calendar-day">
+	<a href="#" class="btn btn-today" data-go="today">Go back to Today</a>
+</div>
 
-<a href="#" class="btn fa fa-angle-right" data-go="next"></a>
-<a href="#" class="btn fa fa-chevron-right" data-go="nextMonth"></a>
+<div class="calendar-month">
+	<a href="#" class="btn fa fa-chevron-left" data-go="prevMonth"></a>
+	<input type="text" class="date">
+	<a href="#" class="btn fa fa-chevron-right" data-go="nextMonth"></a>
+</div>
+

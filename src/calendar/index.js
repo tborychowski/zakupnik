@@ -2,23 +2,46 @@ import $ from 'util';
 import Pikaday from 'pikaday';
 import Moment from 'moment';
 
-var tpl = require('./template.html');
-var el, picker,
-	isReady = false,
-	gotoMap = {
-		prev: function (c) { return c.subtract(1, 'days'); },
-		next: function (c) { return c.add(1, 'days'); },
-		prevMonth: function (c) { return c.subtract(1, 'months'); },
-		nextMonth: function (c) { return c.add(1, 'months'); },
-		today: function () { return Moment(); }
-	};
+const tpl = require('./template.html');
+let el, picker, todayBtn, isReady = false;
+const gotoMap = {
+	prev: function (c) { return c.subtract(1, 'days'); },
+	next: function (c) { return c.add(1, 'days'); },
+	prevMonth: function (c) { return c.subtract(1, 'months'); },
+	nextMonth: function (c) { return c.add(1, 'months'); },
+	today: function () { return Moment(); }
+};
 
 
-function goTo (where) { picker.setMoment(gotoMap[where](picker.getMoment())); }
+function goTo (where) {
+	const now = picker.getMoment();
+	let newdate = now;
+	if (where in gotoMap) newdate = gotoMap[where](now);
+	else newdate = now.isoWeekday(where);
+	picker.setMoment(newdate);
+}
 
-function onSelect () { $.trigger('calendar/changed', picker.getMoment()); }
+function toggleTodayBtn (m) {
+	todayBtn.toggleClass('btn-hidden', m.diff(Moment().startOf('day'), 'days', true) === 0);
+}
 
-function _set (date) { picker.setMoment(Moment(date)); }
+function selectWeekday (wd) {
+	wd = ('' + wd).substr(0, 3).toLowerCase();
+	$('.btn.highlight').removeClass('highlight');
+	$('.btn-' + wd).addClass('highlight');
+}
+
+function onSelect () {
+	const m = picker.getMoment();
+	selectWeekday(m.format('dddd'));
+	toggleTodayBtn(m);
+	$.trigger('calendar/changed', m);
+}
+
+function _set (date) {
+	picker.setMoment(Moment(date));
+}
+
 function _get (format) {
 	if (!isReady) init();
 	if (!format) return picker.getMoment();
@@ -27,7 +50,7 @@ function _get (format) {
 }
 
 function onClick (e) {
-	var target = $(e.target);
+	const target = $(e.target);
 	if (target.is('.btn')) {
 		goTo(target.data('go'));
 		e.preventDefault();
@@ -37,13 +60,14 @@ function onClick (e) {
 function init () {
 	if (isReady) return;
 	el = $('#calendar').html(tpl()).on('click', onClick);
+	todayBtn = el.find('.btn-today');
 
-	var today = new Date();
+	const today = new Date();
 	picker = new Pikaday({
 		firstDay: 1,
 		defaultDate: today,
 		setDefaultDate: true,
-		format: 'ddd, D MMM YYYY',
+		format: 'Do MMM YYYY',
 		field: el.find('.date')[0],
 		yearRange: [2014, today.getFullYear()],
 		onSelect

@@ -2,29 +2,42 @@
 
 
 #calendar
-	pos 0; height top-height; text-align center; padding 5 0 0;
-	left calc(50% - 200px);
-	right calc(50% - 200px);
+	pos 0 10 auto 340; height top-height; padding 5 0 0;
+
+	.calendar-day
+		show 1; margin-left 50
+
+	.calendar-week
+		show 1; margin-left 20
+
+	.calendar-month
+		float right; margin-left 50; margin-right 10
 
 	.date
-		bg none; border none; width 180; padding 0; text-align center;
-		color #fff; cursor default;
-		font 20; margin-right 30;
+		bg none; border none; width 120; padding 0 0 4; text-align center;
+		color #fff; cursor default; font 18;
 
 		&:hover
 			u 1;
 	.btn
-		show 1; u 0; color #888; padding 7 5; font 16/1; vertical-align top;
-		transition color .2s;
+		show 1; u 0; color #888; padding 7 5; font 16/1; vertical-align top; transition color .2s;
+
 		&:hover
 			color #fff;
 		&:active
 			color #aaa;
+		&.highlight
+			bg rgba(#fff, 0.2); color #eee; border-radius 13;
+
 	.btn-today
-		padding-top 7;
+		padding-top 7
 
+	.btn-hidden
+		show 0
 
-
+	.fa-chevron-left
+	.fa-chevron-right
+		line-height 1.2
 
 
 .pika-single
