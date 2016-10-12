@@ -1,4 +1,4 @@
-var keys = {
+const keys = {
 		A: 65,
 		X: 88,
 		C: 67,
@@ -71,7 +71,7 @@ var keys = {
 
 // math operators: + - * / ( ) .
 function isMath (e) {
-	var k = e.keyCode;
+	const k = e.keyCode;
 	if (k === keys.SPACE) return true;
 	if (k === keys.NUMDOT || (k === keys.DOT && !e.shiftKey)) return true;
 	if (k === keys.NUMMINUS || (k === keys.MINUS && !e.shiftKey)) return true;
@@ -85,10 +85,11 @@ function isMath (e) {
 
 // digits + navigation + copy/cut/paste + math operators
 function isAllowed (e) {
-	var k = e.keyCode,
-		allowed = allowedChars[k] === 1,
-		isCtrlXCV = (e && e.ctrlKey === true) && (k === keys.X || k === keys.C || k === keys.V),
-		math = isMath(e);
+	const k = e.keyCode;
+	const allowed = allowedChars[k] === 1;
+	const isCtrlXCV = (e && e.ctrlKey === true) && (k === keys.X || k === keys.C || k === keys.V);
+	const math = isMath(e);
+
 	return isDigit(e) || allowed || isCtrlXCV || math;
 }
 

@@ -1,16 +1,10 @@
 import $ from 'util';
 
 export default {
-	spendingByCategory: (params) => {
-		return $.get('spendingByCategory', params || {});
-	},
+	spendingByCategory: params => $.get('spendingByCategory', params || {}),
 
-	incomeVsExpenses: (params) => {
-		return $.get('incomeVsExpenses', params || {});
-	},
+	incomeVsExpenses: params => $.get('incomeVsExpenses', params || {}),
 
-	spendingByDay: (params) => {
-		return $.get('spendingByDay', params || {});
-	}
+	spendingByDay: params => $.get('spendingByDay', params || {})
 
 };

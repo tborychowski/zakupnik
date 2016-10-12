@@ -4,8 +4,8 @@ import Data from 'data/incomes';
 import Calendar from 'calendar';
 import Moment from 'moment';
 
-var _defaults = {
-	onAdd: function () {}
+const _defaults = {
+	onAdd: () => {}
 };
 
 function cloneItem (item, addMonths = 1) {
@@ -17,7 +17,7 @@ function cloneItem (item, addMonths = 1) {
 // items repeat for X months
 function repeatItems (items, times) {
 	if (!items || !items.length) return [];
-	var newItems = [];
+	const newItems = [];
 	for (let item of items) {
 		for (let i = 1; i < times; i++) {
 			newItems.push(cloneItem(item, i));
@@ -42,9 +42,9 @@ export default class Form {
 		this.el.on('submit', this.onSubmit.bind(this));
 
 		if (typeof this.cfg.onChange === 'function') {
-			this.form.observe(function (nv, ov, f) {
+			this.form.observe((nv, ov, f) => {
 				this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
-			}.bind(this));
+			});
 		}
 
 		let subform = this.subforms.find('.form-row');
@@ -68,16 +68,16 @@ export default class Form {
 	}
 
 	setDate (date) {
-		var dates = this.subforms.find('input[name$="date"]');
-		$.each(dates, function (f) { f.value = date; });
+		const dates = this.subforms.find('input[name$="date"]');
+		$.each(dates, f => { f.value = date; });
 	}
 
 	getData (clean = false) {
-		var date = Calendar.get(true),
-			format = (n) => $.formatNumber(n),
-			item = this.form.get(true),
-			repeat = item.repeat,
-			errors = [];
+		const date = Calendar.get(true);
+		const format = n => $.formatNumber(n);
+		const item = this.form.get(true);
+		const repeat = item.repeat;
+		const errors = [];
 
 		delete item.repeat;
 		if (!item.date) item.date = date;
@@ -130,7 +130,10 @@ export default class Form {
 		if (!this.validate(data.items)) return;
 		if (data.items) {
 			Data.save(data.items)
-				.then(resp => { if (resp.result === 'success') this.reset(); return resp; })
+				.then(resp => {
+					if (resp.result === 'success') this.reset();
+					return resp;
+				})
 				.then(this.cfg.onAdd);
 		}
 	}

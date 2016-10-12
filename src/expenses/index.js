@@ -4,7 +4,7 @@ import Calendar from 'calendar';
 import Grid from 'grid';
 import Form from './form';
 
-var el, grid, previewGrid, preview, formContainer, form, isReady = false, lastLoadDate;
+let el, grid, previewGrid, preview, formContainer, form, isReady = false, lastLoadDate;
 
 function load (force) {
 	let date = Calendar.get('YYYY-MM');
@@ -34,7 +34,7 @@ function edit (item, row) {
 
 function onDel (e) {
 	if (e) e.preventDefault();
-	var data = form.getData().items, id = (data && data[0] ? data[0].id : null);
+	const data = form.getData().items, id = (data && data[0] ? data[0].id : null);
 	if (id && window.confirm('Are you sure you wish to delete this item?')) {
 		Data.del(id).then(onResp).then(onReset);
 	}
@@ -50,7 +50,8 @@ function onReset (e) {
 }
 
 function onPreview () {
-	var data = form.getData(), sum = 0, totalStr;
+	const data = form.getData();
+	let sum = 0, totalStr;
 	preview.toggleClass('hidden', !(data.items && data.items.length));
 
 	if (!data.items) return;
@@ -77,7 +78,7 @@ function categoryRenderer (v, item) {
 
 // Footer renderer/formatter
 function footer (/* data */) {
-	let total = this.items.reduce(function (pre, cur) { return pre + cur.amount; }, 0);
+	let total = this.items.reduce((pre, cur) => pre + cur.amount, 0);
 	total = $.formatNumber(total);
 	return '€' + total;
 }

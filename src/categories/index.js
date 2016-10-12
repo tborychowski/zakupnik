@@ -1,12 +1,12 @@
 import $ from 'util';
 import Data from 'data/categories';
 
-var el, treeContainer, formContainer, form, btn = {}, catSel;
-var tpl = require('./category.html');
-var isReady = false;
+const tpl = require('./category.html');
+let isReady = false;
+let el, treeContainer, formContainer, form, btn = {}, catSel;
 
 function updateCatSelect (data) {
-	var options = ['<option value="0">[root]</option>'];
+	const options = ['<option value="0">[root]</option>'];
 	for (let c of data) options.push(`<option value="${c.id}">${c.name}</option>`);
 	catSel.html(options.join(''));
 	return data;
@@ -28,16 +28,16 @@ function edit (cat) {
 }
 
 function save () {
-	Data.save(form.get(true)).then(function () {
+	Data.save(form.get(true)).then(() => {
 		formContainer.removeClass('update');
 		loadTree();
 	});
 }
 
 function del () {
-	var data = form.get(true);
+	const data = form.get(true);
 	if (window.confirm('Are you sure you wish to remove "' + data.name + '"')) {
-		Data.del(data).then(function () {
+		Data.del(data).then(() => {
 			formContainer.removeClass('update');
 			loadTree();
 		});
@@ -45,7 +45,7 @@ function del () {
 }
 
 function onClick (e) {
-	var target = $(e.target);
+	const target = $(e.target);
 	if (target.is('.cat')) edit(target.data());
 	else if (target.is('.btn-reset')) edit({});
 	else if (target.is('.btn-del')) del();
@@ -58,10 +58,8 @@ function loadTree () {
 	Data.getTree()
 		.then(updateCatSelect)
 		.then(createTree)
-		.then(function (html) {
-			treeContainer.html(html);
-		})
-		.catch(function (e) {
+		.then(html => treeContainer.html(html))
+		.catch(e => {
 			console.error('ERROR:', e);
 		});
 }
@@ -78,7 +76,7 @@ function init () {
 		catSel = formContainer.find('.category');
 
 		el.on('click', onClick);
-		formContainer.on('submit', function (e) {
+		formContainer.on('submit', e => {
 			save();
 			e.preventDefault();
 		});

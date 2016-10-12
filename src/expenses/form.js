@@ -5,9 +5,9 @@ import Categories from 'data/categories';
 import Calendar from 'calendar';
 import Moment from 'moment';
 
-var tpl = require('./form.html');
-var _defaults = {
-	onAdd: function () {}
+const tpl = require('./form.html');
+const _defaults = {
+	onAdd: () => {}
 };
 
 function parseCategories (cats) {
@@ -29,7 +29,7 @@ function cloneItem (item, addMonths = 1) {
 // items repeat for X months
 function repeatItems (items, times) {
 	if (!items || !items.length) return [];
-	var newItems = [];
+	const newItems = [];
 	for (let item of items) {
 		for (let i = 1; i < times; i++) {
 			newItems.push(cloneItem(item, i));
@@ -55,9 +55,9 @@ export default class Form {
 		this.el.on('click', this.onClick.bind(this));
 
 		if (typeof this.cfg.onChange === 'function') {
-			this.form.observe(function (nv, ov, f) {
+			this.form.observe((nv, ov, f) => {
 				this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
-			}.bind(this));
+			});
 		}
 		this.draw();
 	}
@@ -91,9 +91,9 @@ export default class Form {
 	unsplit (btn) {
 		btn.closest('.form-row').remove();
 		let rows = this.el.find('.form-row');
-		$.each(rows, function (row, i) {
+		$.each(rows, (row, i) => {
 			let fields = $(row).find('input,select');
-			$.each(fields, function (f) {
+			$.each(fields, f => {
 				if (!f.name) return;
 				f.name = f.name.replace(/\[\d+\]/, '[' + i + ']');
 			});
@@ -113,19 +113,19 @@ export default class Form {
 	}
 
 	setDate (date) {
-		var dates = this.subforms.find('input[name$="date"]');
-		$.each(dates, function (f) { f.value = date; });
+		const dates = this.subforms.find('input[name$="date"]');
+		$.each(dates, f => { f.value = date; });
 	}
 
 	getData (clean = false) {
-		var date = Calendar.get(true),
-			format = (n) => $.formatNumber(n),
-			formData = this.form.get(true),
-			data = [],
-			errors = [],
-			total = 0;
+		const date = Calendar.get(true);
+		const format = (n) => $.formatNumber(n);
+		const formData = this.form.get(true);
+		const data = [];
+		const errors = [];
+		let total = 0;
 
-		$.each(formData.items, function (item, i) {
+		$.each(formData.items, (item, i) => {
 			if (!item.date) item.date = date;
 			if (!item.amount) errors.push('Please enter amount!');
 			else {
@@ -138,7 +138,8 @@ export default class Form {
 				}
 				data.push(item);
 			}
-		}, this);
+		});
+
 		if (errors.length && clean) return Toaster.error(errors[0]);
 		if (data && data.length) {
 			data[0].amount = total;
@@ -177,7 +178,7 @@ export default class Form {
 
 
 	onKeyUp (e) {
-		var target = $(e.target);
+		const target = $(e.target);
 		if (e.keyCode === $.keys.C && e.ctrlKey) this.split();
 		else if (e.keyCode === $.keys.X && e.ctrlKey) this.unsplit(target);
 		else return;
@@ -191,7 +192,7 @@ export default class Form {
 	}
 
 	onClick (e) {
-		var target = $(e.target);
+		const target = $(e.target);
 		if (target.is('.btn-split')) this.split();
 		else if (target.is('.btn-unsplit')) this.unsplit(target);
 		else return;
@@ -205,7 +206,10 @@ export default class Form {
 		if (!this.validate(data)) return;
 		if (data) {
 			Data.save(data)
-				.then(resp => { if (resp.result === 'success') this.reset(); return resp; })
+				.then(resp => {
+					if (resp.result === 'success') this.reset();
+					return resp;
+				})
 				.then(this.cfg.onAdd);
 		}
 	}

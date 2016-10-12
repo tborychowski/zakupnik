@@ -10,13 +10,13 @@ function _isNumber (value) {
 }
 
 function _decodeEntities (str) {
-	var d = document.createElement('div');
+	const d = document.createElement('div');
 	d.innerHTML = str;
 	return d.innerText || d.textContent;
 }
 
 function _getInputs (form) {
-	var inputs = form.querySelectorAll('[name]');
+	const inputs = form.querySelectorAll('[name]');
 	return Array.prototype.slice.call(inputs) || [];
 }
 
@@ -34,10 +34,10 @@ function Form (el) {
 }
 
 Form.prototype.set = function (params, clear) {
-	var inputs = _getInputs(this.form);
+	const inputs = _getInputs(this.form);
 	for (let input of inputs) {
-		var name = input.name,
-			value = (typeof params[name] === 'undefined' ? '' : params[name]);
+		const name = input.name;
+		let value = (typeof params[name] === 'undefined' ? '' : params[name]);
 
 		// if name is object, e.g. user[name], userData[address][street], update value to read this correctly
 		if (name.indexOf('[') > -1) {
@@ -73,7 +73,8 @@ Form.prototype.set = function (params, clear) {
 
 
 Form.prototype.get = function (convert = false) {
-	var inputs = _getInputs(this.form), data = {}, current;
+	const inputs = _getInputs(this.form);
+	let data = {}, current;
 
 	for (let input of inputs) {
 		let type = input.type && input.type.toLowerCase(), value, parts, lastPart, last;

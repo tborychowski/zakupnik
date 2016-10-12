@@ -9,22 +9,23 @@ const modules = {expenses, income, stats, categories};
 let el, items, contents, selected;
 
 function onChange () {
-	var hash = location.hash.substr(1);
+	const hash = location.hash.substr(1);
 
-	if (hash) selected = items.filter('[href="#' + hash + '"]');
+	if (hash) selected = items.filter(`[href="#${hash}"]`);
 	else selected = items.first();
 	change(selected);
 }
 
 function change (item) {
-	var id = item[0].hash.substr(1), content = $('#' + id);
+	const id = item[0].hash.substr(1);
+	const content = $(`#${id}`);
 
 	items.removeClass('visible active');
 	item.addClass('active');
 
 	contents.removeClass('visible active');
 	content.addClass('visible');
-	setTimeout(function () { content.addClass('active'); }, 100);
+	setTimeout(() => { content.addClass('active'); }, 100);
 
 	// initialise module
 	if (modules[id]) modules[id].init();

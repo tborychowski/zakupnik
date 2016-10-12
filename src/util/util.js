@@ -15,9 +15,9 @@ function formatNumber (num) {
 }
 
 function serialize (obj) {
-	var keys = Object.keys(obj);
+	const keys = Object.keys(obj);
 	if (!keys || !keys.length) return '';
-	return '?' + keys.reduce(function (a, k) {
+	return '?' + keys.reduce((a, k) => {
 		a.push(k + '=' + encodeURIComponent(obj[k]));
 		return a;
 	}, []).join('&');
@@ -47,9 +47,11 @@ function rand (max, min = 0) {
 
 function each (arr, cb, scope) {
 	if (!arr) return;
-	if (type(arr) === 'object') for (var key in arr) cb.call(scope || cb, arr[key], key);
+	if (type(arr) === 'object') {
+		for (let key in arr) cb.call(scope || cb, arr[key], key);
+	}
 	else {
-		for (var i = 0, item; item = arr[i]; i++) {
+		for (let i = 0, item; item = arr[i]; i++) {
 			cb.call(scope || cb, item, i);
 		}
 	}
@@ -57,14 +59,14 @@ function each (arr, cb, scope) {
 }
 
 function sanitize (v) {
-	var div = document.createElement('DIV');
+	const div = document.createElement('DIV');
 	div.innerHTML = v || '';
 	return div.textContent || div.innerText || '';
 }
 
 function merge (target, ...sources) {
 	if (!target) throw new TypeError('Cannot convert first argument to object');
-	var to = Object(target);
+	const to = Object(target);
 	for (let source of sources) {
 		let keys = Object.keys(Object(source));
 		for (let key of keys) {
