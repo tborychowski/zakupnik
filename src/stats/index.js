@@ -3,7 +3,7 @@ import Calendar from 'calendar';
 import Data from 'data/stats';
 import Chart from './Chart';
 
-var lastLoadDate, _chart0, _chart1, _chart2, isReady = false;
+let lastLoadDate, _chart0, _chart1, _chart2, isReady = false;
 
 function chart0 (data) {
 	if (!_chart0) _chart0 = Chart('pie', 'chart0', 'Spending by category (this month)', data);
@@ -17,7 +17,7 @@ function chart1 (data) {
 	if (!_chart1) _chart1 = Chart('line', 'chart1', 'Income vs Expenses (this year)', data);
 	else {
 		_chart1.xAxis[0].removePlotBand('m');
-		var m = +Calendar.get('M') - 1.5;
+		const m = +Calendar.get('M') - 1.5;
 		_chart1.xAxis[0].addPlotBand({ id: 'm', from: m, to: m + 1, color: 'rgba(80,80,80,0.3)' });
 	}
 }

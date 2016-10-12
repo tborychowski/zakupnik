@@ -1,4 +1,4 @@
-var _cache = {};
+const _cache = {};
 
 function trigger (topic, ...args) {
 	if (!_cache[topic]) return;

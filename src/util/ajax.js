@@ -5,7 +5,10 @@ const baseUrl = 'api/index.php/';
 function ajax (options) {
 	if (typeof options === 'string') options = { url: options };
 
-	var req = new XMLHttpRequest(), resp, data = options.data || '';
+	let resp;
+	let data = options.data || '';
+	const req = new XMLHttpRequest();
+
 	options.url = baseUrl + options.url;
 	options.method = options.method || 'GET';
 	options.type = options.type || 'json';
@@ -16,7 +19,7 @@ function ajax (options) {
 	}
 	return new Promise((resolve, reject) => {
 		req.open(options.method, options.url, true);
-		req.onload = function () {
+		req.onload = () => {
 			if (req.status >= 200 && req.status < 400) {
 				resp = req.responseText;
 				try { resp = JSON.parse(resp); }
@@ -25,8 +28,8 @@ function ajax (options) {
 			}
 			else reject(req.statusText);
 		};
-		req.onerror = function () { reject(req.statusText); };
-		req.setRequestHeader('Content-Type', 'application/' + options.type + '; charset=UTF-8');
+		req.onerror = () => reject(req.statusText);
+		req.setRequestHeader('Content-Type', `application/${options.type}; charset=UTF-8`);
 		req.send(data);
 	});
 }

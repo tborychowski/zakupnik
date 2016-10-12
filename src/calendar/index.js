@@ -5,11 +5,11 @@ import Moment from 'moment';
 const tpl = require('./template.html');
 let el, picker, todayBtn, isReady = false;
 const gotoMap = {
-	prev: function (c) { return c.subtract(1, 'days'); },
-	next: function (c) { return c.add(1, 'days'); },
-	prevMonth: function (c) { return c.subtract(1, 'months'); },
-	nextMonth: function (c) { return c.add(1, 'months'); },
-	today: function () { return Moment(); }
+	prev: c => c.subtract(1, 'days'),
+	next: c => c.add(1, 'days'),
+	prevMonth: c => c.subtract(1, 'months'),
+	nextMonth: c => c.add(1, 'months'),
+	today: () => Moment()
 };
 
 

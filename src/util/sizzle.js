@@ -5,7 +5,7 @@ import util from './util';
 
 function sizzle (mixed, context) {
 	if (!mixed) return [];
-	var el;
+	let el;
 	if (typeof mixed !== 'string') el = mixed;
 
 	// is html - create new element
@@ -25,9 +25,7 @@ function sizzle (mixed, context) {
 sizzle.fn = {};
 sizzle.fn.find = function (selector) { return sizzle(selector, this[0]); };
 sizzle.fn.filter = function (selector) {
-	var elems = Array.prototype.filter.call(this, function (el) {
-		return el.matches(selector);
-	});
+	const elems = Array.prototype.filter.call(this, el => el.matches(selector));
 	return sizzle(elems);
 };
 
@@ -52,20 +50,24 @@ sizzle.fn.append = function (child) {
 
 sizzle.fn.on = function (eventName, cb) {
 	if (!this || !this.length) return this;
-	this.forEach(function (el) { el.addEventListener(eventName, cb); });
+	this.forEach(el => {
+		el.addEventListener(eventName, cb);
+	});
 	return this;
 };
 
 sizzle.fn.off = function (eventName, cb) {
 	if (!this || !this.length) return this;
-	this.forEach(function (el) { el.removeEventListener(eventName, cb); });
+	this.forEach(el => {
+		el.removeEventListener(eventName, cb);
+	});
 	return this;
 };
 
 
 sizzle.fn.closest = function (cls) {
 	if (!this || !this.length) return false;
-	var has = false, el = this[0];
+	let has = false, el = this[0];
 	while (!has && el) {
 		has = el.matches(cls);
 		if (has) return sizzle(el);
@@ -110,13 +112,13 @@ function modElCls (el, action, cls, cond) {
 	if (!el || !el.length) return el;
 	cls = cls.split(' ');
 	if (typeof cond === 'boolean') {
-		el.forEach(function (el) {
-			cls.forEach(function (c) { el.classList[action](c, cond); });
+		el.forEach(el => {
+			cls.forEach(c => el.classList[action](c, cond));
 		});
 	}
 	else {
-		el.forEach(function (el) {
-			cls.forEach(function (c) { el.classList[action](c); });
+		el.forEach(el => {
+			cls.forEach(c => el.classList[action](c));
 		});
 	}
 	return el;
@@ -132,13 +134,13 @@ sizzle.fn.hasClass = function (cls) {
 
 sizzle.fn.html = function (html) {
 	if (!this || !this.length) return this;
-	this.forEach(function (el) { el.innerHTML = html; });
+	this.forEach(el => { el.innerHTML = html; });
 	return this;
 };
 
 sizzle.fn.remove = function () {
 	if (!this || !this.length) return this;
-	this.forEach(function (el) { el.remove(); });
+	this.forEach(el => el.remove());
 	return this;
 };
 

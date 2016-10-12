@@ -6,7 +6,7 @@ function onUpdateReady () {
 }
 
 function init () {
-	var cache = window.applicationCache;
+	const cache = window.applicationCache;
 	cache.addEventListener('updateready', onUpdateReady);
 	if (cache.status === cache.UPDATEREADY) onUpdateReady();
 }
