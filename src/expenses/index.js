@@ -102,7 +102,7 @@ function init () {
 				{ width: 27, icons: { pencil: edit } },
 				{ name: 'Date', field: 'date', width: 90 },
 				{ name: 'Category', field: 'category', renderer: categoryRenderer },
-				{ name: 'Amount', field: 'amount', width: 100, renderer, footer }
+				{ name: 'Amount', field: 'amount', width: 105, renderer, footer }
 			]
 		});
 
@@ -114,7 +114,7 @@ function init () {
 				{ name: 'Date', field: 'date', width: 90 },
 				{ name: 'Category', field: 'category', width: '40%' },
 				{ name: 'Description', field: 'description' },
-				{ name: 'Amount', field: 'amount', width: 100, renderer, footer }
+				{ name: 'Amount', field: 'amount', width: 105, renderer, footer }
 			]
 		});
 
