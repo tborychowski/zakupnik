@@ -78,9 +78,7 @@ function categoryRenderer (v, item) {
 // Footer renderer/formatter
 function footer (/* data */) {
 	let total = this.items.reduce(function (pre, cur) { return pre + cur.amount; }, 0);
-	console.log(total);
 	total = $.formatNumber(total);
-	// let total = data.totalStr;
 	return '€' + total;
 }
 

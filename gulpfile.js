@@ -50,6 +50,7 @@ gulp.task('watch', ['js', 'styl'], () => {
 	live.listen();
 	gulp.watch('src/**/*.styl', ['styl']);
 	gulp.watch('src/**/*.js', ['js']);
+	gulp.watch('src/**/*.html', ['js']);
 });
 
 gulp.task('default', [

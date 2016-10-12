@@ -86,10 +86,11 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var tpl = __webpack_require__(13);
-	var el,
-	    picker,
-	    isReady = false,
-	    gotoMap = {
+	var el = void 0,
+	    picker = void 0,
+	    todayBtn = void 0,
+	    isReady = false;
+	var gotoMap = {
 		prev: function prev(c) {
 			return c.subtract(1, 'days');
 		},
@@ -108,16 +109,33 @@
 	};
 
 	function goTo(where) {
-		picker.setMoment(gotoMap[where](picker.getMoment()));
+		var now = picker.getMoment();
+		var newdate = now;
+		if (where in gotoMap) newdate = gotoMap[where](now);else newdate = now.isoWeekday(where);
+		picker.setMoment(newdate);
+	}
+
+	function toggleTodayBtn(m) {
+		todayBtn.toggleClass('btn-hidden', m.diff((0, _moment2.default)().startOf('day'), 'days', true) === 0);
+	}
+
+	function selectWeekday(wd) {
+		wd = ('' + wd).substr(0, 3).toLowerCase();
+		(0, _util2.default)('.btn.highlight').removeClass('highlight');
+		(0, _util2.default)('.btn-' + wd).addClass('highlight');
 	}
 
 	function onSelect() {
-		_util2.default.trigger('calendar/changed', picker.getMoment());
+		var m = picker.getMoment();
+		selectWeekday(m.format('dddd'));
+		toggleTodayBtn(m);
+		_util2.default.trigger('calendar/changed', m);
 	}
 
 	function _set(date) {
 		picker.setMoment((0, _moment2.default)(date));
 	}
+
 	function _get(format) {
 		if (!isReady) init();
 		if (!format) return picker.getMoment();
@@ -136,13 +154,14 @@
 	function init() {
 		if (isReady) return;
 		el = (0, _util2.default)('#calendar').html(tpl()).on('click', onClick);
+		todayBtn = el.find('.btn-today');
 
 		var today = new Date();
 		picker = new _pikaday2.default({
 			firstDay: 1,
 			defaultDate: today,
 			setDefaultDate: true,
-			format: 'ddd, D MMM YYYY',
+			format: 'Do MMM YYYY',
 			field: el.find('.date')[0],
 			yearRange: [2014, today.getFullYear()],
 			onSelect: onSelect
@@ -479,9 +498,12 @@
 		if (!arr) return;
 		if (type(arr) === 'object') for (var key in arr) {
 			cb.call(scope || cb, arr[key], key);
-		} else for (var i = 0, item; item = arr[i]; i++) {
-			cb.call(scope || cb, item, i);
-		} // return Array.prototype.forEach.call(collection, cb);
+		} else {
+			for (var i = 0, item; item = arr[i]; i++) {
+				cb.call(scope || cb, item, i);
+			}
+		}
+		// return Array.prototype.forEach.call(collection, cb);
 	}
 
 	function sanitize(v) {
@@ -551,9 +573,14 @@
 		return to;
 	}
 
-	if (!Object.assign) Object.defineProperty(Object, 'assign', { value: merge,
-		enumerable: false, configurable: true, writable: true
-	});
+	if (!Object.assign) {
+		Object.defineProperty(Object, 'assign', {
+			value: merge,
+			enumerable: false,
+			configurable: true,
+			writable: true
+		});
+	}
 
 	function isNodeList(nodes) {
 		return (typeof nodes === 'undefined' ? 'undefined' : _typeof(nodes)) === 'object' && /^(htmlcollection|nodelist|object)$/.test(type(nodes)) && (nodes.length === 0 || _typeof(nodes[0]) === 'object' && nodes[0].nodeType > 0);
@@ -590,7 +617,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var base_url = 'api/index.php/';
+	var baseUrl = 'api/index.php/';
 
 	function ajax(options) {
 		if (typeof options === 'string') options = { url: options };
@@ -598,7 +625,7 @@
 		var req = new XMLHttpRequest(),
 		    resp,
 		    data = options.data || '';
-		options.url = base_url + options.url;
+		options.url = baseUrl + options.url;
 		options.method = options.method || 'GET';
 		options.type = options.type || 'json';
 
@@ -929,9 +956,11 @@
 		var topic = _handle[0];
 		var cb = _handle[1];var ca = _cache[topic];
 		cb = cb.toString();
-		if (ca) ca.forEach(function (fn, i) {
-			if (fn.toString() === cb) ca.splice(i, 1);
-		});
+		if (ca) {
+			ca.forEach(function (fn, i) {
+				if (fn.toString() === cb) ca.splice(i, 1);
+			});
+		}
 	}
 
 	exports.default = { on: on, off: off, trigger: trigger };
@@ -946,11 +975,22 @@
 		value: true
 	});
 	var keys = {
+		A: 65,
+		X: 88,
+		C: 67,
+		D: 68,
+		V: 86,
+		Z: 90,
+
+		F1: 112,
+		F2: 113,
+		F5: 116,
+		TAB: 9,
+		ESC: 27,
+
 		BCKSPC: 8,
 		BACKSPACE: 8,
-		TAB: 9,
 		ENTER: 13,
-		ESC: 27,
 		SPACE: 32,
 		PGUP: 33,
 		PGDOWN: 34,
@@ -962,15 +1002,6 @@
 		DOWN: 40,
 		INS: 45,
 		DEL: 46,
-		A: 65,
-		X: 88,
-		C: 67,
-		D: 68,
-		V: 86,
-		Z: 90,
-		F1: 112,
-		F2: 113,
-		F5: 116,
 		MINUS: 173,
 		PLUS: 61,
 		DOT: 190,
@@ -1002,7 +1033,8 @@
 		102: 1, // numpad 6
 		103: 1, // numpad 7
 		104: 1, // numpad 8
-		105: 1 },
+		105: 1 // numpad 9
+	},
 	    allowedChars = {
 		8: 1, // backspace
 		9: 1, // tab
@@ -6454,7 +6486,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var H = __webpack_require__(14);
-	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<input type=\"text\" class=\"date\">");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prevMonth\"></a>");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-angle-left\" data-go=\"prev\"></a>");t.b("\n");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>");t.b("\n");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-angle-right\" data-go=\"next\"></a>");t.b("\n" + i);t.b("<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"nextMonth\"></a>");return t.fl(); },partials: {}, subs: {  }}, "<input type=\"text\" class=\"date\">\n<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prevMonth\"></a>\n<a href=\"#\" class=\"btn fa fa-angle-left\" data-go=\"prev\"></a>\n\n<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Today</a>\n\n<a href=\"#\" class=\"btn fa fa-angle-right\" data-go=\"next\"></a>\n<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"nextMonth\"></a>", H);return T.render.apply(T, arguments); };
+	module.exports = function() { var T = new H.Template({code: function (c,p,i) { var t=this;t.b(i=i||"");t.b("<div class=\"calendar-week\">");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn fa fa-angle-left\" data-go=\"prev\"></a>");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn btn-mon\" data-go=\"Monday\">Mon</a>");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn btn-tue\" data-go=\"Tuesday\">Tue</a>");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn btn-wed\" data-go=\"Wednesday\">Wed</a>");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn btn-thu\" data-go=\"Thursday\">Thu</a>");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn btn-fri\" data-go=\"Friday\">Fri</a>");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn btn-sat\" data-go=\"Saturday\">Sat</a>");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn btn-sun\" data-go=\"Sunday\">Sun</a>");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn fa fa-angle-right\" data-go=\"next\"></a>");t.b("\n" + i);t.b("</div>");t.b("\n");t.b("\n" + i);t.b("<div class=\"calendar-day\">");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Go back to Today</a>");t.b("\n" + i);t.b("</div>");t.b("\n");t.b("\n" + i);t.b("<div class=\"calendar-month\">");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prevMonth\"></a>");t.b("\n" + i);t.b("	<input type=\"text\" class=\"date\">");t.b("\n" + i);t.b("	<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"nextMonth\"></a>");t.b("\n" + i);t.b("</div>");t.b("\n");t.b("\n");return t.fl(); },partials: {}, subs: {  }}, "<div class=\"calendar-week\">\n\t<a href=\"#\" class=\"btn fa fa-angle-left\" data-go=\"prev\"></a>\n\t<a href=\"#\" class=\"btn btn-mon\" data-go=\"Monday\">Mon</a>\n\t<a href=\"#\" class=\"btn btn-tue\" data-go=\"Tuesday\">Tue</a>\n\t<a href=\"#\" class=\"btn btn-wed\" data-go=\"Wednesday\">Wed</a>\n\t<a href=\"#\" class=\"btn btn-thu\" data-go=\"Thursday\">Thu</a>\n\t<a href=\"#\" class=\"btn btn-fri\" data-go=\"Friday\">Fri</a>\n\t<a href=\"#\" class=\"btn btn-sat\" data-go=\"Saturday\">Sat</a>\n\t<a href=\"#\" class=\"btn btn-sun\" data-go=\"Sunday\">Sun</a>\n\t<a href=\"#\" class=\"btn fa fa-angle-right\" data-go=\"next\"></a>\n</div>\n\n<div class=\"calendar-day\">\n\t<a href=\"#\" class=\"btn btn-today\" data-go=\"today\">Go back to Today</a>\n</div>\n\n<div class=\"calendar-month\">\n\t<a href=\"#\" class=\"btn fa fa-chevron-left\" data-go=\"prevMonth\"></a>\n\t<input type=\"text\" class=\"date\">\n\t<a href=\"#\" class=\"btn fa fa-chevron-right\" data-go=\"nextMonth\"></a>\n</div>\n\n", H);return T.render.apply(T, arguments); };
 
 /***/ },
 /* 14 */
@@ -7473,9 +7505,7 @@
 		var total = this.items.reduce(function (pre, cur) {
 			return pre + cur.amount;
 		}, 0);
-		console.log(total);
 		total = _util2.default.formatNumber(total);
-		// let total = data.totalStr;
 		return '€' + total;
 	}
 
@@ -9231,11 +9261,13 @@
 			value: function draw() {
 				var _this = this;
 
-				if (this.categories.length) this.reset();else _categories2.default.getTree().then(function (data) {
-					_this.categories = data;
-					_this.catMap = parseCategories(data);
-					_this.reset();
-				});
+				if (this.categories.length) this.reset();else {
+					_categories2.default.getTree().then(function (data) {
+						_this.categories = data;
+						_this.catMap = parseCategories(data);
+						_this.reset();
+					});
+				}
 				return this;
 			}
 		}, {
@@ -9325,7 +9357,7 @@
 		}, {
 			key: 'parseAmount',
 			value: function parseAmount(amount) {
-				/*jshint evil: true */
+				/* eslint no-eval: 0 */
 				amount = ('' + amount).replace(/\s/g, '');
 				if (!/^[\+\-\\*\/\(\)\d\.]+$/i.test(amount)) return 0;
 				if (/[\+\-\\*\/\.]+/i.test(amount)) {
@@ -9405,9 +9437,11 @@
 				e.preventDefault();
 				var data = this.getData(true).items;
 				if (!this.validate(data)) return;
-				if (data) _entries2.default.save(data).then(function (resp) {
-					if (resp.result === 'success') _this2.reset();return resp;
-				}).then(this.cfg.onAdd);
+				if (data) {
+					_entries2.default.save(data).then(function (resp) {
+						if (resp.result === 'success') _this2.reset();return resp;
+					}).then(this.cfg.onAdd);
+				}
 			}
 		}]);
 
@@ -9580,7 +9614,7 @@
 	function onPreview() {
 		var data = form.getData(),
 		    sum = 0,
-		    total_str;
+		    totalStr;
 		preview.toggleClass('hidden', !(data.items && data.items.length));
 
 		if (!data.items) return;
@@ -9608,8 +9642,8 @@
 			}
 		}
 
-		total_str = _util2.default.formatNumber(sum);
-		if (data.items) previewGrid.setData({ total_str: total_str, items: data.items });
+		totalStr = _util2.default.formatNumber(sum);
+		if (data.items) previewGrid.setData({ totalStr: totalStr, items: data.items });
 	}
 
 	/**
@@ -9867,7 +9901,7 @@
 		}, {
 			key: 'parseAmount',
 			value: function parseAmount(amount) {
-				/*jshint evil: true */
+				/* eslint no-eval: 0 */
 				amount = ('' + amount).replace(/\s/g, '');
 				if (!/^[\+\-\\*\/\(\)\d\.]+$/i.test(amount)) return 0;
 				if (/[\+\-\\*\/\.]+/i.test(amount)) {
@@ -9931,9 +9965,11 @@
 				e.preventDefault();
 				var data = this.getData(true);
 				if (!this.validate(data.items)) return;
-				if (data.items) _incomes2.default.save(data.items).then(function (resp) {
-					if (resp.result === 'success') _this.reset();return resp;
-				}).then(this.cfg.onAdd);
+				if (data.items) {
+					_incomes2.default.save(data.items).then(function (resp) {
+						if (resp.result === 'success') _this.reset();return resp;
+					}).then(this.cfg.onAdd);
+				}
 			}
 		}]);
 
