@@ -1,6 +1,6 @@
 import util from './util';
 
-const baseUrl = 'api/index.php/';
+const baseUrl = 'api/';
 
 function ajax (options) {
 	if (typeof options === 'string') options = { url: options };
