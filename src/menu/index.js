@@ -6,21 +6,20 @@ import categories from 'categories';
 
 
 const modules = {expenses, income, stats, categories};
-let el, items, contents, selected;
+let el, items, contents;
 
-function onChange () {
-	const hash = location.hash.substr(1);
 
-	if (hash) selected = items.filter(`[href="#${hash}"]`);
-	else selected = items.first();
-	change(selected);
-}
+function goto (route) {
+	let item;
 
-function change (item) {
+	if (route) item = items.filter(`[href="#${route}"]`);
+	else item = items.first();
+
+
 	const id = item[0].hash.substr(1);
 	const content = $(`#${id}`);
 
-	items.removeClass('visible active');
+	items.removeClass('active');
 	item.addClass('active');
 
 	contents.removeClass('visible active');
@@ -36,10 +35,10 @@ function init () {
 	el = $('#menu');
 	items = el.find('.fa');
 	contents = $('#content .section');
-	window.addEventListener('hashchange', onChange);
-	onChange();
 }
 
+
 export default {
-	init
+	init,
+	goto
 };

@@ -1,7 +1,7 @@
 import $ from 'util';
 import Toaster from 'toaster';
-import Data from 'data/entries';
-import Categories from 'data/categories';
+import Data from './data';
+import Categories from '../categories/data';
 import Calendar from 'calendar';
 import Moment from 'moment';
 

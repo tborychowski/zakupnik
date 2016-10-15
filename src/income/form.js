@@ -1,6 +1,6 @@
 import $ from 'util';
 import Toaster from 'toaster';
-import Data from 'data/incomes';
+import Data from './data';
 import Calendar from 'calendar';
 import Moment from 'moment';
 

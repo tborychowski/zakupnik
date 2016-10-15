@@ -1,6 +1,6 @@
 import $ from 'util';
 import Calendar from 'calendar';
-import Data from 'data/stats';
+import Data from './data';
 import Chart from './Chart';
 
 let lastLoadDate, _chart0, _chart1, _chart2, isReady = false;
