@@ -1,5 +1,5 @@
 import $ from 'util';
-import Data from 'data/incomes';
+import Data from './data';
 import Calendar from 'calendar';
 import Grid from 'grid';
 import Form from './form';

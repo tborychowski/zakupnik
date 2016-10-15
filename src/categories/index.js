@@ -1,5 +1,5 @@
 import $ from 'util';
-import Data from 'data/categories';
+import Data from './data';
 
 const tpl = require('./category.html');
 let isReady = false;
