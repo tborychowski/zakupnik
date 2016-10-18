@@ -42,7 +42,7 @@ const _yAxis = {
 
 
 
-export default function (type, containerId, title, data) {
+function Chart (type, containerId, title, data) {
 	window.Highcharts.setOptions({ lang: { thousandsSep: ',' } });
 
 	let chart = 'Chart';
@@ -99,3 +99,6 @@ export default function (type, containerId, title, data) {
 	}
 	return new window.Highcharts[chart](options);
 }
+
+
+export default Chart;

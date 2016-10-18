@@ -19,7 +19,12 @@ function createTree (data, html = []) {
 		if (item.items) html.push(createTree(item.items));
 		html.push('</li>');
 	}
-	return '<ul class="category-tree">' + html.join('') + '</ul>';
+	return `<ul class="category-tree">${html.join('')}</ul>`;
+}
+
+function reloadTree () {
+	formContainer.removeClass('update');
+	loadTree();
 }
 
 function edit (cat) {
@@ -28,26 +33,20 @@ function edit (cat) {
 }
 
 function save () {
-	Data.save(form.get(true)).then(() => {
-		formContainer.removeClass('update');
-		loadTree();
-	});
+	Data.save(form.get(true)).then(reloadTree);
 }
 
 function del () {
 	const data = form.get(true);
-	if (window.confirm('Are you sure you wish to remove "' + data.name + '"')) {
-		Data.del(data).then(() => {
-			formContainer.removeClass('update');
-			loadTree();
-		});
+	if (window.confirm(`Are you sure you wish to remove "${data.name}"`)) {
+		Data.del(data).then(reloadTree);
 	}
 }
 
 function onClick (e) {
 	const target = $(e.target);
 	if (target.is('.cat')) edit(target.data());
-	else if (target.is('.btn-reset')) edit({});
+	else if (target.is('.btn-reset')) edit();
 	else if (target.is('.btn-del')) del();
 	else return;
 	e.preventDefault();
@@ -59,34 +58,30 @@ function loadTree () {
 		.then(updateCatSelect)
 		.then(createTree)
 		.then(html => treeContainer.html(html))
-		.catch(e => {
-			console.error('ERROR:', e);
-		});
+		.catch(console.error.bind(console));
 }
 
 function init () {
-	if (!isReady) {
-		el = $('#categories');
-		treeContainer = el.find('.tree');
-		formContainer = el.find('.form');
-		form = $.form(formContainer[0]);
-		btn.add = formContainer.find('.btn-add');
-		btn.del = formContainer.find('.btn-del');
-		btn.sav = formContainer.find('.btn-sav');
-		catSel = formContainer.find('.category');
+	if (isReady) return edit();		// reset form
 
-		el.on('click', onClick);
-		formContainer.on('submit', e => {
-			save();
-			e.preventDefault();
-		});
-		loadTree();
-		isReady = true;
-	}
-	else {
-		edit({});	// reset form
-	}
+	el = $('#categories');
+	treeContainer = el.find('.tree');
+	formContainer = el.find('.form');
+	form = $.form(formContainer[0]);
+	btn.add = formContainer.find('.btn-add');
+	btn.del = formContainer.find('.btn-del');
+	btn.sav = formContainer.find('.btn-sav');
+	catSel = formContainer.find('.category');
+
+	el.on('click', onClick);
+	formContainer.on('submit', e => {
+		save();
+		e.preventDefault();
+	});
+	loadTree();
+	isReady = true;
 }
+
 
 export default {
 	init

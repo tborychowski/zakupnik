@@ -42,9 +42,7 @@ export default class Form {
 		this.el.on('submit', this.onSubmit.bind(this));
 
 		if (typeof this.cfg.onChange === 'function') {
-			this.form.observe((nv, ov, f) => {
-				this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
-			});
+			this.form.observe(this.cfg.onChange);
 		}
 
 		let subform = this.subforms.find('.form-row');

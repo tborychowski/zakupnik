@@ -64,23 +64,21 @@ function onPreview () {
  * Amount cell renderer/formatter
  */
 function renderer (v, item) {
-	if (v <= 0) {
-		return '<span class="warn"><i class="fa fa-exclamation-circle"></i> €' +
-			item.amount_str + '</span>';
-	}
-	return '€' + item.amount_str;
+	let val = `€${item.amount_str}`;
+	if (v <= 0) val = `<span class="warn"><i class="fa fa-exclamation-circle"></i> ${val}</span>`;
+	return val;
 }
 
 // Category & description renderer/formatter
 function categoryRenderer (v, item) {
-	return v + ' - ' + item.description;
+	return `${v} - ${item.description}`;
 }
 
 // Footer renderer/formatter
 function footer (/* data */) {
 	let total = this.items.reduce((pre, cur) => pre + cur.amount, 0);
 	total = $.formatNumber(total);
-	return '€' + total;
+	return `€${total}`;
 }
 
 function init () {
