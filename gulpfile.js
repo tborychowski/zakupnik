@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const cssmin = require('gulp-minify-css');
+const cssmin = require('gulp-clean-css');
 const webpack = require('webpack-stream');
 const concat = require('gulp-concat');
 const stylus = require('gulp-stylus');

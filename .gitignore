@@ -2,6 +2,7 @@
 *.err
 *.log
 .cache
+yarn.lock
 
 Thumbs.db
 Desktop.ini
