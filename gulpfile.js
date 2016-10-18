@@ -7,6 +7,7 @@ const live = require('gulp-livereload');
 const notify = require('gulp-notify');
 const plumber = require('gulp-plumber');
 const eslint = require('gulp-eslint');
+const uglify = require('gulp-uglify');
 
 const wpErr = (err, stats) => {
 	if (err) notify.onError('Error: ' + err);
@@ -25,6 +26,7 @@ gulp.task('eslint', () => {
 gulp.task('js', ['eslint'], () => {
 	return gulp.src(['src/app.js'])
 		.pipe(webpack(require('./webpack.conf.js'), null, wpErr))
+		.pipe(uglify())
 		.pipe(gulp.dest('assets/'))
 		.pipe(live());
 });
@@ -32,6 +34,7 @@ gulp.task('js', ['eslint'], () => {
 gulp.task('lib', () => {
 	return gulp.src([ 'lib/standalone-framework.js', 'lib/*.js' ])
 		.pipe(concat('lib.js'))
+		.pipe(uglify())
 		.pipe(gulp.dest('assets/'));
 });
 
