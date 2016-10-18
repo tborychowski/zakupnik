@@ -55,9 +55,7 @@ export default class Form {
 		this.el.on('click', this.onClick.bind(this));
 
 		if (typeof this.cfg.onChange === 'function') {
-			this.form.observe((nv, ov, f) => {
-				this.cfg.onChange.call(this.cfg.onChange, nv, ov, f);
-			});
+			this.form.observe(this.cfg.onChange);
 		}
 		this.draw();
 	}

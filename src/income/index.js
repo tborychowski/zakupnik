@@ -68,18 +68,16 @@ function onPreview () {
  * Amount cell renderer/formatter
  */
 function renderer (v, item) {
-	if (v <= 0) {
-		return '<span class="warn"><i class="fa fa-exclamation-circle"></i> €' +
-			item.amount_str + '</span>';
-	}
-	return '€' + item.amount_str;
+	let val = `€${item.amount_str}`;
+	if (v <= 0) val = `<span class="warn"><i class="fa fa-exclamation-circle"></i> ${val}</span>`;
+	return val;
 }
 
 /**
  * Footer renderer/formatter
  */
 function footer (data) {
-	return '€' + data.total_str;
+	return `€${data.total_str}`;
 }
 
 

@@ -33,7 +33,7 @@ function Form (el) {
 	if (el.elements) this.inputs = el.elements;
 }
 
-Form.prototype.set = function (params, clear) {
+Form.prototype.set = function (params = {}, clear) {
 	const inputs = _getInputs(this.form);
 	for (let input of inputs) {
 		const name = input.name;
