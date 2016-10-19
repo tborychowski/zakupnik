@@ -32,7 +32,7 @@ const _yAxis = {
 	title: { text: null },
 	labels: {
 		style: { color: '#ccc' },
-		formatter: () => '€' + this.value
+		formatter: function () { return '€' + $.formatNumber(this.value); }
 	},
 	showFirstLabel: false,
 	min: 0,
@@ -56,7 +56,10 @@ function Chart (type, containerId, title, data) {
 		options.legend.layout = 'vertical';
 		options.legend.align = 'left';
 		options.tooltip.headerFormat = '<span style="font-size: 10px">Expenses</span><br/>';
-		options.tooltip.pointFormatter = () => `<span style="color: ${this.color}">●</span> ${this.name}: €${this.y}`;
+		options.tooltip.pointFormatter = function () {
+			const val = '€' + $.formatNumber(this.y);
+			return `<span style="color: ${this.color}">●</span> ${this.name}: ${val}`;
+		};
 		options.plotOptions.pie = {
 			borderWidth: 0,
 			innerSize: '50%',
@@ -71,13 +74,14 @@ function Chart (type, containerId, title, data) {
 		options.chart.type = type;
 		options.tooltip.crosshairs = true;
 		options.tooltip.shared = true;
-		options.tooltip.formatter = () => {
-			let html = this.x + '<br>', sum = this.points[0].y - this.points[1].y;
+		options.tooltip.formatter = function () {
+			let html = this.x + '<br>';
+			const sum = '€' + $.formatNumber(this.points[0].y - this.points[1].y);
 			for (let point of this.points) {
-				html += `<span style="color: ${point.series.color}">●</span> ${point.series.name} €${$.formatNumber(point.y)}<br>`;
+				const y = '€' + $.formatNumber(point.y);
+				html += `<span style="color: ${point.series.color}">●</span> ${point.series.name} ${y}<br>`;
 			}
-			html += `<span style="color: green">●</span> savings: €${$.formatNumber(sum)}<br>`;
-
+			html += `<span style="color: green">●</span> savings: ${sum}<br>`;
 			return html;
 		};
 
@@ -94,6 +98,10 @@ function Chart (type, containerId, title, data) {
 		chart = 'StockChart';
 		options.rangeSelector = { enabled: false };
 		options.tooltip.xDateFormat = '%a, %e %b %Y';
+		options.tooltip.pointFormatter = function () {
+			const val = '€' + $.formatNumber(this.y);
+			return `<span style="color: ${this.color}">●</span> ${this.series.name}: ${val}`;
+		};
 		options.xAxis = _clone(_xAxis);
 		options.yAxis = _clone(_yAxis);
 	}
