@@ -31,6 +31,9 @@ const keys = {
 		DOT: 190,
 		SLASH: 191,
 
+		MACMINUS: 189,
+		MACPLUS: 187,
+
 		NUMSTAR: 106,
 		NUMMINUS: 109,
 		NUMPLUS: 107,
@@ -77,6 +80,9 @@ function isMath (e) {
 	if (k === keys.NUMMINUS || (k === keys.MINUS && !e.shiftKey)) return true;
 	if (k === keys.NUMPLUS || (k === keys.PLUS && e.shiftKey)) return true;
 	if (k === keys.NUMSLASH || (k === keys.SLASH && !e.shiftKey)) return true;
+	if (k === keys.MACMINUS && !e.shiftKey) return true;
+	if (k === keys.MACPLUS && e.shiftKey) return true;
+
 	if (e.shiftKey) {
 		if (k === 56 || k === 57 || k === 48) return true;
 	}

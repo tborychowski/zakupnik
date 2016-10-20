@@ -190,7 +190,8 @@ export default class Form {
 	}
 
 	onClick (e) {
-		const target = $(e.target);
+		let target = $(e.target);
+		if (target.is('i.fa')) target = $(target[0].parentNode);
 		if (target.is('.btn-split')) this.split();
 		else if (target.is('.btn-unsplit')) this.unsplit(target);
 		else return;

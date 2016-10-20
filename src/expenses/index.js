@@ -71,7 +71,7 @@ function renderer (v, item) {
 
 // Category & description renderer/formatter
 function categoryRenderer (v, item) {
-	return `${v} - ${item.description}`;
+	return v + (item.description ? ' - ' + item.description : '');
 }
 
 // Footer renderer/formatter
