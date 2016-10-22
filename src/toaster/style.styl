@@ -2,4 +2,30 @@
 
 
 #toaster
-	color #fff;
+	z 9999; position fixed; top 5; right 5; width 400;
+
+	.toast
+		color #fff; border #fff; font 10pt; overflow hidden; //text-align center;
+		margin 0 auto 5; padding 8 15 0;
+		border-radius 5; position relative; opacity 0; height 30;
+		shadow 0 0 0 1 #000 0.2, 0 2 7 3 #000 0.3;
+		transition opacity .4s ease-out, height .3s ease-out, margin-top .3s ease-out;
+
+		&.visible
+			opacity 1;
+
+		&.hiding
+			opacity 0; height 0; margin-top -15;
+
+		p
+			margin 0
+
+	.toast-error
+		bg #B82906; border-color #E8706C #E4524C #D53007;
+
+	.toast-warning
+		bg #CC6A29; border-color #D7924F #D05B0D #DE7A38;
+
+	.toast-success
+		bg #3B9133; border-color #7ED675 #72D36A #67C75E;
+
