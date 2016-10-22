@@ -11,7 +11,3 @@ router({
 	default: 'expenses',
 	handler: menu.goto
 });
-
-
-import toaster from 'toaster';
-console.log(toaster);
