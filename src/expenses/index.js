@@ -100,7 +100,7 @@ function init () {
 			columns: [
 				{ width: 27, icons: { pencil: edit } },
 				{ name: 'Date', field: 'date', width: 90 },
-				{ name: 'Category', field: 'category', renderer: categoryRenderer },
+				{ name: 'Description', field: 'category', renderer: categoryRenderer },
 				{ name: 'Amount', field: 'amount', width: 105, renderer, footer }
 			]
 		});
@@ -111,8 +111,7 @@ function init () {
 			dataSource: (params) => Data.get(params),
 			columns: [
 				{ name: 'Date', field: 'date', width: 90 },
-				{ name: 'Category', field: 'category', width: '40%' },
-				{ name: 'Description', field: 'description' },
+				{ name: 'Description', field: 'category', renderer: categoryRenderer },
 				{ name: 'Amount', field: 'amount', width: 105, renderer, footer }
 			]
 		});
