@@ -3,7 +3,7 @@ Zakupnik
 Record your monthly expenses and income.
 
 
-##Features
+## Features
 - extremely simple (no accounts, social bs, bank integrations)
 - just enter your receipts & salary and see the charts
 - focus on speed and minimalism
@@ -11,45 +11,46 @@ Record your monthly expenses and income.
 - preview before adding
 
 
-##Requirements
+## Requirements
 - client: a modern browser
 - server: Apache + php 5.4 + sqlite
 - building: gulp, babel and stuff
 
-##Installation
+## Installation
 - put files on a php server
 - `chmod 777 assets` - so we can write to the sqlite db file
 - it should work! :-)
 
 
-##Screens
+## Screens
 
-####enter multiple receipts of the same type
+#### enter multiple receipts of the same type
 ![Main](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen.png)
 
-####split one receipt into different categories
+#### split one receipt into different categories
 ![Split](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen-split.png)
 
-####repeat an expense every month
+#### repeat an expense every month
 ![Repeat](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen-repeat.png)
 
-####Categories
+#### Categories
 ![Categories](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen-categories.png)
 
-####Stats
+#### Stats
 ![Stats](https://raw.github.com/tborychowski/zakupnik/master/_stuff/screen-stats.png)
 
 
-##References & third-parties:
-- [HybridAuth](http://hybridauth.sourceforge.net/index.html)
-- [Medoo - db framework](https://github.com/catfan/Medoo)
-- [hellojs - js oauth](https://github.com/MrSwitch/hello.js)
-- [Pikaday - datepicker](https://github.com/dbushell/Pikaday)
-- [highcharts api](http://api.highcharts.com/highcharts#legend.useHTML)
-- [flat design principles](http://designmodo.com/flat-design-principles/)
+## References & third-parties:
+- [Medoo](https://github.com/catfan/Medoo) - db framework
+- [Pikaday](https://github.com/dbushell/Pikaday) - datepicker
+- [Highcharts](http://api.highcharts.com/highcharts#legend.useHTML)
 - [momentjs](http://momentjs.com/)
-- [font awesome icons](http://fortawesome.github.io/Font-Awesome/icons/)
+- [font awesome](http://fortawesome.github.io/Font-Awesome/icons/) - icon font
+
+#### TODO
+- [HybridAuth](http://hybridauth.sourceforge.net/index.html)
+- [hellojs - js oauth](https://github.com/MrSwitch/hello.js)
 
 
-##License
+## License
 *MIT*
