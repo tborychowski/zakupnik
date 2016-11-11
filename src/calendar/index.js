@@ -5,8 +5,8 @@ import Moment from 'moment';
 const tpl = require('./template.html');
 let el, picker, todayBtn, isReady = false;
 const gotoMap = {
-	prev: c => c.subtract(1, 'days'),
-	next: c => c.add(1, 'days'),
+	prev: c => c.subtract(1, 'weeks'),
+	next: c => c.add(1, 'weeks'),
 	prevMonth: c => c.subtract(1, 'months'),
 	nextMonth: c => c.add(1, 'months'),
 	today: () => Moment()
@@ -16,6 +16,7 @@ const gotoMap = {
 function goTo (where) {
 	const now = picker.getMoment();
 	let newdate = now;
+	console.log(where, now);
 	if (where in gotoMap) newdate = gotoMap[where](now);
 	else newdate = now.isoWeekday(where);
 	picker.setMoment(newdate);

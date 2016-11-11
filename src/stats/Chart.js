@@ -1,9 +1,6 @@
 import $ from 'util';
-// import Moment from 'moment';
 
-function _clone (o) {
-	return JSON.parse(JSON.stringify(o));
-}
+const _clone = o => JSON.parse(JSON.stringify(o));
 
 const _options = {
 	chart: { renderTo: '', type: '', backgroundColor: null, spacing: [20, 10, 10, 10] },
@@ -21,7 +18,8 @@ const _options = {
 		align: 'left',
 		x: 0,
 		y: 30,
-		itemStyle: { color: '#ccc' },
+		itemMarginBottom: 5,
+		itemStyle: { color: '#ccc', fontWeight: 'normal', fontSize: 13 },
 		itemHoverStyle: { color: '#fff' },
 		itemHiddenStyle: { color: '#888' }
 	},
