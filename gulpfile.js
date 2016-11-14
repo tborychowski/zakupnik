@@ -20,9 +20,10 @@ const wpErr = (err, stats) => {
 gulp.task('eslint', () => {
 	return gulp.src(['src/**/*.js'])
 		.pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+		.pipe(eslint.format())
+		.pipe(eslint.failAfterError());
 });
+
 
 gulp.task('js', ['eslint'], () => {
 	return gulp.src(['src/app.js'])
