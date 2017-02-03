@@ -1,7 +1,7 @@
 import $ from 'util';
 import Data from './data';
 import Calendar from 'calendar';
-import Grid from 'grid';
+import Grid from 'lite-grid';
 import Form from './form';
 
 let el, grid, previewGrid, preview, formContainer, form, isReady = false, lastLoadDate;

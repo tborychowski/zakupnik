@@ -1,7 +1,7 @@
 'use strict';
 
-const keyBreaker = /[^\[\]]+/g;
-const numberMatcher = /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/;
+const keyBreaker = /[^[\]]+/g;
+const numberMatcher = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/;
 
 function _isNumber (value) {
 	if (typeof value === 'number') return true;
@@ -34,6 +34,9 @@ function Form (el) {
 }
 
 Form.prototype.set = function (params = {}, clear) {
+	this.suspendObserve = true;
+	if (this.animFrame) cancelAnimationFrame(this.animFrame);
+
 	const inputs = _getInputs(this.form);
 	for (let input of inputs) {
 		const name = input.name;
@@ -42,7 +45,7 @@ Form.prototype.set = function (params = {}, clear) {
 		// if name is object, e.g. user[name], userData[address][street], update value to read this correctly
 		if (name.indexOf('[') > -1) {
 			let v = params;
-			let names = name.replace(/[\[\]]/g, '|').split('|');
+			let names = name.replace(/[[\]]/g, '|').split('|');
 			for (let n of names) {
 				if (v[n]) v = v[n];
 				else { v = undefined; break; }
@@ -67,8 +70,9 @@ Form.prototype.set = function (params = {}, clear) {
 		}
 		else input.value = value;
 	}
+	this.suspendObserve = false;
 
-	return this;
+	return this.update();
 };
 
 
@@ -130,9 +134,11 @@ Form.prototype.clear = function () { this.set({}, true); };
 
 
 Form.prototype.update = function () {
+	if (this.animFrame) cancelAnimationFrame(this.animFrame);
 	if (!this.observeCb) return;
+	if (this.suspendObserve) return;
 	for (let field of this.form.elements) {
-		let fname = field.name.replace(/[\[\]]/g, '_') + 'val',
+		let fname = field.name.replace(/[[\]]/g, '_') + 'val',
 			ov = this.form.dataset[fname],
 			v = field.value;
 		if (fname === 'val') continue;
@@ -151,7 +157,7 @@ Form.prototype.update = function () {
 		}
 	}
 
-	requestAnimationFrame(this.update.bind(this));
+	this.animFrame = requestAnimationFrame(this.update.bind(this));
 };
 Form.prototype.observe = function (cb) { this.update(this.observeCb = cb); };
 Form.prototype.observeStop = function () { this.observeCb = null; };

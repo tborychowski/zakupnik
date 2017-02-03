@@ -6,7 +6,7 @@ function type (obj) {
 function isNumber (v) {
 	if (typeof v === 'number') return true;
 	if (typeof v !== 'string') return false;
-	return (/^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/).test(v);
+	return (/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/).test(v);
 }
 
 function formatNumber (num) {

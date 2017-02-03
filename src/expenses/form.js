@@ -150,8 +150,8 @@ export default class Form {
 	parseAmount (amount) {
 		/* eslint no-eval: 0 */
 		amount = ('' + amount).replace(/\s/g, '');
-		if (!(/^[\+\-\\*\/\(\)\d\.]+$/i).test(amount)) return 0;
-		if ((/[\+\-\\*\/\.]+/i).test(amount)) {
+		if (!(/^[+\-\\*/()\d.]+$/i).test(amount)) return 0;
+		if ((/[+\-\\*/.]+/i).test(amount)) {
 			try { amount = eval(amount); }
 			catch (e) { amount = 0; }
 		}
