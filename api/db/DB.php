@@ -56,6 +56,7 @@ class DB {
 	public function insert ($table, $data) {
 		if (!$this->db) return $this;
 
+
 		if (is_array($data) && isset($data[0]['id'])) {
 			foreach ($data as &$item) {
 				if (empty($item['id'])) unset($item['id']);

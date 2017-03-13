@@ -16,7 +16,7 @@ const gotoMap = {
 function goTo (where) {
 	const now = picker.getMoment();
 	let newdate = now;
-	console.log(where, now);
+	// console.log(where, now);
 	if (where in gotoMap) newdate = gotoMap[where](now);
 	else newdate = now.isoWeekday(where);
 	picker.setMoment(newdate);

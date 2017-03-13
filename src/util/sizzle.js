@@ -108,20 +108,20 @@ sizzle.fn.isIn = function (...classes) {
  * @param  {boolean} cond    [optional] true or false for toggle
  * @return {array}           same array of elements
  */
-function modElCls (el, action, cls, cond) {
-	if (!el || !el.length) return el;
+function modElCls (els, action, cls, cond) {
+	if (!els || !els.length) return els;
 	cls = cls.split(' ');
 	if (typeof cond === 'boolean') {
-		el.forEach(el => {
+		els.forEach(el => {
 			cls.forEach(c => el.classList[action](c, cond));
 		});
 	}
 	else {
-		el.forEach(el => {
+		els.forEach(el => {
 			cls.forEach(c => el.classList[action](c));
 		});
 	}
-	return el;
+	return els;
 }
 
 sizzle.fn.addClass = function (cls) { return modElCls(this, 'add', cls); };

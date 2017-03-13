@@ -23,7 +23,7 @@ function ajax (options) {
 			if (req.status >= 200 && req.status < 400) {
 				resp = req.responseText;
 				try { resp = JSON.parse(resp); }
-				catch (e) {}
+				catch (e) {}		/* eslint no-empty: 0 */
 				resolve(resp);
 			}
 			else reject(req.statusText);

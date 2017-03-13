@@ -12,6 +12,7 @@
 		"brace-style": [2, "stroustrup", { "allowSingleLine": true }],
 		"no-multiple-empty-lines": [2, { "max": 3, "maxEOF": 1 }],
 		"no-cond-assign": [0],
+		"no-alert": [0],
 		"key-spacing": [ "error", { "mode": "minimum" }]
 	}
 }
