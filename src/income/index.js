@@ -53,6 +53,7 @@ function onReset (e) {
 
 
 function onPreview () {
+	if (!form) init();
 	const data = form.getData();
 	let sum = 0, totalStr;
 	preview.toggleClass('hidden', !(data.items && data.items.length));
