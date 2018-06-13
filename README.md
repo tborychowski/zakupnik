@@ -51,6 +51,3 @@ Record your monthly expenses and income.
 - [HybridAuth](http://hybridauth.sourceforge.net/index.html)
 - [hellojs - js oauth](https://github.com/MrSwitch/hello.js)
 
-
-## License
-*MIT*
